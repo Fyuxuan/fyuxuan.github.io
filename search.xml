@@ -3,9 +3,31 @@
   
     
     <entry>
-      <title>工厂模式</title>
-      <link href="/2018/12/14/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/"/>
-      <url>/2018/12/14/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
+      <title>test</title>
+      <link href="/2018/12/15/test/"/>
+      <url>/2018/12/15/test/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    <entry>
+      <title>netty</title>
+      <link href="/2018/12/15/sdf/"/>
+      <url>/2018/12/15/sdf/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    <entry>
+      <title>单例模式</title>
+      <link href="/2018/12/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
+      <url>/2018/12/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -26,9 +48,9 @@
     </entry>
     
     <entry>
-      <title>单例模式</title>
-      <link href="/2018/12/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
-      <url>/2018/12/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
+      <title>工厂模式</title>
+      <link href="/2018/12/14/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/"/>
+      <url>/2018/12/14/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
       
         <content type="html"><![CDATA[]]></content>
       
