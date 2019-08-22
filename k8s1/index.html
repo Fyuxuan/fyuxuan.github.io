@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Kubernetes,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。Kubernetes 具备完善的集群管理能力">
+<meta name="keywords" content="Kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（一）Kubernetes简介：Kubernetes架构">
+<meta property="og:url" content="http://fyuxuan.github.io/k8s1/index.html">
+<meta property="og:site_name" content="你必须全力以赴,才能成为发光的哪一个.">
+<meta property="og:description" content="Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。Kubernetes 具备完善的集群管理能力">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://file.yuxuan.video/15662939314245.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15662946967695.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15663927970976.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15663928276452.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15663928485300.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15663928706968.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15663928960235.jpg">
+<meta property="og:updated_time" content="2019-08-22T03:05:35.697Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（一）Kubernetes简介：Kubernetes架构">
+<meta name="twitter:description" content="Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。Kubernetes 具备完善的集群管理能力">
+<meta name="twitter:image" content="http://file.yuxuan.video/15662939314245.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/k8s1/">
+
+
+
+
+
+  <title>（一）Kubernetes简介：Kubernetes架构 | 你必须全力以赴,才能成为发光的哪一个.</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴,才能成为发光的哪一个.</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG,更擅长解决BUG.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/k8s1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴,才能成为发光的哪一个.">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">（一）Kubernetes简介：Kubernetes架构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。<br>Kubernetes 具备完善的集群管理能力，包括多层次的安全防护和准入机制、多租户应用支撑能力、透明的服务注册和服务发现机制、内建负载均衡器、故障发现和自我修复能力、服务滚动升级和在线扩容、可扩展的资源自动调度机制、多粒度的资源配额管理能力。<br>Kubernetes 还提供完善的管理工具，涵盖开发、部署测试、运维监控等各个环节。</p>
+<h2 id="Borg简介"><a href="#Borg简介" class="headerlink" title="Borg简介"></a>Borg简介</h2><p>Borg是谷歌内部的大规模集群管理系统，负责对谷歌内部很多核心服务的调度和管理。Borg的目的是让用户能够不必操心资源管理的问题，让他们专注于自己的核心业务，并且做到跨多个数据中心的资源利用率最大化。</p>
+<p>Borg主要由BorgMaster、Borglet、borgcfg和Scheduler组成，如下图所示</p>
+<p>  <img src="http://file.yuxuan.video/15662939314245.jpg" alt="-w572"></p>
+<ul>
+<li>BorgMaster 是整个集群的大脑，负责维护整个集群的状态，并将数据持久化到 Paxos 存储中；</li>
+<li>Scheduer 负责任务的调度，根据应用的特点将其调度到具体的机器上去；</li>
+<li>Borglet 负责真正运行任务（在容器中）；</li>
+<li>borgcfg 是 Borg 的命令行工具，用于跟 Borg 系统交互，一般通过一个配置文件来提交任务。</li>
+</ul>
+<h2 id="Kubernetes-特性"><a href="#Kubernetes-特性" class="headerlink" title="Kubernetes 特性"></a>Kubernetes 特性</h2><p>Kubernetes 是一种用于在一组主机上运行和协同容器化应用程序的系统，旨在提供可预测性、可扩展性与高可用性的方法来完全管理容器化应用程序和服务的生命周期的平台。用户可以定义应用程序的运行方式，以及与其他应用程序或外部世界交互的途径，并能实现服务的扩容和缩容，执行平滑滚动更新，以及在不同版本的应用程序之间调度流量以测试功能或回滚有问题的部署。 Kubernetes 提供了接口和可组合的平台原语，使得用户能够以高度的灵活性和可靠性定义及管理应用程序。简单总结起来，它具有以下几个重要特性 。</p>
+<h3 id="1-自动装箱"><a href="#1-自动装箱" class="headerlink" title="1. 自动装箱"></a>1. 自动装箱</h3><p>建构于容器之上，基于资源依赖及其他约束自动完成容器部署且不影响其可用性，并 通过调度机制混合关键型应用和非关键型应用的工作负载于同一节点以提升资源利用率。</p>
+<h3 id="2-自我修复（自愈）"><a href="#2-自我修复（自愈）" class="headerlink" title="2. 自我修复（自愈）"></a>2. 自我修复（自愈）</h3><p>支持容器故障后自动重启、节点故障后重新调度容器，以及其他可用节点、健康状态 检查失败后关闭容器并重新创建等自我修复机制。</p>
+<h3 id="3-水平扩展"><a href="#3-水平扩展" class="headerlink" title="3. 水平扩展"></a>3. 水平扩展</h3><p>支持通过简单命令或 UI 手动水平扩展，以及基于 CPU 等资源负载率的自动水平扩展机制 。</p>
+<h3 id="4-服务发现和负载均衡"><a href="#4-服务发现和负载均衡" class="headerlink" title="4. 服务发现和负载均衡"></a>4. 服务发现和负载均衡</h3><p>Kubernetes 通过其附加组件之一的 KubeDNS （或 CoreDNS ）为系统内置了服务发现功能，它会为每个 Service 配置 DNS 名称，并允许集群内的客户端直接使用此名称发出访问请求，而 Service 则通过 iptables 或 ipvs 内建了负载均衡机制 。</p>
+<h3 id="5-自动发布和回滚"><a href="#5-自动发布和回滚" class="headerlink" title="5. 自动发布和回滚"></a>5. 自动发布和回滚</h3><p>Kubernetes 支持“灰度”更新应用程序或其配置信息，它会监控更新过程中应用程序的健康状态，以确保它不会在同一时刻杀掉所有实例，而此过程中一旦有故障发生，就会立即自动执行回滚操作 。</p>
+<h3 id="6-密钥和配置管理"><a href="#6-密钥和配置管理" class="headerlink" title="6. 密钥和配置管理"></a>6. 密钥和配置管理</h3><p>Kubernetes 的 ConfigMap 实现了配置数据与 Docker 镜像解稠，需要时，仅对配置做出变更而无须重新构建 Docker 镜像，这为应用开发部署带来了很大的灵活性。此外，对于应用所依赖的一些敏感数据，如用户名和密码、令牌、密钥等信息， Kubernetes 专门提供了 Secret 对象为其解耦，既便利了应用的快速开发和交付，又提供了一定程度上的安全保障。</p>
+<h3 id="7-存储编排"><a href="#7-存储编排" class="headerlink" title="7. 存储编排"></a>7. 存储编排</h3><p>Kubernetes 支持 Pod 对象按需自动挂载不同类型的存储系统 ，这包括节点本地存储、公有云服务商的云存储（如 AWS 和 GCP 等），以及网络存储系统（例如， NFS、iSCSI、GlusterFS、Ceph、Cinder 和 Flocker 等）。</p>
+<h3 id="8-批量处理执行"><a href="#8-批量处理执行" class="headerlink" title="8. 批量处理执行"></a>8. 批量处理执行</h3><p>除了服务型应用，Kubernetes 还支持批处理作业及 CI（持续集成），如果需要， 一样可以实现容器故障后恢复。</p>
+<h2 id="Kubernetes-架构"><a href="#Kubernetes-架构" class="headerlink" title="Kubernetes 架构"></a>Kubernetes 架构</h2><p>Kubernetes 借鉴了 Borg 的设计理念，比如 Pod、Service、Labels 和单 Pod 单 IP 等。Kubernetes 的整体架构跟 Borg 非常像，如下图所示</p>
+<p><img src="http://file.yuxuan.video/15662946967695.jpg" alt=""></p>
+<p>Kubernetes 主要由以下几个核心组件组成：</p>
+<ul>
+<li>etcd 保存了整个集群的状态；</li>
+<li>kube-apiserver 提供了资源操作的唯一入口，并提供认证、授权、访问控制、API 注册和发现等机制；</li>
+<li>kube-controller-manager 负责维护集群的状态，比如故障检测、自动扩展、滚动更新等；</li>
+<li>kube-scheduler 负责资源的调度，按照预定的调度策略将 Pod 调度到相应的机器上；</li>
+<li>kubelet 负责维持容器的生命周期，同时也负责 Volume（CVI）和网络（CNI）的管理；</li>
+<li>Container runtime 负责镜像管理以及 Pod 和容器的真正运行（CRI），默认的容器运行时为 Docker；</li>
+<li>kube-proxy 负责为 Service 提供 cluster 内部的服务发现和负载均衡；</li>
+</ul>
+<p>除了核心组件，还有一些推荐的 Add-ons：</p>
+<ul>
+<li>CoreDNS 负责为整个集群提供 DNS 服务</li>
+<li>Ingress Controller 为服务提供外网入口</li>
+<li>Heapster 提供资源监控</li>
+<li>Dashboard 提供 GUI</li>
+<li>Federation 提供跨可用区的集群</li>
+<li>Fluentd-elasticsearch 提供集群日志采集、存储与查询</li>
+</ul>
+<h2 id="Kubernetes架构示意图"><a href="#Kubernetes架构示意图" class="headerlink" title="Kubernetes架构示意图"></a>Kubernetes架构示意图</h2><h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h3><p>下图清晰表明了Kubernetes的架构设计以及组件之间的通信协议。</p>
+<p><img src="http://file.yuxuan.video/15663927970976.jpg" alt="Kuberentes架构（图片来自于网络）"></p>
+<p>下面是更抽象的一个视图：</p>
+<p><img src="http://file.yuxuan.video/15663928276452.jpg" alt="kubernetes整体架构示意图"></p>
+<h3 id="Master架构"><a href="#Master架构" class="headerlink" title="Master架构"></a>Master架构</h3><p><img src="http://file.yuxuan.video/15663928485300.jpg" alt="Kubernetes master架构示意图"></p>
+<h3 id="Node架构"><a href="#Node架构" class="headerlink" title="Node架构"></a>Node架构</h3><p><img src="http://file.yuxuan.video/15663928706968.jpg" alt="kubernetes node架构示意图"></p>
+<h3 id="分层架构"><a href="#分层架构" class="headerlink" title="分层架构"></a>分层架构</h3><p>Kubernetes设计理念和功能其实就是一个类似Linux的分层架构，如下图所示。</p>
+<p><img src="http://file.yuxuan.video/15663928960235.jpg" alt="Kubernetes分层架构示意图"></p>
+<ul>
+<li>核心层：Kubernetes最核心的功能，对外提供API构建高层的应用，对内提供插件式应用执行环境</li>
+<li>应用层：部署（无状态应用、有状态应用、批处理任务、集群应用等）和路由（服务发现、DNS解析等）、Service Mesh（部分位于应用层）</li>
+<li>管理层：系统度量（如基础设施、容器和网络的度量），自动化（如自动扩展、动态Provision等）以及策略管理（RBAC、Quota、PSP、NetworkPolicy等）、Service Mesh（部分位于管理层）</li>
+<li>接口层：kubectl命令行工具、客户端SDK以及集群联邦</li>
+<li>生态系统：在接口层之上的庞大容器集群管理调度的生态系统，可以划分为两个范畴</li>
+<li>Kubernetes外部：日志、监控、配置管理、CI/CD、Workflow、FaaS、OTS应用、ChatOps、GitOps、SecOps等</li>
+<li>Kubernetes内部：CRI、CNI、CSI、镜像仓库、Cloud Provider、集群自身的配置和管理等</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/k8s1/" title="（一）Kubernetes简介：Kubernetes架构">http://fyuxuan.github.io/k8s1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/k8s2/" rel="next" title="（二）Kubernetes简介：核心资源对象&核心组件">
+                <i class="fa fa-chevron-left"></i> （二）Kubernetes简介：核心资源对象&核心组件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.jianshu.com/u/a59c8c9b219b" title="我的简书" target="_blank">我的简书</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Borg简介"><span class="nav-number">1.</span> <span class="nav-text">Borg简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-特性"><span class="nav-number">2.</span> <span class="nav-text">Kubernetes 特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-自动装箱"><span class="nav-number">2.1.</span> <span class="nav-text">1. 自动装箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自我修复（自愈）"><span class="nav-number">2.2.</span> <span class="nav-text">2. 自我修复（自愈）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-水平扩展"><span class="nav-number">2.3.</span> <span class="nav-text">3. 水平扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-服务发现和负载均衡"><span class="nav-number">2.4.</span> <span class="nav-text">4. 服务发现和负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-自动发布和回滚"><span class="nav-number">2.5.</span> <span class="nav-text">5. 自动发布和回滚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-密钥和配置管理"><span class="nav-number">2.6.</span> <span class="nav-text">6. 密钥和配置管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-存储编排"><span class="nav-number">2.7.</span> <span class="nav-text">7. 存储编排</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-批量处理执行"><span class="nav-number">2.8.</span> <span class="nav-text">8. 批量处理执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-架构"><span class="nav-number">3.</span> <span class="nav-text">Kubernetes 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes架构示意图"><span class="nav-number">4.</span> <span class="nav-text">Kubernetes架构示意图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整体架构"><span class="nav-number">4.1.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Master架构"><span class="nav-number">4.2.</span> <span class="nav-text">Master架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node架构"><span class="nav-number">4.3.</span> <span class="nav-text">Node架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分层架构"><span class="nav-number">4.4.</span> <span class="nav-text">分层架构</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">13k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

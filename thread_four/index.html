@@ -88,7 +88,7 @@
 <meta property="og:description" content="线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&amp;#123;    Thread.sleep(5000);&amp;#125;doSomeThing(); 上面这段伪代码看似能够实现所需的功能，但是">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://file.yuxuan.video/15596987353536.jpg">
-<meta property="og:updated_time" content="2019-06-05T03:28:15.247Z">
+<meta property="og:updated_time" content="2019-06-06T02:27:36.635Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="四、【Java并发】线程间通信之wait,notify,notifyAll">
 <meta name="twitter:description" content="线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&amp;#123;    Thread.sleep(5000);&amp;#125;doSomeThing(); 上面这段伪代码看似能够实现所需的功能，但是">
@@ -324,6 +324,17 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/Java并发编程的艺术读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Java并发编程的艺术读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -477,8 +488,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/thread_one/" rel="next" title="一、【Java并发】初识线程">
-                <i class="fa fa-chevron-left"></i> 一、【Java并发】初识线程
+              <a href="/thread_three/" rel="next" title="三、【Java并发】线程安全之synchronized的原理和应用">
+                <i class="fa fa-chevron-left"></i> 三、【Java并发】线程安全之synchronized的原理和应用
               </a>
             
           </div>
@@ -486,6 +497,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/thread_one/" rel="prev" title="一、【Java并发】初识线程">
+                一、【Java并发】初识线程 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -564,7 +579,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -575,7 +590,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -586,7 +601,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -690,7 +705,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">7.9k</span>
+    <span title="Site words total count">13k</span>
   
 </div>
 
