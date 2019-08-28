@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下">
+<meta name="description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
 <meta name="keywords" content="Java,多线程,synchronized">
 <meta property="og:type" content="article">
 <meta property="og:title" content="三、【Java并发】线程安全之synchronized的原理和应用">
 <meta property="og:url" content="http://fyuxuan.github.io/thread_three/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下">
+<meta property="og:description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://file.yuxuan.video/15582414008504.jpg">
 <meta property="og:image" content="http://file.yuxuan.video/15582414972082.jpg">
 <meta property="og:image" content="http://file.yuxuan.video/15582415222130.jpg">
 <meta property="og:image" content="http://file.yuxuan.video/15582424874906.jpg">
-<meta property="og:updated_time" content="2019-08-22T03:10:44.095Z">
+<meta property="og:updated_time" content="2019-08-28T14:08:24.141Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="三、【Java并发】线程安全之synchronized的原理和应用">
-<meta name="twitter:description" content="Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下">
+<meta name="twitter:description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
 <meta name="twitter:image" content="http://file.yuxuan.video/15582414008504.jpg">
 
 
@@ -377,7 +377,8 @@
       
 
       
-        <h2 id="Synchronized的实现原理与应用"><a href="#Synchronized的实现原理与应用" class="headerlink" title="Synchronized的实现原理与应用"></a>Synchronized的实现原理与应用</h2><p>在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下面我们一起来探究synchronized的实现原理，以及JDK1.6是如何对它进行优化，以及锁的存储结构和升级过程。</p>
+        <p>w</p>
+<h2 id="Synchronized的实现原理与应用"><a href="#Synchronized的实现原理与应用" class="headerlink" title="Synchronized的实现原理与应用"></a>Synchronized的实现原理与应用</h2><p>在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下面我们一起来探究synchronized的实现原理，以及JDK1.6是如何对它进行优化，以及锁的存储结构和升级过程。</p>
 <h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>synchronized关键字可以实现一个简单的策略来防止线程干扰和内存一致性问题，如果一个共享资源对多个线程是可见的，那么该资源的所有读或者写都将通过同步的方式来进行，具体表现如下：</p>
 <ul>
 <li>synchronized提供了一种锁的机制，能够确保共享变量的互斥访问，从而防止数据不一致问题得出现</li>
@@ -473,8 +474,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/thread_one/" rel="next" title="一、【Java并发】初识线程">
-                <i class="fa fa-chevron-left"></i> 一、【Java并发】初识线程
+              <a href="/thread_two/" rel="next" title="二、【Java并发】线程生命周期以及常用方法详解">
+                <i class="fa fa-chevron-left"></i> 二、【Java并发】线程生命周期以及常用方法详解
               </a>
             
           </div>
@@ -483,8 +484,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/thread_two/" rel="prev" title="二、【Java并发】线程生命周期以及常用方法详解">
-                二、【Java并发】线程生命周期以及常用方法详解 <i class="fa fa-chevron-right"></i>
+              <a href="/thread_one/" rel="prev" title="一、【Java并发】初识线程">
+                一、【Java并发】初识线程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
