@@ -881,7 +881,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_four/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_one/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -900,7 +900,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/thread_four/" itemprop="url">四、【Java并发】线程间通信之wait,notify,notifyAll</a></h1>
+                <a class="post-title-link" href="/thread_one/" itemprop="url">一、【Java并发】初识线程</a></h1>
         
 
         <div class="post-meta">
@@ -965,7 +965,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1k
+                  807
                 </span>
               
 
@@ -992,11 +992,12 @@
       
         
           
-          线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&#123;    Thread.slee
+          1. 线程介绍对于计算机来说每一个任务就是一个进程，在进程运行过程中必须至少有一条线程实在运行中。线程本身是不会独立存在的，因为线程是进程中的一个执行路径。
+操作系统在分配资源时是把资源分配给进程的，但是CPU资源比较特殊，它是被分配到线程的，因为真正要占用CPU运行的是线程，所以也说线程是 CPU
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/thread_four/#more" rel="contents">
+            <a class="btn" href="/thread_one/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1390,7 +1391,7 @@ NEW(新建状态)当我们
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_one/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_four/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -1409,7 +1410,7 @@ NEW(新建状态)当我们
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/thread_one/" itemprop="url">一、【Java并发】初识线程</a></h1>
+                <a class="post-title-link" href="/thread_four/" itemprop="url">四、【Java并发】线程间通信之wait,notify,notifyAll</a></h1>
         
 
         <div class="post-meta">
@@ -1474,7 +1475,7 @@ NEW(新建状态)当我们
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  807
+                  1k
                 </span>
               
 
@@ -1501,12 +1502,11 @@ NEW(新建状态)当我们
       
         
           
-          1. 线程介绍对于计算机来说每一个任务就是一个进程，在进程运行过程中必须至少有一条线程实在运行中。线程本身是不会独立存在的，因为线程是进程中的一个执行路径。
-操作系统在分配资源时是把资源分配给进程的，但是CPU资源比较特殊，它是被分配到线程的，因为真正要占用CPU运行的是线程，所以也说线程是 CPU
+          线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&#123;    Thread.slee
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/thread_one/#more" rel="contents">
+            <a class="btn" href="/thread_four/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
