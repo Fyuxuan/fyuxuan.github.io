@@ -261,7 +261,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/pattern_simple_factory/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/pattern_singleton/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -280,7 +280,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/pattern_simple_factory/" itemprop="url">设计模式 —— 简单工厂模式</a></h1>
+                <a class="post-title-link" href="/pattern_singleton/" itemprop="url">设计模式 —— 单例模式</a></h1>
         
 
         <div class="post-meta">
@@ -334,7 +334,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  633
+                  1.3k
                 </span>
               
 
@@ -361,14 +361,12 @@
       
         
           
-          概念简单工厂模式又称之为静态工厂方法(Static Factory Method), 属于创建型模式。简单工厂模式是根据传递的参数不同, 返回不同实现类的实例对象.（这些类都依赖一个父类或接口） 
-实现方式我们先简单的来看看简单工厂模式的组成:
-
-工厂类角色(Factory): 工厂类是工厂模式的最
+          概念程序在运行时，通常都会生成很多实例。例如，表示字符串的 String 类的实例与字符串是一一对应的关系，所以当有 1000 个字符串的时候，会生成 1000 个实例。
+但是，当我们想在程序中表示某个东西只会存在一个时，就会有“只能创建-一个实例”的需求。典型的例子有表示程序所运行于的那台计算机的
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/pattern_simple_factory/#more" rel="contents">
+            <a class="btn" href="/pattern_singleton/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
