@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,多线程,synchronized,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
+<meta name="keywords" content="Java,多线程,synchronized">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三、【Java并发】线程安全之synchronized的原理和应用">
+<meta property="og:url" content="http://fyuxuan.github.io/thread_three/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://file.yuxuan.video/15582414008504.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15582414972082.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15582415222130.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15582424874906.jpg">
+<meta property="og:updated_time" content="2019-08-28T14:08:24.141Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="三、【Java并发】线程安全之synchronized的原理和应用">
+<meta name="twitter:description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
+<meta name="twitter:image" content="http://file.yuxuan.video/15582414008504.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/thread_three/">
+
+
+
+
+
+  <title>三、【Java并发】线程安全之synchronized的原理和应用 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_three/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">三、【Java并发】线程安全之synchronized的原理和应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/Java并发/" itemprop="url" rel="index">
+                    <span itemprop="name">Java并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.5k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>w</p>
+<h2 id="Synchronized的实现原理与应用"><a href="#Synchronized的实现原理与应用" class="headerlink" title="Synchronized的实现原理与应用"></a>Synchronized的实现原理与应用</h2><p>在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下面我们一起来探究synchronized的实现原理，以及JDK1.6是如何对它进行优化，以及锁的存储结构和升级过程。</p>
+<h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>synchronized关键字可以实现一个简单的策略来防止线程干扰和内存一致性问题，如果一个共享资源对多个线程是可见的，那么该资源的所有读或者写都将通过同步的方式来进行，具体表现如下：</p>
+<ul>
+<li>synchronized提供了一种锁的机制，能够确保共享变量的互斥访问，从而防止数据不一致问题得出现</li>
+<li>synchronized在JVM中实现原理是基于进入和退出Monitor对象来实现方法的同步和代码块同步。<ul>
+<li>同步代码块是使用monitorenter 和 monitorexit两个JVM指令实现的。monitorenter指令是在编译后插入到同步代码块开始的位置，而monitorexit是插入到方法结束处和异常处。</li>
+<li>在任何时候任何线程执行到monitorenter成功之前都必须从主内存中获取数据，在monitorexit运行成功之后，共享资源被更新后的值必须刷入主内存。</li>
+</ul>
+</li>
+<li>synchronized的指令严格遵守java happens-before规则，一个monitorexit指令之前必定要有一个monitorenter指令。</li>
+<li>Java中每个对象都可以作为锁，这是synchronized实现同步的基础，具体表现形式如下<ul>
+<li>对于普通同步方法，锁是当前实例对象</li>
+<li>对于静态同步方法，所示当前类的Class对象</li>
+<li>对于同步方法块，锁是synchronized括号里设置的对象</li>
+</ul>
+</li>
+</ul>
+<h2 id="synchronized堆栈分析-amp-JVM指令分析"><a href="#synchronized堆栈分析-amp-JVM指令分析" class="headerlink" title="synchronized堆栈分析&amp;JVM指令分析"></a>synchronized堆栈分析&amp;JVM指令分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTest</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"当前线程:"</span>+Thread.currentThread().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        ThreadTest test = <span class="keyword">new</span> ThreadTest();</span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                test.test();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Thread t2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                test.test();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码非常简单，在test方法中使用同步代码块方式进行的线程同步，在main方法中定义了2个线程调用test方法，由于同步代码块的互斥性，只能有一个线程获取了mutex monitor的锁，其它的线程只能进入阻塞状态，等待获取mutex monitor的锁的线程释放锁，我可以用JDK自带的工具jconsole来查看堆栈信息，运行上面代码，打开jconsole会看到如下图所示：</p>
+<p><img src="http://file.yuxuan.video/15582414008504.jpg" alt=""></p>
+<ul>
+<li>然后我们选中我们运行的程序连接，然后点开线程一栏查看：</li>
+</ul>
+<p><img src="http://file.yuxuan.video/15582414972082.jpg" alt=""><br><img src="http://file.yuxuan.video/15582415222130.jpg" alt=""></p>
+<ul>
+<li>我们可以很清楚看到我们创建的两个线程，Thread-0和Thread-1，此时Thread-0处于RUNNABLE状态也就是就绪状态，而Thread-1处于BLOCKED状态，并且清楚的告诉了我们锁拥有者是Thread-0线程。我们再通过jstack命令打印进程的线程的堆栈信息，截取关键的地方对其进行分析：</li>
+</ul>
+<p><img src="http://file.yuxuan.video/15582424874906.jpg" alt=""></p>
+<p>Thread-0持有monitor <0x00000007976030e0> 的锁，Thread1线程进入BLOCKED状态并且等待着获取monitor <0x00000007976030e0>。</0x00000007976030e0></0x00000007976030e0></p>
+<p>下面我们再通过JDK命令javap对ThreadTest类进行反汇编，会发现输出了大量的JVM指令，在这些指令中，会发现monitor enter和monitor exit是成对出现的（有些时候会出现一个monitor enter，多个monitor exit，但是每一个monitor exit之前必有对应的monitor enter)，运行如下的命令：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javap -c ThreadTest</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">yuxuan</span>.<span class="title">thread2</span>.<span class="title">ThreadTest</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.yuxuan.thread2.ThreadTest();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="number">1</span>: dup</span><br><span class="line">       <span class="number">2</span>: astore_1</span><br><span class="line">       <span class="number">3</span>: monitorenter</span><br><span class="line">       4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       7: new           #3                  // class java/lang/StringBuilder</span><br><span class="line">      <span class="number">10</span>: dup</span><br><span class="line">      11: invokespecial #4                  // Method java/lang/StringBuilder."&lt;init&gt;":()V</span><br><span class="line">      14: ldc           #5                  // String 当前线程:</span><br><span class="line">      16: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">      19: invokestatic  #7                  // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;</span><br><span class="line">      22: invokevirtual #8                  // Method java/lang/Thread.getName:()Ljava/lang/String;</span><br><span class="line">      25: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">      28: invokevirtual #9                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">      31: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      <span class="number">34</span>: aload_1</span><br><span class="line">      <span class="number">35</span>: monitorexit</span><br><span class="line">      <span class="number">36</span>: goto          <span class="number">44</span></span><br><span class="line">      <span class="number">39</span>: astore_2</span><br><span class="line">      <span class="number">40</span>: aload_1</span><br><span class="line">      <span class="number">41</span>: monitorexit</span><br><span class="line">      <span class="number">42</span>: aload_2</span><br><span class="line">      <span class="number">43</span>: athrow</span><br><span class="line">      <span class="number">44</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<h3 id="Monitorenter"><a href="#Monitorenter" class="headerlink" title="Monitorenter"></a>Monitorenter</h3><p>一个monitor的lock的锁只会被一个线程在同一时间获得，在一个线程尝试获取monitor的所有权时会发生下面几件事：</p>
+<ul>
+<li>如果monitor的计数器为0，则代表该monitor的lock还没有被获得，一旦被某个线程获得之后会即将对该monitor的计数器加一，也就意味着该线程就是这个monitor的所有者了。</li>
+<li>如果一个已经拥有该monitor所有权的线程重入，则会导致monitor计数器累加。</li>
+<li>如果monitor已经被其他线程拥有，则其他线程尝试获取该monitor所有权时，会陷入阻塞状态直到monitor计数器变为0，才能再次尝试获取monitor的所有权</li>
+</ul>
+<h3 id="Monitorexit"><a href="#Monitorexit" class="headerlink" title="Monitorexit"></a>Monitorexit</h3><p>释放monitor所有权的过程相对比较简单，就是将monitor的计数器减一，如果计数器为0，那就意味着该线程不再拥有对该monitor的所有权，也就是我们常说的解锁。在此同时被该monitor block的线程将再次尝试获取该monitor的所有权。</p>
+<h2 id="使用synchronized的注意点"><a href="#使用synchronized的注意点" class="headerlink" title="使用synchronized的注意点"></a>使用synchronized的注意点</h2><ul>
+<li>与monitor关联的对象不能为空，也就是锁对象不能为null。</li>
+<li>synchronized作用于太大，如果synchronized作用于越大，则代表期效率越低。</li>
+<li>不同的monitor企图锁相同的方法或者代码块。</li>
+<li>多个锁的交叉从而导致死锁</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/thread_three/" title="三、【Java并发】线程安全之synchronized的原理和应用">http://fyuxuan.github.io/thread_three/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/synchronized/" rel="tag"># synchronized</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/thread_two/" rel="next" title="二、【Java并发】线程生命周期以及常用方法详解">
+                <i class="fa fa-chevron-left"></i> 二、【Java并发】线程生命周期以及常用方法详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/thread_one/" rel="prev" title="一、【Java并发】初识线程">
+                一、【Java并发】初识线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.jianshu.com/u/a59c8c9b219b" title="我的简书" target="_blank">我的简书</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Synchronized的实现原理与应用"><span class="nav-number">1.</span> <span class="nav-text">Synchronized的实现原理与应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized实现原理"><span class="nav-number">2.</span> <span class="nav-text">synchronized实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized堆栈分析-amp-JVM指令分析"><span class="nav-number">3.</span> <span class="nav-text">synchronized堆栈分析&amp;JVM指令分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Monitorenter"><span class="nav-number">3.1.</span> <span class="nav-text">Monitorenter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Monitorexit"><span class="nav-number">3.2.</span> <span class="nav-text">Monitorexit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用synchronized的注意点"><span class="nav-number">4.</span> <span class="nav-text">使用synchronized的注意点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">19.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
