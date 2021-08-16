@@ -385,7 +385,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Lazy lazy;</span><br></pre></td></tr></table></figure>
 <p>好了,到此关于线程安全的问题我们解决了.</p>
 <p>现在我们再来考虑一个问题, 做过java的同学,想必对反射和序列化不陌生.为什么在这里提这两个呢? 因为这两个可能会破坏我们的单例.(具体什么原因,后面我会有详细的文章介绍).针对这个问题我们可以做出如下修改就可以解决:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们只需要在单例类里定义此方法就能解决</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> lazy;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们只需要在单例类里定义此方法就能解决</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> lazy;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -523,7 +523,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -649,7 +649,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">19.4k</span>
+    <span title="Site words total count">21.7k</span>
   
 </div>
 

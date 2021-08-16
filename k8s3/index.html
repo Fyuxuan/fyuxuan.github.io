@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Kubernetes,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="pod 是一组并置的容器，代表了 Kubernetes 中的基本构建模块。在实际应用中我们并不会单独部署容器，更多的是针对一组 pod 的容器进行部署和操作。然而这并不意味着一个 pod 总是要包含多个容器，实际上只包含一个单独容器的 pod 也是非常常见的。值得注意的是，当一个 pod 包含多个容器时，这些容器总是运行于同一个工作节点上，一个 pod 绝不会跨越多个工作节点。  在包含容器的 p">
+<meta name="keywords" content="Kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（三）Kubernetes 之 pod">
+<meta property="og:url" content="http://fyuxuan.github.io/k8s3/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="pod 是一组并置的容器，代表了 Kubernetes 中的基本构建模块。在实际应用中我们并不会单独部署容器，更多的是针对一组 pod 的容器进行部署和操作。然而这并不意味着一个 pod 总是要包含多个容器，实际上只包含一个单独容器的 pod 也是非常常见的。值得注意的是，当一个 pod 包含多个容器时，这些容器总是运行于同一个工作节点上，一个 pod 绝不会跨越多个工作节点。  在包含容器的 p">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://fyuxuan.github.io/k8s3/file/15670631091472.jpg">
+<meta property="og:image" content="http://fyuxuan.github.io/k8s3/file/15670648371662.jpg">
+<meta property="og:updated_time" content="2021-08-16T10:01:47.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（三）Kubernetes 之 pod">
+<meta name="twitter:description" content="pod 是一组并置的容器，代表了 Kubernetes 中的基本构建模块。在实际应用中我们并不会单独部署容器，更多的是针对一组 pod 的容器进行部署和操作。然而这并不意味着一个 pod 总是要包含多个容器，实际上只包含一个单独容器的 pod 也是非常常见的。值得注意的是，当一个 pod 包含多个容器时，这些容器总是运行于同一个工作节点上，一个 pod 绝不会跨越多个工作节点。  在包含容器的 p">
+<meta name="twitter:image" content="http://fyuxuan.github.io/k8s3/file/15670631091472.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/k8s3/">
+
+
+
+
+
+  <title>（三）Kubernetes 之 pod | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/k8s3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">（三）Kubernetes 之 pod</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.2k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>pod 是一组并置的容器，代表了 Kubernetes 中的基本构建模块。在实际应用中我们并不会单独部署容器，更多的是针对一组 pod 的容器进行部署和操作。然而这并不意味着一个 pod 总是要包含多个容器，实际上只包含一个单独容器的 pod 也是非常常见的。值得注意的是，当一个 pod 包含多个容器时，这些容器总是运行于同一个工作节点上，一个 pod 绝不会跨越多个工作节点。</p>
+<p><img src="/k8s3/file/15670631091472.jpg" alt="-w688"></p>
+<p>在包含容器的 pod 下，我们可以同时运行一些密切相关的进程，并为它们提供几乎相同的环境，此时这些进程就好像全部运行于单个容器中一样，同时又保持着一定的隔离。这样一来，我们便能全面地利用容器所提供的特性，同时对这些进程来说它们就像运行在一起一样，实现两全其美 。</p>
+<p>容器之间彼此是完全隔离的，但此时我们期望的是隔离容器组，而不是单个容器，并让每个容器组内的容器共享一些资源，而不是完全隔离。Kubernetes 通过配置 Docker 来让一个 pod 内的所有容器共享相同的 Linux 命名空间，而不是每个容器都有自己的一组命名空间。</p>
+<p>由于一个 pod 中的所有容器都在相同的 network 和 UTS 命名空间下运行，所以它们都共享相同的主机名和网络接口。同样这些容器也都在相同的 IPC 命名空间下运行，因此能够通过 IPC 进行通信。在最新的 Kubernetes 和 Docker 版本中，它们也能够共享相同的 PID 命名空间，但是该特征默认是未激活的。</p>
+<blockquote>
+<p>当同一个 pod 中的容器使用单独的 PID 命名空间时，在容器中执行 ps aux 就只会看到容器自己的进程。</p>
+</blockquote>
+<p>但是当涉及文件系统时，情况就有所不同。由于大多数容器的文件系统来自容器镜像，因此默认情况下，每个容器的文件系统与其他容器完全隔离。但我们可 以使用 Volume 的 Kubernetes 资源来共享文件目录。</p>
+<p>由于一个 pod 中的容器运行于相同的 Network 命名空间中，因此它们共享相同的 IP 地址和端口空间。这意味着在同－ pod 中的容器运行的多个进程需要注意不能绑定到相同的端口号，否则会导致端口冲突，但这只涉及同一 pod 中的容器。 由于每个 pod 都有独立的端口空间，对于不同 pod 中的容器来说永远不会遇到端口冲突。此外，一个 pod 中的所有容器也都具有相同的网络接口，因此容器可以通过 localhost 与同一 pod 中的其他容器进行通信。</p>
+<p>Kubernetes 集群中的所有 pod 都在同一个共享网络地址空间中，这意味着每个 pod 都可以通过其他 pod 的 IP 地址来实现相互访问。它们之间没有 NAT（网络地址转换）网关。当两个 pod 彼此之间发送网络数据包时，它们都会将对方的实际 IP 地址看作数据包中的源 IP。</p>
+<p><img src="/k8s3/file/15670648371662.jpg" alt="-w616"></p>
+<h2 id="在-Kubernetes-中运行一个简单的-pod"><a href="#在-Kubernetes-中运行一个简单的-pod" class="headerlink" title="在 Kubernetes 中运行一个简单的 pod"></a>在 Kubernetes 中运行一个简单的 pod</h2><p>我们可以通过 kubectl run 命令， 该命令可以创建所有资源组件而无需 JSON 或 YAML 文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> kubectl run yx-nginx --image=nginx  --port=80 --generator=run/v1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>–image=nginx 指定运行的镜像</li>
+<li>–port=80 告诉kubernetes应用正在监听80端口</li>
+<li>–generator 一般来说不会使用它，这里使用是为了让kubernetes创建一个 ReplicationController而不是Deployment</li>
+</ul>
+<h3 id="列出-pod"><a href="#列出-pod" class="headerlink" title="列出 pod"></a>列出 pod</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods</span><br><span class="line"></span><br><span class="line">NAME             READY   STATUS    RESTARTS   AGE</span><br><span class="line">yx-nginx-2r4xf   0/1     Pending   0          9m28s</span><br></pre></td></tr></table></figure>
+<p>可以看到 pod 处于挂起状态，READY 列显示 0/1 代表 pod 的容器还未就绪。pod 还没有运行的 原因是：该 pod 被分配到的工作节点正在下载容器镜像，完成之后才可以运行。下载完成后，将创建 pod 的容器， 然后 pod 会变为运行状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods</span><br><span class="line"></span><br><span class="line">NAME             READY   STATUS    RESTARTS   AGE</span><br><span class="line">yx-nginx-2r4xf   1/1     Running   0          9m28s</span><br></pre></td></tr></table></figure>
+<p>再次列出 pod，可以发现 pod的状态已经发生改变了。</p>
+<h3 id="查看pod详细信息"><a href="#查看pod详细信息" class="headerlink" title="查看pod详细信息"></a>查看pod详细信息</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="keyword">describe</span> pod <span class="keyword">yx</span>-nginx-2r4xf</span><br></pre></td></tr></table></figure>
+<h2 id="使用描述文件创建-pod"><a href="#使用描述文件创建-pod" class="headerlink" title="使用描述文件创建 pod"></a>使用描述文件创建 pod</h2><p>YAML 格式的 Pod 定义文件的完整内容:<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span>  <span class="comment">## 版本号</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span> <span class="comment">## 元数据 </span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">string</span>  <span class="comment">## Pod 名称</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">string</span> <span class="comment">## Pod 所属的命名空间 默认值为 default</span></span><br><span class="line"><span class="attr">  labels:</span> <span class="comment">## 自定义标签列表</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">string</span></span><br><span class="line"><span class="attr">  annotations:</span> <span class="comment">## 自定义注解列表</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">string</span></span><br><span class="line"><span class="attr">spec:</span> <span class="comment">##pod 中容器的详细定义</span></span><br><span class="line"><span class="attr">  containers:</span> <span class="comment">## 容器列表</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">string</span> <span class="comment">## 容器名称</span></span><br><span class="line">	<span class="attr">image:</span> <span class="string">string</span> <span class="comment">## 容器镜像名称</span></span><br><span class="line">    <span class="comment">## 镜像拉取策略: </span></span><br><span class="line">    <span class="comment">## Always(默认值): 表示每次都尝试重新拉取镜像。</span></span><br><span class="line">    <span class="comment">## IfNotPresent: 表示 如果本地有该镜像，则使用本地的镜像，本地不存在时拉取镜像。</span></span><br><span class="line">    <span class="comment">## Never: 表示仅使用本地镜像。</span></span><br><span class="line">    <span class="comment">## 下面几种情况系统将默认设置 imagePullPolicy=Always。</span></span><br><span class="line">    <span class="comment">## 1. 不设置 imagePullPolicy，也未指定镜像的 tag</span></span><br><span class="line">    <span class="comment">## 2. 不设置 imagePullPolicy，镜像 tag 为 latest</span></span><br><span class="line">    <span class="comment">## 3. 启用名为 AlwaysPullImages 的准入控制器（Admission Controller）</span></span><br><span class="line">	<span class="attr">imagePullPolicy:</span> <span class="string">[Always</span> <span class="string">| Never |IfNotPresent]</span></span><br><span class="line"><span class="string">	command: [string] ## 容器的启动命令列表，如果不指定，则使用镜像打包时使用的启动命令。</span></span><br><span class="line"><span class="string">	args: [string]  ## 容器的启动命令参数列表</span></span><br><span class="line"><span class="string">	workingDir: string ## 容器的工作目录</span></span><br><span class="line"><span class="string">	volumeMounts: ## 挂载到容器内部的存储卷配置</span></span><br><span class="line"><span class="string">	- name: string ## 引用 pod 定义的共享存储卷的名称，需使用 volumes[]部分定义的共享存储卷名称</span></span><br><span class="line"><span class="string">	  mountPath: string ## 存储卷在容器内 Mount 的绝对路径，应少于 512 个字符</span></span><br><span class="line"><span class="string">	  readOnly: boolean ## 是否为只读模式，默认为读写模式</span></span><br><span class="line"><span class="string">	ports: ## 容器需要暴露的端口号列表</span></span><br><span class="line"><span class="string">	- name: string ## 端口的名称</span></span><br><span class="line"><span class="string">	  containerPort: int ## 容器需要监听的端口号</span></span><br><span class="line"><span class="string">	  hostPort: int ## 容器所在主机需要监听的端口号，默认与 containerPort 相同。设置 hostPort 时，同一台宿主机将无法启动该容器的第 2 份副本</span></span><br><span class="line"><span class="string">	  protocol: string ## 端口协议，支持 TCP 和 UDP, 默认值为 TCP</span></span><br><span class="line"><span class="string">	env:  ## 容器运行前需设置的环境变量列表</span></span><br><span class="line"><span class="string">	- name: string ## 环境变量的名称</span></span><br><span class="line"><span class="string">	  value: string ## 环境变量的值</span></span><br><span class="line"><span class="string">	resources: ## 资源限制和资源请求的设置</span></span><br><span class="line"><span class="string"> 	  limits: </span></span><br><span class="line"><span class="string"> 	    cpu: string ## CPU 限制，单位为 core 数，将用于 docker run --cpu-shares 参数</span></span><br><span class="line"><span class="string">		memory: string ## 内存限制，单位可以为 MiB、GiB等，将用于 docker run --memory 参数</span></span><br><span class="line"><span class="string">	  requests :</span></span><br><span class="line"><span class="string">		cpu: string ## CPU 请求，单位为 core 数，容器启动的初始可用数量</span></span><br><span class="line"><span class="string">		memory: string ## 内存请求，单位可以为 MiB、GiB等，容器启动的初始可用数量</span></span><br><span class="line"><span class="string">	livenessProbe :</span></span><br><span class="line"><span class="string">	  exec:</span></span><br><span class="line"><span class="string">		command: [string]</span></span><br><span class="line"><span class="string">	  httpGet:</span></span><br><span class="line"><span class="string">		path: string</span></span><br><span class="line"><span class="string">		port: number</span></span><br><span class="line"><span class="string">		host: string</span></span><br><span class="line"><span class="string">		scheme: string </span></span><br><span class="line"><span class="string">		httpHeaders:</span></span><br><span class="line"><span class="string">		- name: string</span></span><br><span class="line"><span class="string">		  value: string</span></span><br><span class="line"><span class="string">	  tcpSocket:</span></span><br><span class="line"><span class="string">		port: number</span></span><br><span class="line"><span class="string"></span><span class="attr">      initialDelaySeconds:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">      timeoutSeconds:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">      periodSeconds:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">      successThreshold:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">      failureThreshold:</span> <span class="number">0</span></span><br><span class="line">	<span class="attr">securityContext:</span></span><br><span class="line">	  <span class="attr">privileged:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  restartPolicy:</span> <span class="string">[Always</span> <span class="string">| Never | OnFailure]</span></span><br><span class="line"><span class="string"></span><span class="attr">  nodeSelector:</span> <span class="string">object</span></span><br><span class="line"><span class="attr">  imagePullSecrets:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">string</span></span><br><span class="line"><span class="attr">  hostNetwork:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  volumes:</span> <span class="comment">## 在该 Pod 上定义的共享存储卷列表</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">string</span></span><br><span class="line">	<span class="attr">emptyDir:</span> <span class="string">&#123;</span> <span class="string">&#125;</span></span><br><span class="line">	<span class="attr">hostPath:</span></span><br><span class="line">	  <span class="attr">path:</span> <span class="string">string</span></span><br><span class="line">	<span class="attr">secret:</span></span><br><span class="line">	  <span class="attr">secretName:</span> <span class="string">string</span></span><br><span class="line">	  <span class="attr">items:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">string</span></span><br><span class="line">	  	<span class="attr">path:</span> <span class="string">string</span></span><br><span class="line">	<span class="attr">configMap:</span></span><br><span class="line">	  <span class="attr">name:</span> <span class="string">string</span></span><br><span class="line">	  <span class="attr">items:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">string</span></span><br><span class="line">	    <span class="attr">path:</span> <span class="string">string</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="pod定义的主要几个部分"><a href="#pod定义的主要几个部分" class="headerlink" title="pod定义的主要几个部分"></a>pod定义的主要几个部分</h3><p>pod定义由这么几个部分组成：首先是YAML中使用的 kubernetes API 版本和 YAML 描述的资源类型，其次就是几乎在所有 kubernetes 资源中都可以找到的三大重要部分：</p>
+<ul>
+<li>metadata：包括名称，命名空间，标签和关于该容器的其他信息。</li>
+<li>spec：包含 pod 内容的实际说明，例如 pod 的容器，卷和其他数据。</li>
+<li>status：包含运行中的 pod 的当前信息，例如 pod 所处的条件，每个容器的描述和状态，以及内部IP和其他基本信息。</li>
+</ul>
+<h3 id="编写一个简单的-YAML-描述文件创建-pod"><a href="#编写一个简单的-YAML-描述文件创建-pod" class="headerlink" title="编写一个简单的 YAML 描述文件创建 pod"></a>编写一个简单的 YAML 描述文件创建 pod</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">test-nginx</span> <span class="comment">##pod名称</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">    containers:</span> <span class="comment">## pod里运行那些容器</span></span><br><span class="line"><span class="attr">    - image:</span> <span class="string">nginx</span>  <span class="comment">## 镜像名称</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">test</span>    <span class="comment">## 容器名称</span></span><br><span class="line"><span class="attr">      ports:</span></span><br><span class="line"><span class="attr">      - containerPort:</span> <span class="number">80</span> <span class="comment">## 容器运行监听的端口</span></span><br><span class="line"><span class="attr">        protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 kubectl explain 查找资源对象的属性<br>kubectl explain pod<br>kubectl explain pod.spec</p>
+</blockquote>
+<h4 id="使用-kubectl-create-来创建-pod"><a href="#使用-kubectl-create-来创建-pod" class="headerlink" title="使用 kubectl create 来创建 pod"></a>使用 kubectl create 来创建 pod</h4><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f test-nginx.yaml</span><br><span class="line">``` </span><br><span class="line">&gt; kubectl create -f 命令用于从YAML或JOSN文件创建任何资源，不只是pod。</span><br><span class="line"></span><br><span class="line">#### 获取运行中 pod 的完整定义</span><br><span class="line">```shell</span><br><span class="line">kubectl get po test-nginx -o yaml</span><br><span class="line">kubectl get po test-nginx -o json</span><br></pre></td></tr></table></figure>
+<h4 id="查看应用程序日志"><a href="#查看应用程序日志" class="headerlink" title="查看应用程序日志"></a>查看应用程序日志</h4><p>使用 kubectl logs 命令获取 pod 日志<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs test-nginx</span><br></pre></td></tr></table></figure></p>
+<p>获取多容器 pod 的日志时指定容器名称<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs test-nginx -c test</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>kubectl logs 命令将显示当前容器的日志。 当你想知道为什么前一个容器终止时，你想看到的是前一个容器的日志，而不是当前容器的。可以通过添加 –previous 选项来完成：<br>kubectl logs test-nginx –previous</p>
+</blockquote>
+<h3 id="停止和移除-pod"><a href="#停止和移除-pod" class="headerlink" title="停止和移除 pod"></a>停止和移除 pod</h3><ul>
+<li>按名称删除 pod</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kc delete pods test-nginx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用标签选择器删除 pod</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kc delete pods -l env=debug</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除指定命名空间下的所有 pod</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kc delete pods --all -n test-namespace</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/k8s3/" title="（三）Kubernetes 之 pod">http://fyuxuan.github.io/k8s3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/docker1/" rel="next" title="（一）初识 Docker 与容器">
+                <i class="fa fa-chevron-left"></i> （一）初识 Docker 与容器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/k8s2/" rel="prev" title="（二）Kubernetes简介：核心资源对象&核心组件">
+                （二）Kubernetes简介：核心资源对象&核心组件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.jianshu.com/u/a59c8c9b219b" title="我的简书" target="_blank">我的简书</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在-Kubernetes-中运行一个简单的-pod"><span class="nav-number">1.</span> <span class="nav-text">在 Kubernetes 中运行一个简单的 pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#列出-pod"><span class="nav-number">1.1.</span> <span class="nav-text">列出 pod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看pod详细信息"><span class="nav-number">1.2.</span> <span class="nav-text">查看pod详细信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用描述文件创建-pod"><span class="nav-number">2.</span> <span class="nav-text">使用描述文件创建 pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pod定义的主要几个部分"><span class="nav-number">2.1.</span> <span class="nav-text">pod定义的主要几个部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写一个简单的-YAML-描述文件创建-pod"><span class="nav-number">2.2.</span> <span class="nav-text">编写一个简单的 YAML 描述文件创建 pod</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-kubectl-create-来创建-pod"><span class="nav-number">2.2.1.</span> <span class="nav-text">使用 kubectl create 来创建 pod</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看应用程序日志"><span class="nav-number">2.2.2.</span> <span class="nav-text">查看应用程序日志</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#停止和移除-pod"><span class="nav-number">2.3.</span> <span class="nav-text">停止和移除 pod</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">21.7k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
