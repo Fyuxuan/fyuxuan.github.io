@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring Cloud,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务架构">
+<meta name="keywords" content="Spring Cloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（一）微服务架构与 Spring Cloud 简介">
+<meta property="og:url" content="http://fyuxuan.github.io/springcloud1/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务架构">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://file.yuxuan.video/15661318810425.jpg">
+<meta property="og:image" content="http://file.yuxuan.video/15661331490382.jpg">
+<meta property="og:updated_time" content="2019-08-26T13:55:50.749Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（一）微服务架构与 Spring Cloud 简介">
+<meta name="twitter:description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务架构">
+<meta name="twitter:image" content="http://file.yuxuan.video/15661318810425.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/springcloud1/">
+
+
+
+
+
+  <title>（一）微服务架构与 Spring Cloud 简介 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/springcloud1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">（一）微服务架构与 Spring Cloud 简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Cloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.9k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。</p>
+<p>目前软件架构有三种架构类型，分别是业务架构、应用架构、技术架构。它们之间的关系是业务架构决定应用架构，技术架构支撑应用架构。架构的发展历程是从单体架构、分布式架构、SOA架构再到微服务架构，如下图所示。</p>
+<p><img src="http://file.yuxuan.video/15661318810425.jpg" alt=""></p>
+<h2 id="单体应用架构"><a href="#单体应用架构" class="headerlink" title="单体应用架构"></a>单体应用架构</h2><p>传统的单体架构在Java领域可以理解为一个Web应用，大部分Web工程都是将所有的功能打包在一起部署和运行。按照程序调用顺序，从上到下为表示层、业务层、数据访问层、DB层。如下图所示<br><img src="http://file.yuxuan.video/15661331490382.jpg" alt=""></p>
+<p>因为所有的功能模块都是在一个工程编写的，所以从开发和测试的角度来看，开发人员可以在短时间内就开发出单体应用，并且由于没有过多的依赖项，测试也可以节约很多时间。</p>
+<p>但是，随着应用不断的发展，开发团队不断的扩张之后，单体应用的不足和弊端就会很明显的暴露出来，主要有以下不足点：</p>
+<ul>
+<li>灵活度不够：如果程序有任何修改，那么修改的不止一个点，可能需要从上到下地去修改，并且测试的时候必须等到整个程序部署完才能看出效果，并且由于整个开发工作都是在一个工程下进行的，可能需要等待其他开发人员开发完成才能完成部署，大大的降低了团队的灵活性。</li>
+<li>可靠性：一旦出现了bug，影响的将是整个应用。因为所有的模块功能都是运行在一个进程中的。</li>
+<li>复杂性高：单体应用的代码量可能会让团队新来的成员望而生畏，应用难以理解和迭代，从而到时开发速度大大降低。</li>
+<li>系统扩展性差：添加新东西的时候不能针对某个点增加，要全局性增加。</li>
+<li>系统启动慢：一个应用包含了所有功能模块，导致系统的启动时间较长。</li>
+</ul>
+<h2 id="SOA架构"><a href="#SOA架构" class="headerlink" title="SOA架构"></a>SOA架构</h2><p>SOA的核心主体是服务，其目标是通过服务的流程化来实现业务的灵活性。服务就像一堆“元器件”，这些元器件通过封装形成标准服务，它们有相同的接口和语义表达规则。但服务要组装成一个流程和应用，还需要有效的“管理”，包括如何注册服务、如何发现服 务、如何包装服务的安全性和可靠性，这些就是SOA治理。SOA治理是将 SOA 的一堆元器件进行有效组装。这是形成一个“产品”的关键，否则那些永远是一堆元器件，而无法形成一个有机整体。<br>完整的SOA架构由五大部分组成：基础设施服务、企业服务总线、关键服务组件、开发工具、管理工具等。</p>
+<ul>
+<li>基础设施：为整个SOA组件和框架提供一个可靠的运行环境，以及服务组件容器，它的核心组件是应用服务器等基础软件支撑设施，提供运行期完整、可靠的软件支撑 。</li>
+<li>企业服务总线：提供可靠消息传输、服务接入、协议转换、数据格式转换、 基于内容的路由等功能，屏蔽了服务的物理位置、协议和数据格式 。</li>
+<li>关键服务组件：SOA在各种业务服务组件的分类。</li>
+<li>开发工具和管理工具：提供完善的、可视化的服务开发和流程编排工具，包括服务的设计、开发、 配置、部署、监控、重构等完整的SOA项目开发生命周期 。</li>
+</ul>
+<p>SOA 架构中有两个主要角色：服务提供者（Provider）和服务消费者（Consumer）。<br>SOA架构的优点：</p>
+<ul>
+<li>把模块拆分， 使用接口通信， 降低模块之间的耦合度。</li>
+<li>把项目拆分成若干个子项目，不同的团队负责不同的子项目。</li>
+<li>增加功能时只需要增加一个子项目，调用其他系统的接口即可。</li>
+<li>可以灵活地进行分布式部署。 </li>
+</ul>
+<p>SOA 架构的缺点：系统之间的交互需要使用远程通信， 接口开发增加工作量 。</p>
+<h2 id="微服务架构"><a href="#微服务架构" class="headerlink" title="微服务架构"></a>微服务架构</h2><p>微服务的概率最早是由 Martin Fowler 与 James Lewis 于 2014 年共同提出，需要了解细节的读者可以阅览 <a href="https://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">Microservices</a>。根据其描述，总体来说，微服务是一种架构风格， 对于一个大型复杂的业务系统，它的业务功能可以拆分为多个相互独立的微服务，各个微服务之间是松搞合的，通过各种远程协议进行同步／异步通信，各微服务均可以被独立部署、 扩／缩容以及升／降级。这些服务是基于业务逻辑和范围，通过自动 化部署的机制来独立部署的，并且服务的集中管理应该是最低限度的，即每个服务可以采用不同的编程语言编写，使用不同的数据存储技术 。<br>如今，微服务架构已经不是一个新概念了，很多业界前沿互联网公司的实践表明，微服务是一种渐进式的演进架构，是企业应对业务复杂性，支持大规模持续创新行之有效的架构手段。</p>
+<h3 id="微服务组成"><a href="#微服务组成" class="headerlink" title="微服务组成"></a>微服务组成</h3><p>微服务架构是一种比较复杂、内涵丰富的架构模式，它包含很多支撑“微”服务的具体组件和概念，其中一些常用的组件及其概念如下：</p>
+<ul>
+<li>服务注册与发现：服务提供方将己方调用地址注册到服务注册中心，让服务调用方能够方便地找到自己；服务调用方从服务注册中心找到自己需要调用的服务的地址。</li>
+<li>负载均衡：服务提供方一般以多实例的形式提供服务，负载均衡功能能够让服务调用方连接到合适的服务节点。并且，服务节点选择的过程对服务调用方来说是透明的。</li>
+<li>服务网关：服务网关是服务调用的唯一入口，可以在这个组件中实现用户鉴权、动态路由、灰度发布、 A/B测试、负载限流等功能。</li>
+<li>配置中心：将本地化的配置信息（ Properties 、 XML 、 YAML 等形式）注册到配置中心，实现程序包在开发、测试、生产环境中的无差别性，方便程序包的迁移。</li>
+<li>集成框架：微服务组件都以职责单一的程序包对外提供服务，集成框架以配置的形 式将所有微服务组件（特别是管理端组件）集成到统一的界面框架下，让用户能够 在统一的界面中使用系统。</li>
+<li>调用链监控：记录完成一次请求的先后衔接和调用关系，并将这种串行或并行的调用关系展示出来。在系统出错时，可以方便地找到出错点。</li>
+<li>支撑平台：系统微服务化后，各个业务模块经过拆分变得更加细化，系统的部署、运维、监控等都比单体应用架构更加复杂，这就需要将大部分的工作自动化。 现在，Jenkins、Docker、Kubernetes等工具可以给微服务架构的部署带来较多的便利，例如持续集成、蓝绿 发布、健康检查、性能健康等等。如果没有合适的支撑平台或工具，微服务架构就无法发挥它最大的功效 。</li>
+</ul>
+<p>微服务架构模式有很多优势可以有效解决单体应用扩大之后出现的大部分问题。首先，通过将巨大单体式应用分解为多个服务的方法解决了复杂性问题。在功能不变的情况下，应用分解为多个可管理的模块或服务。每个服务都有一个用RPC或者消息驱动API定义清楚的边界。微服务架构模式为采用单体式编码方式，由此，单个服务变得很容易开发、理解和维护。<br>其次，微服务架构模式使得团队并行开发得以推进，每个服务都可以由专门开发团队来开发。不同团队的开发者可以自由选择开发技术，提供API服务。这种自由意味着开发者不需要被迫使用之前采用的过时技术，他们可以选择最新的技术。甚至于，因为服务都是相对简单的，即使用新技术重写以前的代码也不是很困难的事情。</p>
+<p>微服务的一些想法是好的，但在实践中也会呈现出其复杂性，具体如下：</p>
+<ul>
+<li>运维要求较高：更多的服务意味着需要更多的运维投入。在单体架构中只需要保证一个应用的正常运行即可；而在微服务中，需要保证几十甚至几百个服务的正常运行与协作，这带来了巨大的挑战。 </li>
+<li>分布式固有的复杂性：使用微服务构建的是分布式系统。对于一个分布式系统来说，系统容错、网络延迟、分布式事务等都会带来巨大的挑战。</li>
+<li>接口调整成本高：微服务之间通过接口进行通信。 如果修改某个微服务的API，可能所有使用了该接口 的微服务都需要做调整。</li>
+<li>重复劳动：很多服务可能都会使用到相同的功能， 而这个功能并没有达到分解为一个微服务的程度， 这个时候，可能各个服务都会开发这一功能，导致代码重复。</li>
+<li>可测试性的挑战：在动态环境下，服务间的交互会产生非常微妙的行为，难以进行可视化及全面测试。</li>
+</ul>
+<h2 id="Spring-Cloud简介"><a href="#Spring-Cloud简介" class="headerlink" title="Spring Cloud简介"></a>Spring Cloud简介</h2><p>Spring Cloud是一系列框架的有序集合。目前由 Spring 官方开发维护，基于 Spring Boot 开发，提供一套完整的微服务解决方案。包括服务注册与发现、配置中心、全链路监控、 API 网关、熔断器等开源组件，可以随需扩展和替换组装。Spring并没有重复制造轮子，它只是将目前各家公司开发的比较成熟、经得起实际考验的服务框架组合起来，通过Spring Boot风格进行再封装屏蔽掉了复杂的配置和实现原理，最终给开发者留出了一套简单易懂、易部署和易维护的分布式系统开发工具包。</p>
+<p>Spring Cloud 不同于其他独立项目，它是拥有众多子项目的项目集合。因为 Spring Cloud 的子项目居多，每个子项目有自己的版本号，为了对 Spring Cloud 整体进行版本编号，确定一个可用于生产上的版本标识。这些版本采用伦敦地铁站的名字，按名称首字母排序，比如 Dalston 版、Edgware 版、Finchley 版、Greenwich 版。</p>
+<h2 id="Spring-Cloud-组成"><a href="#Spring-Cloud-组成" class="headerlink" title="Spring Cloud 组成"></a>Spring Cloud 组成</h2><p>Spring Cloud 包含的组件众多，各个组件都有各自不同的特性和优点，为使用者提供丰富的选择 ：</p>
+<ul>
+<li><p>服务注册与发现组件：Eureka、Zookeeper 和 Consul 等。</p>
+</li>
+<li><p>服务调用组件：Hystrix、Ribbon 和 OpenFeign。其中 Hystrix 能够使系统在出现依赖服务访问不可达的情况下，通过隔离系统依赖服务的方式，防止服务雪崩，同时提供失败回滚机制，使系统能够更快地从异常中恢复。Ribbon 用于提供客户端的软件负载均衡算法，还提供了一系列完善的配置项如连接超时、重试等。OpenFeign 是一个声明式 RESTful 网络请求客户端，它使编写 Web 服务客户端变得更加方便和快捷。</p>
+</li>
+<li><p>路由和过滤组件：包括 Zuul 和 Spring Cloud Gateway。Spring Cloud Gateway 提供了一个构建在 Spring 生态 之上的 API 网关，其旨在提供一种简单而有效的途径来发送API，并为他们提供横切关注点。如：安全性、监控指标和弹性。</p>
+</li>
+<li><p>消息组件：Spring Cloud Stream 和 Spring Cloud Bus。Spring Cloud Stream 对于分布式消息的各种需求进行了抽象，包括发布订阅、分组消费和消息分区等功能，实现了微服务之间的异步通信。Spring Cloud Bus 主要提供了服务间的事件通信（比如：刷新配置 ）。</p>
+</li>
+<li><p>安全控制组件：Spring Cloud Security 基于 OAuth2.0 开放网络的安全标准，提供了微服务环境下的单点登录、资源授权和令牌管理等功能。</p>
+</li>
+<li><p>链路监控组件：Spring Cloud Sleuth 提供了全自动、可配置的数据埋点，以 收集微服务调用链路上的性能数据，并可以结合 Zipkin 进行数据存储、统计和展示。</p>
+</li>
+</ul>
+<p>除了上述组件之外，Spring Cloud 还提供了命令行工具 Spring Cloud Cli 和集群工具 Spring Cloud Cluster。 Spring Cloud Cli 提供了以命令行和脚本的方式来管理微服务及 Spring Cloud 组件的方式，Spring Cloud Cluster 提供了集群选主、分布式锁和一次性令牌等分布式集群需要的技术组件。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">组件名称</th>
+<th style="text-align:center">所属项目</th>
+<th style="text-align:center">组件分类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Eureka</td>
+<td style="text-align:center">spring-cloud-netfix</td>
+<td style="text-align:center">注册中心</td>
+</tr>
+<tr>
+<td style="text-align:center">Consul</td>
+<td style="text-align:center">spring-cloud-consul</td>
+<td style="text-align:center">注册中心</td>
+</tr>
+<tr>
+<td style="text-align:center">Zookeeper</td>
+<td style="text-align:center">spring-cloud-zookeeper</td>
+<td style="text-align:center">注册中心</td>
+</tr>
+<tr>
+<td style="text-align:center">Zuul</td>
+<td style="text-align:center">spring-cloud-netfix</td>
+<td style="text-align:center">第一代网关</td>
+</tr>
+<tr>
+<td style="text-align:center">Ribbon</td>
+<td style="text-align:center">spring-cloud-netfix</td>
+<td style="text-align:center">负载均衡</td>
+</tr>
+<tr>
+<td style="text-align:center">Hystrix</td>
+<td style="text-align:center">spring-cloud-netfix</td>
+<td style="text-align:center">熔断器</td>
+</tr>
+<tr>
+<td style="text-align:center">Turbine</td>
+<td style="text-align:center">spring-cloud-netfix</td>
+<td style="text-align:center">集群监控</td>
+</tr>
+<tr>
+<td style="text-align:center">Feign</td>
+<td style="text-align:center">spring-cloud-openfeign</td>
+<td style="text-align:center">远程调用</td>
+</tr>
+<tr>
+<td style="text-align:center">Gateway</td>
+<td style="text-align:center">spring-cloud-gateway</td>
+<td style="text-align:center">第二代网关</td>
+</tr>
+<tr>
+<td style="text-align:center">Sleuth</td>
+<td style="text-align:center">spring-cloud-seluth</td>
+<td style="text-align:center">链路追踪</td>
+</tr>
+<tr>
+<td style="text-align:center">Bus</td>
+<td style="text-align:center">spring-cloud-bus</td>
+<td style="text-align:center">总线</td>
+</tr>
+<tr>
+<td style="text-align:center">config</td>
+<td style="text-align:center">spring-cloud-config</td>
+<td style="text-align:center">配置中心</td>
+</tr>
+<tr>
+<td style="text-align:center">Pipeline</td>
+<td style="text-align:center">spring-cloud-pipeline</td>
+<td style="text-align:center">部署管道</td>
+</tr>
+<tr>
+<td style="text-align:center">Dataflow</td>
+<td style="text-align:center">spring-cloud-dataflow</td>
+<td style="text-align:center">数据处理</td>
+</tr>
+<tr>
+<td style="text-align:center">Security</td>
+<td style="text-align:center">spring-cloud-Security</td>
+<td style="text-align:center">安全控制</td>
+</tr>
+</tbody>
+</table>
+<p>Spring Cloud 并不能与微服务或者微服务架构划上等号，不能误认为使用了 Spring Cloud 的应用服务就是微服务。微服务架构是一种架构的理念，重点是微服务的设计原则，从理论上为具体的技术落地提供了指导思想。Spring Cloud 是一个基于 Spring Boot 实现的服务治理工具包，关注全局的服务治理框架。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/springcloud1/" title="（一）微服务架构与 Spring Cloud 简介">http://fyuxuan.github.io/springcloud1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring-Cloud/" rel="tag"># Spring Cloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/springcloud2/" rel="next" title="（二）服务注册与发现之 Spring Cloud Eureka">
+                <i class="fa fa-chevron-left"></i> （二）服务注册与发现之 Spring Cloud Eureka
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/docker1/" rel="prev" title="（一）初识 Docker 与容器">
+                （一）初识 Docker 与容器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.jianshu.com/u/a59c8c9b219b" title="我的简书" target="_blank">我的简书</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单体应用架构"><span class="nav-number">1.</span> <span class="nav-text">单体应用架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SOA架构"><span class="nav-number">2.</span> <span class="nav-text">SOA架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务架构"><span class="nav-number">3.</span> <span class="nav-text">微服务架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务组成"><span class="nav-number">3.1.</span> <span class="nav-text">微服务组成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud简介"><span class="nav-number">4.</span> <span class="nav-text">Spring Cloud简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud-组成"><span class="nav-number">5.</span> <span class="nav-text">Spring Cloud 组成</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">19.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
