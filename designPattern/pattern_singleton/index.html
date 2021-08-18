@@ -83,11 +83,11 @@
 <meta name="keywords" content="Java,设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式 —— 单例模式">
-<meta property="og:url" content="http://fyuxuan.github.io/pattern_singleton/index.html">
+<meta property="og:url" content="http://fyuxuan.github.io/designPattern/pattern_singleton/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
 <meta property="og:description" content="概念程序在运行时，通常都会生成很多实例。例如，表示字符串的 String 类的实例与字符串是一一对应的关系，所以当有 1000 个字符串的时候，会生成 1000 个实例。 但是，当我们想在程序中表示某个东西只会存在一个时，就会有“只能创建-一个实例”的需求。典型的例子有表示程序所运行于的那台计算机的类、表示软件系统相关设置的类，以及表示视窗系统（window system）的类。当然，只要我们在编">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-28T14:14:04.981Z">
+<meta property="og:updated_time" content="2021-08-18T01:58:03.746Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式 —— 单例模式">
 <meta name="twitter:description" content="概念程序在运行时，通常都会生成很多实例。例如，表示字符串的 String 类的实例与字符串是一一对应的关系，所以当有 1000 个字符串的时候，会生成 1000 个实例。 但是，当我们想在程序中表示某个东西只会存在一个时，就会有“只能创建-一个实例”的需求。典型的例子有表示程序所运行于的那台计算机的类、表示软件系统相关设置的类，以及表示视窗系统（window system）的类。当然，只要我们在编">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/pattern_singleton/">
+  <link rel="canonical" href="http://fyuxuan.github.io/designPattern/pattern_singleton/">
 
 
 
@@ -223,6 +223,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
@@ -265,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/pattern_singleton/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/designPattern/pattern_singleton/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -385,7 +395,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Lazy lazy;</span><br></pre></td></tr></table></figure>
 <p>好了,到此关于线程安全的问题我们解决了.</p>
 <p>现在我们再来考虑一个问题, 做过java的同学,想必对反射和序列化不陌生.为什么在这里提这两个呢? 因为这两个可能会破坏我们的单例.(具体什么原因,后面我会有详细的文章介绍).针对这个问题我们可以做出如下修改就可以解决:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们只需要在单例类里定义此方法就能解决</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> lazy;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//我们只需要在单例类里定义此方法就能解决</span><br><span class="line">private Object readResolve() &#123;</span><br><span class="line">       return lazy;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -406,7 +416,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/pattern_singleton/" title="设计模式 —— 单例模式">http://fyuxuan.github.io/pattern_singleton/</a>
+    <a href="http://fyuxuan.github.io/designPattern/pattern_singleton/" title="设计模式 —— 单例模式">http://fyuxuan.github.io/designPattern/pattern_singleton/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -442,8 +452,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/pattern_factory_method/" rel="prev" title="设计模式 —— 工厂方法模式">
-                设计模式 —— 工厂方法模式 <i class="fa fa-chevron-right"></i>
+              <a href="/designPattern/pattern_simple_factory/" rel="prev" title="设计模式 —— 简单工厂模式">
+                设计模式 —— 简单工厂模式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -521,7 +531,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>

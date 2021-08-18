@@ -82,21 +82,22 @@
 <meta name="description" content="Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。Kubernetes 具备完善的集群管理能力">
 <meta name="keywords" content="Kubernetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="（一）Kubernetes简介：Kubernetes架构">
-<meta property="og:url" content="http://fyuxuan.github.io/k8s1/index.html">
+<meta property="og:title" content="（一）Kubernetes简介：Kubernetes架构2">
+<meta property="og:url" content="http://fyuxuan.github.io/kubernetes/k8s1/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
 <meta property="og:description" content="Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。Kubernetes 具备完善的集群管理能力">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15662939314245.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-5262ffd168735d45.jpg">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15662946967695.jpg">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15663927970976.jpg">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15663928276452.jpg">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15663928485300.jpg">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15663928706968.jpg">
 <meta property="og:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15663928960235.jpg">
-<meta property="og:updated_time" content="2021-08-17T06:08:25.947Z">
+<meta property="og:updated_time" content="2021-08-18T06:12:55.610Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="（一）Kubernetes简介：Kubernetes架构">
+<meta name="twitter:title" content="（一）Kubernetes简介：Kubernetes架构2">
 <meta name="twitter:description" content="Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。Kubernetes 具备完善的集群管理能力">
 <meta name="twitter:image" content="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15662939314245.jpg">
 
@@ -128,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/k8s1/">
+  <link rel="canonical" href="http://fyuxuan.github.io/kubernetes/k8s1/">
 
 
 
 
 
-  <title>（一）Kubernetes简介：Kubernetes架构 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>（一）Kubernetes简介：Kubernetes架构2 | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -231,6 +232,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
@@ -273,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/k8s1/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s1/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -290,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">（一）Kubernetes简介：Kubernetes架构</h1>
+          <h1 class="post-title" itemprop="name headline">（一）Kubernetes简介：Kubernetes架构2</h1>
         
 
         <div class="post-meta">
@@ -372,7 +383,7 @@
         <p>Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的workflows 和更高级的自动化任务。<br>Kubernetes 具备完善的集群管理能力，包括多层次的安全防护和准入机制、多租户应用支撑能力、透明的服务注册和服务发现机制、内建负载均衡器、故障发现和自我修复能力、服务滚动升级和在线扩容、可扩展的资源自动调度机制、多粒度的资源配额管理能力。<br>Kubernetes 还提供完善的管理工具，涵盖开发、部署测试、运维监控等各个环节。</p>
 <h2 id="Borg简介"><a href="#Borg简介" class="headerlink" title="Borg简介"></a>Borg简介</h2><p>Borg是谷歌内部的大规模集群管理系统，负责对谷歌内部很多核心服务的调度和管理。Borg的目的是让用户能够不必操心资源管理的问题，让他们专注于自己的核心业务，并且做到跨多个数据中心的资源利用率最大化。</p>
 <p>Borg主要由BorgMaster、Borglet、borgcfg和Scheduler组成，如下图所示</p>
-<p>  <img src="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15662939314245.jpg" alt="-w572"></p>
+<p>  <img src="https://gitee.com/yuxuancode/picgo_image/raw/master/images/15662939314245.jpg" alt="-w572"><br>  <img src="https://upload-images.jianshu.io/upload_images/1455014-5262ffd168735d45.jpg" alt="-w572"></p>
 <ul>
 <li>BorgMaster 是整个集群的大脑，负责维护整个集群的状态，并将数据持久化到 Paxos 存储中；</li>
 <li>Scheduer 负责任务的调度，根据应用的特点将其调度到具体的机器上去；</li>
@@ -446,7 +457,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/k8s1/" title="（一）Kubernetes简介：Kubernetes架构">http://fyuxuan.github.io/k8s1/</a>
+    <a href="http://fyuxuan.github.io/kubernetes/k8s1/" title="（一）Kubernetes简介：Kubernetes架构2">http://fyuxuan.github.io/kubernetes/k8s1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -474,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/k8s2/" rel="next" title="（二）Kubernetes简介：核心资源对象&核心组件">
-                <i class="fa fa-chevron-left"></i> （二）Kubernetes简介：核心资源对象&核心组件
+              <a href="/docker/docker1/" rel="next" title="（一）初识 Docker 与容器">
+                <i class="fa fa-chevron-left"></i> （一）初识 Docker 与容器
               </a>
             
           </div>
@@ -484,8 +495,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/k8s3/" rel="prev" title="（三）Kubernetes 之 pod">
-                （三）Kubernetes 之 pod <i class="fa fa-chevron-right"></i>
+              <a href="/kubernetes/k8s2/" rel="prev" title="（二）Kubernetes简介：核心资源对象&核心组件">
+                （二）Kubernetes简介：核心资源对象&核心组件 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -563,7 +574,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>

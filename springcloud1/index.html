@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务架构">
+<meta name="description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务">
 <meta name="keywords" content="Spring Cloud">
 <meta property="og:type" content="article">
 <meta property="og:title" content="（一）微服务架构与 Spring Cloud 简介">
 <meta property="og:url" content="http://fyuxuan.github.io/springcloud1/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务架构">
+<meta property="og:description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://file.yuxuan.video/15661318810425.jpg">
-<meta property="og:image" content="http://file.yuxuan.video/15661331490382.jpg">
-<meta property="og:updated_time" content="2019-08-26T13:55:50.749Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-3a3ff2c6224b631b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-2fa28cd5b928fbb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2021-08-18T06:28:42.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="（一）微服务架构与 Spring Cloud 简介">
-<meta name="twitter:description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务架构">
-<meta name="twitter:image" content="http://file.yuxuan.video/15661318810425.jpg">
+<meta name="twitter:description" content="从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。 目前软件架构有三种架构类型，分别是业务">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-3a3ff2c6224b631b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -222,6 +222,16 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
           </a>
         </li>
       
@@ -364,10 +374,12 @@
       
 
       
-        <p>从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。</p>
+        <meta name="referrer" content="no-referrer">
+
+<p>从单体应用架构发展到SOA架构，再到微服务架构，应用架构经历了多年的不断演进。微服务架构不是凭空产生的，而是技术发展的必然结果，分布式云平台的应用环境使得微服务代替单体应用成为互联网大型系统的架构选择。目前，虽然微服务架构还没有公 认的技术标准和规范草案，但业界已经有了一些很有影响力的开源微服务架构解决方案，在进行微服务化开发或改造时可以进行相应的参考。</p>
 <p>目前软件架构有三种架构类型，分别是业务架构、应用架构、技术架构。它们之间的关系是业务架构决定应用架构，技术架构支撑应用架构。架构的发展历程是从单体架构、分布式架构、SOA架构再到微服务架构，如下图所示。</p>
-<p><img src="http://file.yuxuan.video/15661318810425.jpg" alt=""></p>
-<h2 id="单体应用架构"><a href="#单体应用架构" class="headerlink" title="单体应用架构"></a>单体应用架构</h2><p>传统的单体架构在Java领域可以理解为一个Web应用，大部分Web工程都是将所有的功能打包在一起部署和运行。按照程序调用顺序，从上到下为表示层、业务层、数据访问层、DB层。如下图所示<br><img src="http://file.yuxuan.video/15661331490382.jpg" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-3a3ff2c6224b631b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="单体应用架构"><a href="#单体应用架构" class="headerlink" title="单体应用架构"></a>单体应用架构</h2><p>传统的单体架构在Java领域可以理解为一个Web应用，大部分Web工程都是将所有的功能打包在一起部署和运行。按照程序调用顺序，从上到下为表示层、业务层、数据访问层、DB层。如下图所示<br><img src="https://upload-images.jianshu.io/upload_images/1455014-2fa28cd5b928fbb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>因为所有的功能模块都是在一个工程编写的，所以从开发和测试的角度来看，开发人员可以在短时间内就开发出单体应用，并且由于没有过多的依赖项，测试也可以节约很多时间。</p>
 <p>但是，随着应用不断的发展，开发团队不断的扩张之后，单体应用的不足和弊端就会很明显的暴露出来，主要有以下不足点：</p>
 <ul>
@@ -575,7 +587,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/docker1/" rel="prev" title="（一）初识 Docker 与容器">
+              <a href="/docker/docker1/" rel="prev" title="（一）初识 Docker 与容器">
                 （一）初识 Docker 与容器 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -654,7 +666,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>

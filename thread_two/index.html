@@ -225,6 +225,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
@@ -420,7 +430,7 @@
 <li>对于root用户，它会hint操作系统你想要设置的优先级别，否则它会被忽略。</li>
 <li>在CPU比较忙的情况下，设置优先级可能会获取更多的CPU调度机会，但是闲时优先级的高低一般不会有任何作用。</li>
 </ul>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//简单来看看设置优先级方法的源码</span></span><br><span class="line"><span class="keyword">public</span> final void setPriority(int <span class="keyword">new</span><span class="type">Priority</span>) &#123;</span><br><span class="line">        ThreadGroup g;</span><br><span class="line">        checkAccess();</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">new</span><span class="type">Priority</span> &gt; MAX_PRIORITY || <span class="keyword">new</span><span class="type">Priority</span> &lt; MIN_PRIORITY) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">IllegalArgumentException</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((g = getThreadGroup()) != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">new</span><span class="type">Priority</span> &gt; g.getMaxPriority()) &#123;</span><br><span class="line">                <span class="keyword">new</span><span class="type">Priority</span> = g.getMaxPriority();</span><br><span class="line">            &#125;</span><br><span class="line">            setPriority0(priority = <span class="keyword">new</span><span class="type">Priority</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//简单来看看设置优先级方法的源码</span><br><span class="line">public final void setPriority(int newPriority) &#123;</span><br><span class="line">        ThreadGroup g;</span><br><span class="line">        checkAccess();</span><br><span class="line">        if (newPriority &gt; MAX_PRIORITY || newPriority &lt; MIN_PRIORITY) &#123;</span><br><span class="line">            throw new IllegalArgumentException();</span><br><span class="line">        &#125;</span><br><span class="line">        if((g = getThreadGroup()) != null) &#123;</span><br><span class="line">            if (newPriority &gt; g.getMaxPriority()) &#123;</span><br><span class="line">                newPriority = g.getMaxPriority();</span><br><span class="line">            &#125;</span><br><span class="line">            setPriority0(priority = newPriority);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>分析如上代码，可以看出线程的优先级必须是1~10，如果指定的线程优先级大于线程所在的group的优先级，那么会忽略指定的优先级从而获取group的最大优先级。线程默认的优先级和创建它的那个线程保持一致，一般情况下都是5.</p>
 <h3 id="获取线程ID-getId"><a href="#获取线程ID-getId" class="headerlink" title="获取线程ID getId()"></a>获取线程ID getId()</h3><p>getId()获取线程的唯一ID,线程的ID在整个JVM进程中都是唯一的。</p>
 <h3 id="线程-interrupt相关方法"><a href="#线程-interrupt相关方法" class="headerlink" title="线程 interrupt相关方法"></a>线程 interrupt相关方法</h3><ul>
@@ -431,7 +441,7 @@
 <li><p>interrupted()方法<br>此方法是Thread中的一个静态方法，也是主要用于判断当前线程是否被中断，但是它和isInterrupted()方法有个区别就是该方法会直接清除掉该线程的interrupt标识</p>
 </li>
 </ul>
-<h3 id="线程join方法"><a href="#线程join方法" class="headerlink" title="线程join方法"></a>线程join方法</h3><p>join方法会使当前线程永远的等待下去，直到期间被另外的线程中断，或者join的线程执行结束，也可以使用另外两个重载方法，指定等待毫秒数，在指定的时间到达之后，当前线程也回退出阻塞。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">join</span><span class="params">()</span></span> 一直等待</span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis)</span></span> 等待指定毫秒数</span><br><span class="line"><span class="function"><span class="title">join</span><span class="params">(long millis, int nanos)</span></span> 等待指定毫秒数</span><br></pre></td></tr></table></figure></p>
+<h3 id="线程join方法"><a href="#线程join方法" class="headerlink" title="线程join方法"></a>线程join方法</h3><p>join方法会使当前线程永远的等待下去，直到期间被另外的线程中断，或者join的线程执行结束，也可以使用另外两个重载方法，指定等待毫秒数，在指定的时间到达之后，当前线程也回退出阻塞。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">join() 一直等待</span><br><span class="line">join(long millis) 等待指定毫秒数</span><br><span class="line">join(long millis, int nanos) 等待指定毫秒数</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -482,8 +492,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/pattern_simple_factory/" rel="next" title="设计模式 —— 简单工厂模式">
-                <i class="fa fa-chevron-left"></i> 设计模式 —— 简单工厂模式
+              <a href="/thread_three/" rel="next" title="三、【Java并发】线程安全之synchronized的原理和应用">
+                <i class="fa fa-chevron-left"></i> 三、【Java并发】线程安全之synchronized的原理和应用
               </a>
             
           </div>
@@ -571,7 +581,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
