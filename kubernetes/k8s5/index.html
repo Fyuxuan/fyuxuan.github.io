@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Docker,">
+  <meta name="keywords" content="Kubernetes,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Docker 是基于 Go 语言实现的开源容器项目，主要用于创建、管理和编排容器。 它诞生于 2013 年年初，最初是由一家名为 dotCloud 的公司利用 Linux 容器技术开发的一套内部工具。自开源后受到业界广泛的关注与参与，dotCloud 公司也随之快速发展壮大， 在 2013 年年底直接改名为 Docker Inc，并专注于 Docker 相关技术和产品的开发，目前已经成为全球最大的">
-<meta name="keywords" content="Docker">
+<meta name="description" content="保持pod健康使用 Kubernetes 的一个主要好处是，可以给 Kubernetes －个容器列表来由其保持容器在集群中的运行。可以通过让 Kubernetes 创建 pod 资源，为其选择一个工作节点并在该节点上运行该 pod 的容器来完成此操作。但是，如果其中一个容器终止，或一个 pod 的所有容器都终止，怎么办？ 只要将 pod 调度到某个节点，该节点上的 Kubelet 就会运行 po">
+<meta name="keywords" content="Kubernetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="（一）初识 Docker 与容器">
-<meta property="og:url" content="http://fyuxuan.github.io/docker/docker1/index.html">
+<meta property="og:title" content="（五）Kubernetes 之 存活探针">
+<meta property="og:url" content="http://fyuxuan.github.io/kubernetes/k8s5/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="Docker 是基于 Go 语言实现的开源容器项目，主要用于创建、管理和编排容器。 它诞生于 2013 年年初，最初是由一家名为 dotCloud 的公司利用 Linux 容器技术开发的一套内部工具。自开源后受到业界广泛的关注与参与，dotCloud 公司也随之快速发展壮大， 在 2013 年年底直接改名为 Docker Inc，并专注于 Docker 相关技术和产品的开发，目前已经成为全球最大的">
+<meta property="og:description" content="保持pod健康使用 Kubernetes 的一个主要好处是，可以给 Kubernetes －个容器列表来由其保持容器在集群中的运行。可以通过让 Kubernetes 创建 pod 资源，为其选择一个工作节点并在该节点上运行该 pod 的容器来完成此操作。但是，如果其中一个容器终止，或一个 pod 的所有容器都终止，怎么办？ 只要将 pod 调度到某个节点，该节点上的 Kubelet 就会运行 po">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-08-18T01:57:22.861Z">
+<meta property="og:updated_time" content="2021-08-19T03:25:53.441Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="（一）初识 Docker 与容器">
-<meta name="twitter:description" content="Docker 是基于 Go 语言实现的开源容器项目，主要用于创建、管理和编排容器。 它诞生于 2013 年年初，最初是由一家名为 dotCloud 的公司利用 Linux 容器技术开发的一套内部工具。自开源后受到业界广泛的关注与参与，dotCloud 公司也随之快速发展壮大， 在 2013 年年底直接改名为 Docker Inc，并专注于 Docker 相关技术和产品的开发，目前已经成为全球最大的">
+<meta name="twitter:title" content="（五）Kubernetes 之 存活探针">
+<meta name="twitter:description" content="保持pod健康使用 Kubernetes 的一个主要好处是，可以给 Kubernetes －个容器列表来由其保持容器在集群中的运行。可以通过让 Kubernetes 创建 pod 资源，为其选择一个工作节点并在该节点上运行该 pod 的容器来完成此操作。但是，如果其中一个容器终止，或一个 pod 的所有容器都终止，怎么办？ 只要将 pod 调度到某个节点，该节点上的 Kubelet 就会运行 po">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/docker/docker1/">
+  <link rel="canonical" href="http://fyuxuan.github.io/kubernetes/k8s5/">
 
 
 
 
 
-  <title>（一）初识 Docker 与容器 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>（五）Kubernetes 之 存活探针 | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/docker/docker1/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s5/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -292,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">（一）初识 Docker 与容器</h1>
+          <h1 class="post-title" itemprop="name headline">（五）Kubernetes 之 存活探针</h1>
         
 
         <div class="post-meta">
@@ -315,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index">
-                    <span itemprop="name">Docker</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -346,7 +346,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.5k
+                  944
                 </span>
               
 
@@ -371,66 +371,45 @@
       
 
       
-        <p>Docker 是基于 Go 语言实现的开源容器项目，主要用于创建、管理和编排容器。 它诞生于 2013 年年初，最初是由一家名为 dotCloud 的公司利用 Linux 容器技术开发的一套内部工具。自开源后受到业界广泛的关注与参与，dotCloud 公司也随之快速发展壮大， 在 2013 年年底直接改名为 Docker Inc，并专注于 Docker 相关技术和产品的开发，目前已经成为全球最大的 Docker 容器服务提供商。</p>
-<p>Docker 的构想是要实现“ Build, Ship and Run Any App, Anywhere ”，即通过对应用的封装（Packaging）、分发（ Distribution ）、部署（ Deployment）、运行（ Runtime ）生命周期进行管 理，达到应用组件级别的“一次封装，到处运行”。这里的应用组件， 既可以是一个 Web 应用、一个编译环境，也可以是一套数据库平台服务，甚至是一个操作系统或集群。基于 Linux 平台上的多项开源技术，Docker 提供了高效、敏捷和轻量级的容器方案， 并支持部署到本地环境和多种主流云平台。可以说，Docker 首次为应用的开发、运行和部署提供了“一站式”的实用解决方案。</p>
-<p>在 LXC 的基础上， Docker 进一步优化了容器的使用体验，让它进入寻常百姓家。首先，Docker 提供了各种容器管理工具（如分发、版本、移植等），让用户无须关注底层的操作，更加简单明了地管理和使用容器；其次，Docker 通过引入分层文件系统构建和高效的镜像机制，降低了迁移难度，极大地改善了用户体验。用户操作 Docker 容器就像操作应用自身一样简单。</p>
-<p>早期的 Docker 代码实现是直接基于 LXC 的。自 0.9 版本开始，Docker 开发了 libcontainer 项目作为更广泛的容器驱动实现，从而替换掉了 LXC 的实现。目前，Docker 还积极推动成立了 rune 标准项目，井贡献给开放容器联盟，试图让容器的支持不再局限于 Linux 操作系统，而是更安全、更开放、更具扩展性。</p>
-<h2 id="Docker-运行时与编排引擎"><a href="#Docker-运行时与编排引擎" class="headerlink" title="Docker 运行时与编排引擎"></a>Docker 运行时与编排引擎</h2><p>多数技术人员在谈到 Docker 时，主要是指 Docker 引擎。Docker 引擎是用于运行和编排容器的基础设施工具。有 VMware 管理经验的读者可以将其类比为 ESXi。ESXi 是运行虚拟机的核心管理程序，而 Docker 引擎是运行容器的核心容器运行时。</p>
-<p>Docker 引擎主要有两个版本:企业版 (EE) 和社区版 (CE)。<br>每个季度，企业版和社区版都会发布一一个稳定版本。社区版本会提供 4 个月的支持，而企业版本会提供 12 个月的支持。<br>社区版还会通过 Edge 方式发布月度版。</p>
-<h2 id="为什么要使用Docker"><a href="#为什么要使用Docker" class="headerlink" title="为什么要使用Docker"></a>为什么要使用Docker</h2><p>对开发和运维（ DevOps ）人员来说，最梦寐以求的效果可能就是一次创建或配置，之后可以在任意地方、任意时间让应用正常运行，而 Docker 恰恰是可以实现这一终极目标的“瑞士军刀”。具体说来，在开发和运维过程中，Docker 具有如下几个方面的优势：</p>
+        <h2 id="保持pod健康"><a href="#保持pod健康" class="headerlink" title="保持pod健康"></a>保持pod健康</h2><p>使用 Kubernetes 的一个主要好处是，可以给 Kubernetes －个容器列表来由其保持容器在集群中的运行。可以通过让 Kubernetes 创建 pod 资源，为其选择一个工作节点并在该节点上运行该 pod 的容器来完成此操作。但是，如果其中一个容器终止，或一个 pod 的所有容器都终止，怎么办？</p>
+<p>只要将 pod 调度到某个节点，该节点上的 Kubelet 就会运行 pod 的容器， 从此只要该 pod 存在，就会保持运行。如果容器的主进程崩溃，Kubelet 将重启容器。如果应用程序中有一个导致它每隔一段时间就会崩溃的 bug, Kubernetes 会自动重启应用程序，所以即使应用程序本身没有做任何特殊的事，在Kubernetes 中运行也能自动获得自我修复的能力。</p>
+<p>即使进程没有崩溃，有时应用程序也会停止正常工作。例如，具有内存泄漏的 Java 应用程序将开始抛出 OutOfMemoryErrors，但 JVM 进程会一直运行。如果有一种方法，能让应用程序向 Kubernetes 发出信号，告诉 Kubernetes 它运行异常并让 Kubernetes 重新启动，那就很棒了。</p>
+<p>我们已经说过，一个崩溃的容器会自动重启，所以也许你会想到，可以在应用中捕获这类错误， 并在错误发生时退出该进程。当然可以这样做，但这仍然不能解决所有的问题。</p>
+<p>例如，你的应用因为无限循环或死锁而停止响应。为确保应用程序在这种情况下可以重新启动，必须从外部检查应用程序的运行状况，而不是依赖于应用的内部检测。</p>
+<h3 id="存活探针"><a href="#存活探针" class="headerlink" title="存活探针"></a>存活探针</h3><p>Kubernetes 可以通过存活探针（liveness probe）检查容器是否还在运行。可以为 pod 中的每个容器单独指定存活探针。如果探测失败，Kubernetes 将定期执行探针并重新启动容器。</p>
+<p>Kubernetes 有以下三种探测容器的机制：</p>
 <ul>
-<li>更快速的交付和部署：使用 Docker，开发人员可以使用镜像来快速构建一套标准的开发环境；开发完成之后，测试和运维人员可以直接使用完全相同的环境来部署代码。只要是开发测试过的代码，就可以确保在生产环境无缝运行。Docker 可以快速创建和删除容器，实现快速迭代，节约开发、测试、部署的大量时间。</li>
-<li>更高效的资源利用：运行 Docker 容器不需要额外的虚拟化管理程序的支持，Docker 是内核级的虚拟化，可以实现更高的性能，同时对资源的额外需求很低。</li>
-<li>更轻松的迁移和扩展：Docker 容器几乎可以在任意的平台上运行，包括物理机、虚拟机、公有云、私有云、个人电脑、服务器等，同时支持主流的操作系统发行版本。</li>
-<li>更简单的更新管理：使用 Dockerfile，只需要小小的配置修改，就可以替代以往大量的更新工作。所有修改都以增量的方式被分发和更新，从而实现自动化并且高效的容器管理。</li>
+<li>HTTP GET 探针对容器的 IP 地址（指定的端口和路径）执行 HTTP GET 请求。如果探测器收到响应，并且响应状态码不代表错误（换句话说，如果 HTTP 响应状态码是 2xx 或 3xx ），则认为探测成功。如果服务器返回错误响应状态码或者根本没有响应，那么探测就被认为是失败的，容器将被重新启动。</li>
+<li>TCP 套接字探针尝试与容器指定端口建立 TCP 连接。如果连接成功建立，则探测成功。 否则，容器重新启动。</li>
+<li>Exec 探针在容器内执行任意命令，并检查命令的退出状态码。如果状态码是 0，则探测成功。所有其他状态码都被认为失败。</li>
 </ul>
-<p>Docker 容器除了运行其中的应用外，基本不消耗额外的系统资源，在保证应用性能的同时，尽量减小系统开销。传统虚拟机方式运行 N 个不同的应用就要启用 N 个虚拟机（每个虚拟机需要单独分配独占的内存、磁盘等资源），而 Docker 只需要启动 N 个隔离得“很薄的”容器，并将应用放进容器内即可。应用获得的是接近原生的运行性能。当然，在隔离性方面，传统的虚拟机方式提供的是相对封闭的隔离。但这并不意味着 Docker 不安全。 Docker利用 Linux 系统上的多种防护技术实现了严格的隔离可靠性， 并且可以整合众多安全工具。从 1.3.0 版本开始，Docker重点改善了容器的安全控制和镜像的安全机制，极大地提高了使用 Docker 的安全性。Docker 在运行应用上跟传统的虚拟机方式相比具有如下：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">特性</th>
-<th style="text-align:center">容器</th>
-<th style="text-align:center">虚拟机</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">启动速度</td>
-<td style="text-align:center">秒级</td>
-<td style="text-align:center">分钟级</td>
-</tr>
-<tr>
-<td style="text-align:center">性能</td>
-<td style="text-align:center">接近原生</td>
-<td style="text-align:center">较弱</td>
-</tr>
-<tr>
-<td style="text-align:center">内存代价</td>
-<td style="text-align:center">很小</td>
-<td style="text-align:center">较多</td>
-</tr>
-<tr>
-<td style="text-align:center">硬盘使用</td>
-<td style="text-align:center">一般为MB</td>
-<td style="text-align:center">一般为GB</td>
-</tr>
-<tr>
-<td style="text-align:center">运行密度</td>
-<td style="text-align:center">单机支持上千个容器</td>
-<td style="text-align:center">一般几十个</td>
-</tr>
-<tr>
-<td style="text-align:center">隔离性</td>
-<td style="text-align:center">安全隔离</td>
-<td style="text-align:center">完全隔离</td>
-</tr>
-<tr>
-<td style="text-align:center">迁移性</td>
-<td style="text-align:center">优秀</td>
-<td style="text-align:center">一般</td>
-</tr>
-</tbody>
-</table>
+<h4 id="创建-HTTP-的存活探针"><a href="#创建-HTTP-的存活探针" class="headerlink" title="创建 HTTP 的存活探针"></a>创建 HTTP 的存活探针</h4><p>创建一个包含 HTTP GET 存活探针的新 pod</p>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+    name: test-nginx-liveness-probe
+spec:
+    containers:
+    - image: nginx
+      name: test
+      ## 存活探针
+      livenessProbe:
+        ## 初始延迟
+        initiaDelaySeconds: 20
+        ## HTTP GET 存活探针
+        httpGet:
+            ## HTTP 请求路径
+            path: /
+            ## 端口
+            port: 8080
+      ports:
+      - containerPort: 80
+        protocol: TCP
+</code></pre><p>该 pod 的描述文件定义了一个 HTTP Get 存活探针，该探针告诉 Kubernetes 定期在端口 8080 路径上执行 HTTP GET 请求，已确定该容器是否健康，请求在容器运行后立即开始。</p>
+<p>上面指定8080，但其实容器没有在8080端口上运行http程序，所以会一直请求失败，Kubernete 会认为探测失败并重启容器。</p>
+<blockquote>
+<p>当容器被强行终止时会创建一个全新的容器，而不是重启原来的容器 。</p>
+</blockquote>
 
       
     </div>
@@ -451,7 +430,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/docker/docker1/" title="（一）初识 Docker 与容器">http://fyuxuan.github.io/docker/docker1/</a>
+    <a href="http://fyuxuan.github.io/kubernetes/k8s5/" title="（五）Kubernetes 之 存活探针">http://fyuxuan.github.io/kubernetes/k8s5/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -466,7 +445,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Docker/" rel="tag"># Docker</a>
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
           
         </div>
       
@@ -479,8 +458,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/springcloud/springcloud1/" rel="next" title="（一）微服务架构与 Spring Cloud 简介">
-                <i class="fa fa-chevron-left"></i> （一）微服务架构与 Spring Cloud 简介
+              <a href="/kubernetes/k8s4/" rel="next" title="（四）Kubernetes之标签-注解-命名空间">
+                <i class="fa fa-chevron-left"></i> （四）Kubernetes之标签-注解-命名空间
               </a>
             
           </div>
@@ -489,8 +468,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/kubernetes/k8s4/" rel="prev" title="（四）Kubernetes之标签-注解-命名空间">
-                （四）Kubernetes之标签-注解-命名空间 <i class="fa fa-chevron-right"></i>
+              <a href="/kubernetes/k8s6/" rel="prev" title="（六）Kubernetes 之 控制器">
+                （六）Kubernetes 之 控制器 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -641,7 +620,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-运行时与编排引擎"><span class="nav-number">1.</span> <span class="nav-text">Docker 运行时与编排引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要使用Docker"><span class="nav-number">2.</span> <span class="nav-text">为什么要使用Docker</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#保持pod健康"><span class="nav-number">1.</span> <span class="nav-text">保持pod健康</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存活探针"><span class="nav-number">1.1.</span> <span class="nav-text">存活探针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建-HTTP-的存活探针"><span class="nav-number">1.1.1.</span> <span class="nav-text">创建 HTTP 的存活探针</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
