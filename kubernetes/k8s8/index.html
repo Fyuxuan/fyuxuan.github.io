@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,多线程,">
+  <meta name="keywords" content="Kubernetes,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="1. 线程介绍对于计算机来说每一个任务就是一个进程，在进程运行过程中必须至少有一条线程实在运行中。线程本身是不会独立存在的，因为线程是进程中的一个执行路径。 操作系统在分配资源时是把资源分配给进程的，但是CPU资源比较特殊，它是被分配到线程的，因为真正要占用CPU运行的是线程，所以也说线程是 CPU 分配的基本单位。在Java中，当我们启动main函数时其实就启动了一个JVM的进程，而main函数">
-<meta name="keywords" content="Java,多线程">
+<meta name="description" content="现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，">
+<meta name="keywords" content="Kubernetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一、【Java并发】初识线程">
-<meta property="og:url" content="http://fyuxuan.github.io/thread_one/index.html">
+<meta property="og:title" content="（八）Kubernetes 之 就绪探针">
+<meta property="og:url" content="http://fyuxuan.github.io/kubernetes/k8s8/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="1. 线程介绍对于计算机来说每一个任务就是一个进程，在进程运行过程中必须至少有一条线程实在运行中。线程本身是不会独立存在的，因为线程是进程中的一个执行路径。 操作系统在分配资源时是把资源分配给进程的，但是CPU资源比较特殊，它是被分配到线程的，因为真正要占用CPU运行的是线程，所以也说线程是 CPU 分配的基本单位。在Java中，当我们启动main函数时其实就启动了一个JVM的进程，而main函数">
+<meta property="og:description" content="现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-22T03:10:53.688Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-0a4e696f494b4a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2021-08-21T11:15:20.706Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一、【Java并发】初识线程">
-<meta name="twitter:description" content="1. 线程介绍对于计算机来说每一个任务就是一个进程，在进程运行过程中必须至少有一条线程实在运行中。线程本身是不会独立存在的，因为线程是进程中的一个执行路径。 操作系统在分配资源时是把资源分配给进程的，但是CPU资源比较特殊，它是被分配到线程的，因为真正要占用CPU运行的是线程，所以也说线程是 CPU 分配的基本单位。在Java中，当我们启动main函数时其实就启动了一个JVM的进程，而main函数">
+<meta name="twitter:title" content="（八）Kubernetes 之 就绪探针">
+<meta name="twitter:description" content="现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-0a4e696f494b4a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/thread_one/">
+  <link rel="canonical" href="http://fyuxuan.github.io/kubernetes/k8s8/">
 
 
 
 
 
-  <title>一、【Java并发】初识线程 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>（八）Kubernetes 之 就绪探针 | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -275,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_one/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s8/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -292,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一、【Java并发】初识线程</h1>
+          <h1 class="post-title" itemprop="name headline">（八）Kubernetes 之 就绪探针</h1>
         
 
         <div class="post-meta">
@@ -315,19 +317,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/Java并发/" itemprop="url" rel="index">
-                    <span itemprop="name">Java并发</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -357,7 +348,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  813
+                  1.4k
                 </span>
               
 
@@ -382,18 +373,31 @@
       
 
       
-        <h2 id="1-线程介绍"><a href="#1-线程介绍" class="headerlink" title="1. 线程介绍"></a>1. 线程介绍</h2><p>对于计算机来说每一个任务就是一个进程，在进程运行过程中必须至少有一条线程实在运行中。线程本身是不会独立存在的，因为线程是进程中的一个执行路径。</p>
-<p>操作系统在分配资源时是把资源分配给进程的，但是CPU资源比较特殊，它是被分配到线程的，因为真正要占用CPU运行的是线程，所以也说线程是 CPU 分配的基本单位。在Java中，当我们启动main函数时其实就启动了一个JVM的进程，而main函数所在的线程就是这个进程中的一个线程，也称主线程。</p>
-<blockquote>
-<p>在单核CPU的计算机中，其实并没有真正的并行运算，一般是使用时间片轮转方式让线程轮询占用的，只不过快速的轮转调度带给你的错觉，让你产生了它们真的在同一时刻同时运行。当然如果是多核CPU,那么并行运行还是真实存在的。</p>
-</blockquote>
-<h2 id="2-JAVA中的线程创建和运行"><a href="#2-JAVA中的线程创建和运行" class="headerlink" title="2.JAVA中的线程创建和运行"></a>2.JAVA中的线程创建和运行</h2><p>Java中有三种线程的创建方式，分别为实现Runnable接口的run方法，集成Thread类重写run方法，使用FutureTask方式。</p>
-<h3 id="首先来看看Thread类方式的实现"><a href="#首先来看看Thread类方式的实现" class="headerlink" title="首先来看看Thread类方式的实现"></a>首先来看看Thread类方式的实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//继承Thread,重写run方法</span><br><span class="line">class MyThread extends Thread&#123;</span><br><span class="line">    </span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ThreadTest &#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        </span><br><span class="line">        //创建线程</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        //启动线程</span><br><span class="line">        myThread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从代码中可以看出MyThread类继承了Thread类，并重写了run()方法。在 main 函数中创建了MyThread的实例并调用了start方式启动了线程。</p>
-<p>使用继承有个不好的地方就是Java是不支持多继承的，所以如果使用了继承方式，那么就不能再继承其他类。还有就是任务与代码没有分离，当多个线程执行一样的任务时就会产生代码冗余。而Runable就没有这个限制。下面我们来看看Runnable接口的方式。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//实现Runnable接口</span><br><span class="line">class MyThread implements Runnable&#123;</span><br><span class="line">    </span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ThreadTest &#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        </span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        </span><br><span class="line">        new Thread(myThread).start();</span><br><span class="line">        new Thread(myThread).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从上面代码可以看出，两个线程公用了一个代码逻辑，并且MyThread可以继承其他类。但是两种方式都有一个缺点，就是任务没有返回值。下面我们可以来看看FutureTask方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//实现Callable接口</span><br><span class="line">class MyThread implements Callable&lt;String&gt;&#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String call() throws Exception &#123;</span><br><span class="line">        return &quot;result&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ThreadTest &#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        </span><br><span class="line">        //创建任务</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        FutureTask&lt;String&gt; futureTask = new FutureTask&lt;&gt;(myThread);</span><br><span class="line">        </span><br><span class="line">        //启动线程</span><br><span class="line">        new Thread(futureTask).start();</span><br><span class="line">        </span><br><span class="line">        try &#123;</span><br><span class="line">            //等待任务执行完成,并返回结果</span><br><span class="line">            String result = futureTask.get();</span><br><span class="line">            System.out.println(result);</span><br><span class="line">        &#125; catch (InterruptedException | ExecutionException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面代码中的MyThread类实现了Callable接口的call()方法。在main函数中创建了一个FutrueTask对象，然后使用FutrueTask对象作为任务创建一个线程并启动。最后通过get()等待任务执行完成拿到结果。</p>
+        <meta name="referrer" content="no-referrer">
+
+<p>现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，尤其是在有其他运行的 pod 可以正确快速地处理请求的情况下。 不要将请求转发到正在启动的 pod 中，直到完全准备就绪。</p>
+<h2 id="就绪探针"><a href="#就绪探针" class="headerlink" title="就绪探针"></a>就绪探针</h2><p>前面我们了解了存活探针，以及它们如何通过确保异常容器自动重启来保持应用程序的正常运行。与存活探针类似，Kubernetes 还允许为容器定义准备就绪探针 。</p>
+<p>就绪探测器会定期调用，并确定特定的 pod 是否接收客户端请求。当容器的准备就绪探测返回成功时，表示容器己准备好接收请求。</p>
+<p>这个准备就绪的概念显然是每个容器特有的东西。 Kubernetes 只能检查在容器中运行的应用程序是否响应一个简单的 GET 请求，或者它可以响应特定的 URL 路径（该 URL 导致应用程序执行一系列检查以确定它是否准备就绪）。考虑到应用程序的具体情况，这种确切的准备就绪的判定是应用程序开发人员的 责任。</p>
+<p>像存活探针一样，就绪探针有三种类型：</p>
+<ul>
+<li>HTTP GET 探针对容器的 IP 地址（指定的端口和路径）执行 HTTP GET 请求。如果探测器收到响应，并且响应状态码不代表错误（换句话说，如果 HTTP 响应状态码是 2xx 或 3xx ），则认为探测成功。如果服务器返回错误响应状态码或者根本没有响应，那么探测就被认为是失败的。</li>
+<li>TCP 套接字探针尝试与容器指定端口建立 TCP 连接。如果连接成功建立，则探测成功。反之失败。</li>
+<li>Exec 探针在容器内执行任意命令，并检查命令的退出状态码。如果状态码是 0，则探测成功。所有其他状态码都被认为失败。</li>
+</ul>
+<h2 id="了解就绪探针的流程"><a href="#了解就绪探针的流程" class="headerlink" title="了解就绪探针的流程"></a>了解就绪探针的流程</h2><p>启动容器时，可以为 Kubernetes 配置一个等待时间，经过等待时间后才可以执行第 一次准备就绪检查。之后，它会周期性地调用探针，并根据就绪探针的结果采取行动。如果某个 pod 报告它尚未准备就绪，则会从该服务(Service)中删除该 pod。如果 pod 再次准备就绪，则重新添加 pod。</p>
+<p>与存活探针不同，如果容器未通过准备检查，则不会被终止或重新启动。这是存活探针与就绪探针之间的重要区别。存活探针通过杀死异常的容器并用新的正常容器替代它们来保持 pod 正常工作，而就绪探针确保只有准备好处理请求的 pod 才可以接收请求。这在容器启动时最为必要，当然在容器运行一段时间后也是有用的。</p>
+<p>如下图所示，如果一个容器的就绪探测失败， 则将该容器从端点对象中移除。连接到该服务的客户端不会被重定向到 pod。这和 pod 与服务的标签选择器完全不匹配的效果相同。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-0a4e696f494b4a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="就绪失败的 pod 将从服务的 endpoint 中移除"></p>
+<h2 id="pod-添加就绪探针"><a href="#pod-添加就绪探针" class="headerlink" title="pod 添加就绪探针"></a>pod 添加就绪探针</h2><p>我们可以在定义 pod 模板的时候添加好探针，也可以通过 kubectl edit 命令来修改已存在的 pod 模板。下面我们就来修改之前创建的 ReplicationController中的 pod 模板。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit rc rc-test</span><br></pre></td></tr></table></figure></p>
+<p>当在文本编辑器中打开 ReplicationController 的 YAML 时，就将以下就绪探针定义添加到 spec.template.spec.containers 下的容器模板中。修改后的 YAML 大致如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="string">.....</span> <span class="comment">##省略其它</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">    <span class="string">.....</span> <span class="comment">##省略其它</span></span><br><span class="line"><span class="attr">    template:</span></span><br><span class="line"><span class="attr">        spec:</span></span><br><span class="line"><span class="attr">            containers:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">test-rc-nginx</span></span><br><span class="line"><span class="attr">              image:</span> <span class="string">nginx</span></span><br><span class="line">              <span class="comment">## 添加就绪探针</span></span><br><span class="line"><span class="attr">              readinessProbe:</span></span><br><span class="line"><span class="attr">                exec:</span></span><br><span class="line"><span class="attr">                    command:</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="string">ls</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="string">/var/test</span> </span><br><span class="line">    <span class="string">.....</span> <span class="comment">##省略其它</span></span><br></pre></td></tr></table></figure>
+<p>就绪探针将定期在容器内执行 ls /var/test 命令。 如果文件存在，则 ls 命令返回退出码 0，否则返回非零的退出码。如果文件存在，则就绪探针为成功，反之失败。</p>
+<p>修改 rc 之后，现有的所有 pod 仍没有定义准备就绪探针。我们需要删除现有 pod 并让它们通过修改之后的 ReplicationController 重新创建。新的 pod 将进行就绪检查会一直失败，并且不会将其作为服务的端点，直到在每个 pod 中创建 /var/test 文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span># 列出 pod  会发现所有的 pod 都处于 NO READY 状态</span><br><span class="line">[root@h249 test]# kc get pods</span><br><span class="line">NAME            READY   STATUS    RESTARTS   AGE</span><br><span class="line">rc-test-nxg74   0/1     Running   0          9m55s</span><br><span class="line">rc-test-pztvx   0/1     Running   0          6m58s</span><br><span class="line">rc-test-svkzp   0/1     Running   0          6m58s</span><br></pre></td></tr></table></figure>
+<p>使用 kubecl exec 命令为 pod 创建 /var/test 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@h249 home]# kc exec rc-test-nxg74 -- touch /var/test</span><br></pre></td></tr></table></figure>
+<p>准备就绪探针会定期检查，默认情况下每 10 秒检查一次。可能不是马上就会调用就绪探针，因此容器可能还是未准备好。但是最晚 10 秒钟内，该 pod 就会准备就绪。</p>
 
       
     </div>
@@ -414,7 +418,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/thread_one/" title="一、【Java并发】初识线程">http://fyuxuan.github.io/thread_one/</a>
+    <a href="http://fyuxuan.github.io/kubernetes/k8s8/" title="（八）Kubernetes 之 就绪探针">http://fyuxuan.github.io/kubernetes/k8s8/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -429,9 +433,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
-            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
           
         </div>
       
@@ -444,8 +446,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/thread_four/" rel="next" title="四、【Java并发】线程间通信之wait,notify,notifyAll">
-                <i class="fa fa-chevron-left"></i> 四、【Java并发】线程间通信之wait,notify,notifyAll
+              <a href="/docker/docker1/" rel="next" title="（一）初识 Docker 与容器">
+                <i class="fa fa-chevron-left"></i> （一）初识 Docker 与容器
               </a>
             
           </div>
@@ -454,8 +456,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/springcloud/eureka/springcloud2/" rel="prev" title="（二）服务注册与发现之 Spring Cloud Eureka">
-                （二）服务注册与发现之 Spring Cloud Eureka <i class="fa fa-chevron-right"></i>
+              <a href="/kubernetes/k8s7/" rel="prev" title="（七）Kubernetes 之 服务 Service">
+                （七）Kubernetes 之 服务 Service <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -606,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-线程介绍"><span class="nav-number">1.</span> <span class="nav-text">1. 线程介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-JAVA中的线程创建和运行"><span class="nav-number">2.</span> <span class="nav-text">2.JAVA中的线程创建和运行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先来看看Thread类方式的实现"><span class="nav-number">2.1.</span> <span class="nav-text">首先来看看Thread类方式的实现</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#就绪探针"><span class="nav-number">1.</span> <span class="nav-text">就绪探针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解就绪探针的流程"><span class="nav-number">2.</span> <span class="nav-text">了解就绪探针的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod-添加就绪探针"><span class="nav-number">3.</span> <span class="nav-text">pod 添加就绪探针</span></a></li></ol></div>
             
 
           </div>
