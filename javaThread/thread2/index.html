@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="线程的生命周期每个线程都有自己的生命周期，下面我们就来详细的了解一下。   从上图我们可以看出线程的生命周期大致可以分为五个阶段：  NEW(新建状态) RUNNABLE(就绪状态) RUNNING(运行状态) BLOCKED(阻塞状态) TERMINATED(死亡状态)  NEW(新建状态)当我们new一个Thread对象时，此时它并不处于运行状态，因为还没有调用start方法启动线程。那么线程">
+<meta name="description" content="线程的生命周期每个线程都有自己的生命周期，下面我们就来详细的了解一下。   从上图我们可以看出线程的生命周期大致可以分为五个阶段：  NEW(新建状态) RUNNABLE(就绪状态) RUNNING(运行状态) BLOCKED(阻塞状态) TERMINATED(死亡状态)  NEW(新建状态)当我们new一个Thread对象时，此时它并不处于运行状态，因为还没有调用start方法启动线程。那么">
 <meta name="keywords" content="Java,多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二、【Java并发】线程生命周期以及常用方法详解">
-<meta property="og:url" content="http://fyuxuan.github.io/thread_two/index.html">
+<meta property="og:url" content="http://fyuxuan.github.io/javaThread/thread2/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="线程的生命周期每个线程都有自己的生命周期，下面我们就来详细的了解一下。   从上图我们可以看出线程的生命周期大致可以分为五个阶段：  NEW(新建状态) RUNNABLE(就绪状态) RUNNING(运行状态) BLOCKED(阻塞状态) TERMINATED(死亡状态)  NEW(新建状态)当我们new一个Thread对象时，此时它并不处于运行状态，因为还没有调用start方法启动线程。那么线程">
+<meta property="og:description" content="线程的生命周期每个线程都有自己的生命周期，下面我们就来详细的了解一下。   从上图我们可以看出线程的生命周期大致可以分为五个阶段：  NEW(新建状态) RUNNABLE(就绪状态) RUNNING(运行状态) BLOCKED(阻塞状态) TERMINATED(死亡状态)  NEW(新建状态)当我们new一个Thread对象时，此时它并不处于运行状态，因为还没有调用start方法启动线程。那么">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://file.yuxuan.video/15573707021512.jpg">
-<meta property="og:updated_time" content="2019-08-22T03:11:06.557Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-34eb0171effba7ae.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2021-08-22T09:12:32.515Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="二、【Java并发】线程生命周期以及常用方法详解">
-<meta name="twitter:description" content="线程的生命周期每个线程都有自己的生命周期，下面我们就来详细的了解一下。   从上图我们可以看出线程的生命周期大致可以分为五个阶段：  NEW(新建状态) RUNNABLE(就绪状态) RUNNING(运行状态) BLOCKED(阻塞状态) TERMINATED(死亡状态)  NEW(新建状态)当我们new一个Thread对象时，此时它并不处于运行状态，因为还没有调用start方法启动线程。那么线程">
-<meta name="twitter:image" content="http://file.yuxuan.video/15573707021512.jpg">
+<meta name="twitter:description" content="线程的生命周期每个线程都有自己的生命周期，下面我们就来详细的了解一下。   从上图我们可以看出线程的生命周期大致可以分为五个阶段：  NEW(新建状态) RUNNABLE(就绪状态) RUNNING(运行状态) BLOCKED(阻塞状态) TERMINATED(死亡状态)  NEW(新建状态)当我们new一个Thread对象时，此时它并不处于运行状态，因为还没有调用start方法启动线程。那么">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-34eb0171effba7ae.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/thread_two/">
+  <link rel="canonical" href="http://fyuxuan.github.io/javaThread/thread2/">
 
 
 
@@ -277,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_two/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/javaThread/thread2/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -384,8 +384,10 @@
       
 
       
-        <h2 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h2><p>每个线程都有自己的生命周期，下面我们就来详细的了解一下。 </p>
-<p><img src="http://file.yuxuan.video/15573707021512.jpg" alt=""></p>
+        <meta name="referrer" content="no-referrer">
+
+<h2 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h2><p>每个线程都有自己的生命周期，下面我们就来详细的了解一下。 </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-34eb0171effba7ae.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <p>从上图我们可以看出线程的生命周期大致可以分为五个阶段：</p>
 <ul>
 <li>NEW(新建状态)</li>
@@ -462,7 +464,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/thread_two/" title="二、【Java并发】线程生命周期以及常用方法详解">http://fyuxuan.github.io/thread_two/</a>
+    <a href="http://fyuxuan.github.io/javaThread/thread2/" title="二、【Java并发】线程生命周期以及常用方法详解">http://fyuxuan.github.io/javaThread/thread2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -492,7 +494,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/thread_three/" rel="next" title="三、【Java并发】线程安全之synchronized的原理和应用">
+              <a href="/javaThread/thread3/" rel="next" title="三、【Java并发】线程安全之synchronized的原理和应用">
                 <i class="fa fa-chevron-left"></i> 三、【Java并发】线程安全之synchronized的原理和应用
               </a>
             
@@ -502,8 +504,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/thread_four/" rel="prev" title="四、【Java并发】线程间通信之wait,notify,notifyAll">
-                四、【Java并发】线程间通信之wait,notify,notifyAll <i class="fa fa-chevron-right"></i>
+              <a href="/javaThread/thread1/" rel="prev" title="一、【Java并发】初识线程">
+                一、【Java并发】初识线程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

@@ -79,23 +79,23 @@
 
 
 
-<meta name="description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
+<meta name="description" content="Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
 <meta name="keywords" content="Java,多线程,synchronized">
 <meta property="og:type" content="article">
 <meta property="og:title" content="三、【Java并发】线程安全之synchronized的原理和应用">
-<meta property="og:url" content="http://fyuxuan.github.io/thread_three/index.html">
+<meta property="og:url" content="http://fyuxuan.github.io/javaThread/thread3/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
+<meta property="og:description" content="Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://file.yuxuan.video/15582414008504.jpg">
-<meta property="og:image" content="http://file.yuxuan.video/15582414972082.jpg">
-<meta property="og:image" content="http://file.yuxuan.video/15582415222130.jpg">
-<meta property="og:image" content="http://file.yuxuan.video/15582424874906.jpg">
-<meta property="og:updated_time" content="2019-08-28T14:08:24.141Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-5262ffd168735d45.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-319ed4f8b251044e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-2e4c0ec5e0ce92aa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-1c1be84c051de7de.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2021-08-22T09:13:07.489Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="三、【Java并发】线程安全之synchronized的原理和应用">
-<meta name="twitter:description" content="w Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
-<meta name="twitter:image" content="http://file.yuxuan.video/15582414008504.jpg">
+<meta name="twitter:description" content="Synchronized的实现原理与应用在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-5262ffd168735d45.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/thread_three/">
+  <link rel="canonical" href="http://fyuxuan.github.io/javaThread/thread3/">
 
 
 
@@ -280,7 +280,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/thread_three/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/javaThread/thread3/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -387,7 +387,8 @@
       
 
       
-        <p>w</p>
+        <meta name="referrer" content="no-referrer">
+
 <h2 id="Synchronized的实现原理与应用"><a href="#Synchronized的实现原理与应用" class="headerlink" title="Synchronized的实现原理与应用"></a>Synchronized的实现原理与应用</h2><p>在多线程并发编程中线程安全和数据同步一直以来都是不可避免的问题，在JDK1.5版本之前，要解决这个问题需要使用synchronized关键字，synchronized提供了一种排他机制，也就是在同一时间只能有一个线程执行某些操作，很多人都会称呼它为重量级锁，但是随着JDK1.6对synchronized进行了各种优化之后，有些情况下它就并不会显得那么重了。下面我们一起来探究synchronized的实现原理，以及JDK1.6是如何对它进行优化，以及锁的存储结构和升级过程。</p>
 <h2 id="synchronized实现原理"><a href="#synchronized实现原理" class="headerlink" title="synchronized实现原理"></a>synchronized实现原理</h2><p>synchronized关键字可以实现一个简单的策略来防止线程干扰和内存一致性问题，如果一个共享资源对多个线程是可见的，那么该资源的所有读或者写都将通过同步的方式来进行，具体表现如下：</p>
 <ul>
@@ -407,15 +408,15 @@
 </ul>
 <h2 id="synchronized堆栈分析-amp-JVM指令分析"><a href="#synchronized堆栈分析-amp-JVM指令分析" class="headerlink" title="synchronized堆栈分析&amp;JVM指令分析"></a>synchronized堆栈分析&amp;JVM指令分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadTest &#123;</span><br><span class="line">    </span><br><span class="line">    public void test() &#123;</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            System.out.println(&quot;当前线程:&quot;+Thread.currentThread().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        ThreadTest test = new ThreadTest();</span><br><span class="line">        Thread t1 = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                test.test();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Thread t2 = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                test.test();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的代码非常简单，在test方法中使用同步代码块方式进行的线程同步，在main方法中定义了2个线程调用test方法，由于同步代码块的互斥性，只能有一个线程获取了mutex monitor的锁，其它的线程只能进入阻塞状态，等待获取mutex monitor的锁的线程释放锁，我可以用JDK自带的工具jconsole来查看堆栈信息，运行上面代码，打开jconsole会看到如下图所示：</p>
-<p><img src="http://file.yuxuan.video/15582414008504.jpg" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-5262ffd168735d45.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <ul>
 <li>然后我们选中我们运行的程序连接，然后点开线程一栏查看：</li>
 </ul>
-<p><img src="http://file.yuxuan.video/15582414972082.jpg" alt=""><br><img src="http://file.yuxuan.video/15582415222130.jpg" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-319ed4f8b251044e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br><img src="https://upload-images.jianshu.io/upload_images/1455014-2e4c0ec5e0ce92aa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <ul>
 <li>我们可以很清楚看到我们创建的两个线程，Thread-0和Thread-1，此时Thread-0处于RUNNABLE状态也就是就绪状态，而Thread-1处于BLOCKED状态，并且清楚的告诉了我们锁拥有者是Thread-0线程。我们再通过jstack命令打印进程的线程的堆栈信息，截取关键的地方对其进行分析：</li>
 </ul>
-<p><img src="http://file.yuxuan.video/15582424874906.jpg" alt=""></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-1c1be84c051de7de.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <p>Thread-0持有monitor <0x00000007976030e0> 的锁，Thread1线程进入BLOCKED状态并且等待着获取monitor <0x00000007976030e0>。</0x00000007976030e0></0x00000007976030e0></p>
 <p>下面我们再通过JDK命令javap对ThreadTest类进行反汇编，会发现输出了大量的JVM指令，在这些指令中，会发现monitor enter和monitor exit是成对出现的（有些时候会出现一个monitor enter，多个monitor exit，但是每一个monitor exit之前必有对应的monitor enter)，运行如下的命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -c ThreadTest</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">yuxuan</span>.<span class="title">thread2</span>.<span class="title">ThreadTest</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.yuxuan.thread2.ThreadTest();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="number">1</span>: dup</span><br><span class="line">       <span class="number">2</span>: astore_1</span><br><span class="line">       <span class="number">3</span>: monitorenter</span><br><span class="line">       4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       7: new           #3                  // class java/lang/StringBuilder</span><br><span class="line">      <span class="number">10</span>: dup</span><br><span class="line">      11: invokespecial #4                  // Method java/lang/StringBuilder."&lt;init&gt;":()V</span><br><span class="line">      14: ldc           #5                  // String 当前线程:</span><br><span class="line">      16: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">      19: invokestatic  #7                  // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;</span><br><span class="line">      22: invokevirtual #8                  // Method java/lang/Thread.getName:()Ljava/lang/String;</span><br><span class="line">      25: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">      28: invokevirtual #9                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">      31: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      <span class="number">34</span>: aload_1</span><br><span class="line">      <span class="number">35</span>: monitorexit</span><br><span class="line">      <span class="number">36</span>: goto          <span class="number">44</span></span><br><span class="line">      <span class="number">39</span>: astore_2</span><br><span class="line">      <span class="number">40</span>: aload_1</span><br><span class="line">      <span class="number">41</span>: monitorexit</span><br><span class="line">      <span class="number">42</span>: aload_2</span><br><span class="line">      <span class="number">43</span>: athrow</span><br><span class="line">      <span class="number">44</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
@@ -452,7 +453,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/thread_three/" title="三、【Java并发】线程安全之synchronized的原理和应用">http://fyuxuan.github.io/thread_three/</a>
+    <a href="http://fyuxuan.github.io/javaThread/thread3/" title="三、【Java并发】线程安全之synchronized的原理和应用">http://fyuxuan.github.io/javaThread/thread3/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -484,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/designPattern/pattern_factory_method/" rel="next" title="设计模式 —— 工厂方法模式">
-                <i class="fa fa-chevron-left"></i> 设计模式 —— 工厂方法模式
+              <a href="/javaThread/thread4/" rel="next" title="四、【Java并发】线程间通信之wait,notify,notifyAll">
+                <i class="fa fa-chevron-left"></i> 四、【Java并发】线程间通信之wait,notify,notifyAll
               </a>
             
           </div>
@@ -494,7 +495,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/thread_two/" rel="prev" title="二、【Java并发】线程生命周期以及常用方法详解">
+              <a href="/javaThread/thread2/" rel="prev" title="二、【Java并发】线程生命周期以及常用方法详解">
                 二、【Java并发】线程生命周期以及常用方法详解 <i class="fa fa-chevron-right"></i>
               </a>
             
