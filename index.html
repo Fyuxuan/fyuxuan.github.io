@@ -1046,7 +1046,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s8/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s7/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -1065,7 +1065,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/kubernetes/k8s8/" itemprop="url">（八）Kubernetes 之 就绪探针</a></h1>
+                <a class="post-title-link" href="/kubernetes/k8s7/" itemprop="url">（七）Kubernetes 之 服务 Service</a></h1>
         
 
         <div class="post-meta">
@@ -1119,7 +1119,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.4k
+                  2.7k
                 </span>
               
 
@@ -1146,13 +1146,11 @@
       
         
           
-          
-
-现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过
+          kubernetes 服务是一种为一组功能相同的 pod 提供单一不变的接入点的资源。当服务存在时，它的 IP 地址和端口不会改变。客户端通过 IP 地址和端口号建立连接，这些连接会被路由到提供该服务的任意一个 pod 上。通过这种方式，客户端不需要知道每个单独的提供服务的 pod 的地址，这样这些
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s8/#more" rel="contents">
+            <a class="btn" href="/kubernetes/k8s7/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1358,7 +1356,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s7/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s8/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -1377,7 +1375,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/kubernetes/k8s7/" itemprop="url">（七）Kubernetes 之 服务 Service</a></h1>
+                <a class="post-title-link" href="/kubernetes/k8s8/" itemprop="url">（八）Kubernetes 之 就绪探针</a></h1>
         
 
         <div class="post-meta">
@@ -1431,7 +1429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.7k
+                  1.4k
                 </span>
               
 
@@ -1458,11 +1456,13 @@
       
         
           
-          kubernetes 服务是一种为一组功能相同的 pod 提供单一不变的接入点的资源。当服务存在时，它的 IP 地址和端口不会改变。客户端通过 IP 地址和端口号建立连接，这些连接会被路由到提供该服务的任意一个 pod 上。通过这种方式，客户端不需要知道每个单独的提供服务的 pod 的地址，这样这些
+          
+
+现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s7/#more" rel="contents">
+            <a class="btn" href="/kubernetes/k8s8/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1864,7 +1864,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1960,7 +1960,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">32.3k</span>
+    <span title="Site words total count">33.3k</span>
   
 </div>
 

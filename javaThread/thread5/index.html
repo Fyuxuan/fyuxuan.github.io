@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Kubernetes,">
+  <meta name="keywords" content="Java,多线程,">
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，">
-<meta name="keywords" content="Kubernetes">
+<meta name="description" content="happens-before happens-before是Java内存模型最核心的概念，因此理解happens-before是理解Java内存模型的关键。  在Java语言中有个happens-before(先行发生)的原则。这个原则非常重要，它是判断数据是否存在竞争，线程是否安全的主要依据，依靠这个原则，我们就可以解决在并发环境中两个操作之间可能存在冲突的所有问题。下面我们来看个简单的例子：1">
+<meta name="keywords" content="Java,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="（八）Kubernetes 之 就绪探针">
-<meta property="og:url" content="http://fyuxuan.github.io/kubernetes/k8s8/index.html">
+<meta property="og:title" content="五、【Java并发】JMM之happens-before">
+<meta property="og:url" content="http://fyuxuan.github.io/javaThread/thread5/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，">
+<meta property="og:description" content="happens-before happens-before是Java内存模型最核心的概念，因此理解happens-before是理解Java内存模型的关键。  在Java语言中有个happens-before(先行发生)的原则。这个原则非常重要，它是判断数据是否存在竞争，线程是否安全的主要依据，依靠这个原则，我们就可以解决在并发环境中两个操作之间可能存在冲突的所有问题。下面我们来看个简单的例子：1">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-0a4e696f494b4a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2021-08-21T11:15:20.706Z">
+<meta property="og:updated_time" content="2021-08-23T09:58:16.496Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="（八）Kubernetes 之 就绪探针">
-<meta name="twitter:description" content="现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-0a4e696f494b4a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="五、【Java并发】JMM之happens-before">
+<meta name="twitter:description" content="happens-before happens-before是Java内存模型最核心的概念，因此理解happens-before是理解Java内存模型的关键。  在Java语言中有个happens-before(先行发生)的原则。这个原则非常重要，它是判断数据是否存在竞争，线程是否安全的主要依据，依靠这个原则，我们就可以解决在并发环境中两个操作之间可能存在冲突的所有问题。下面我们来看个简单的例子：1">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/kubernetes/k8s8/">
+  <link rel="canonical" href="http://fyuxuan.github.io/javaThread/thread5/">
 
 
 
 
 
-  <title>（八）Kubernetes 之 就绪探针 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>五、【Java并发】JMM之happens-before | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -277,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s8/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/javaThread/thread5/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -294,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">（八）Kubernetes 之 就绪探针</h1>
+          <h1 class="post-title" itemprop="name headline">五、【Java并发】JMM之happens-before</h1>
         
 
         <div class="post-meta">
@@ -317,8 +315,19 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/Java并发/" itemprop="url" rel="index">
+                    <span itemprop="name">Java并发</span>
                   </a>
                 </span>
 
@@ -348,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.4k
+                  945
                 </span>
               
 
@@ -373,31 +382,34 @@
       
 
       
-        <meta name="referrer" content="no-referrer">
-
-<p>现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过程以防止第一个用户请求时间太长影响了用户体验。 在这种情况下，不希望该 pod 立即开始接 收请求，尤其是在有其他运行的 pod 可以正确快速地处理请求的情况下。 不要将请求转发到正在启动的 pod 中，直到完全准备就绪。</p>
-<h2 id="就绪探针"><a href="#就绪探针" class="headerlink" title="就绪探针"></a>就绪探针</h2><p>前面我们了解了存活探针，以及它们如何通过确保异常容器自动重启来保持应用程序的正常运行。与存活探针类似，Kubernetes 还允许为容器定义准备就绪探针 。</p>
-<p>就绪探测器会定期调用，并确定特定的 pod 是否接收客户端请求。当容器的准备就绪探测返回成功时，表示容器己准备好接收请求。</p>
-<p>这个准备就绪的概念显然是每个容器特有的东西。 Kubernetes 只能检查在容器中运行的应用程序是否响应一个简单的 GET 请求，或者它可以响应特定的 URL 路径（该 URL 导致应用程序执行一系列检查以确定它是否准备就绪）。考虑到应用程序的具体情况，这种确切的准备就绪的判定是应用程序开发人员的 责任。</p>
-<p>像存活探针一样，就绪探针有三种类型：</p>
+        <h2 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h2><blockquote>
+<p>happens-before是Java内存模型最核心的概念，因此理解happens-before是理解Java内存模型的关键。</p>
+</blockquote>
+<p>在Java语言中有个happens-before(先行发生)的原则。这个原则非常重要，它是判断数据是否存在竞争，线程是否安全的主要依据，依靠这个原则，我们就可以解决在并发环境中两个操作之间可能存在冲突的所有问题。下面我们来看个简单的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">1</span>; <span class="comment">//A线程执行</span></span><br><span class="line">j = i; <span class="comment">//B线程执行</span></span><br><span class="line">i = <span class="number">2</span>; <span class="comment">//C线程执行</span></span><br></pre></td></tr></table></figure></p>
+<p>这里我们分两个情况来分析：</p>
 <ul>
-<li>HTTP GET 探针对容器的 IP 地址（指定的端口和路径）执行 HTTP GET 请求。如果探测器收到响应，并且响应状态码不代表错误（换句话说，如果 HTTP 响应状态码是 2xx 或 3xx ），则认为探测成功。如果服务器返回错误响应状态码或者根本没有响应，那么探测就被认为是失败的。</li>
-<li>TCP 套接字探针尝试与容器指定端口建立 TCP 连接。如果连接成功建立，则探测成功。反之失败。</li>
-<li>Exec 探针在容器内执行任意命令，并检查命令的退出状态码。如果状态码是 0，则探测成功。所有其他状态码都被认为失败。</li>
+<li>线程C不执行<br>  假设A线程先行发生于线程B，根据先行发生原则那么就可以确定线程B执行完后，j一定等于1。</li>
+<li>线程C执行<br>  我们依然保持线程A先行与B线程，但此时线程C出现在线程A,B之间,假设线程C与线程B之间没有先行发生原则的话，此时j的值就不确定了！！！1和2都有可能，因为线程C对变量i的影响可能会被线程B观察到，也可能不会，这时候线程B就可能读取到过期数据的风险，不具备多线程安全性。</li>
 </ul>
-<h2 id="了解就绪探针的流程"><a href="#了解就绪探针的流程" class="headerlink" title="了解就绪探针的流程"></a>了解就绪探针的流程</h2><p>启动容器时，可以为 Kubernetes 配置一个等待时间，经过等待时间后才可以执行第 一次准备就绪检查。之后，它会周期性地调用探针，并根据就绪探针的结果采取行动。如果某个 pod 报告它尚未准备就绪，则会从该服务(Service)中删除该 pod。如果 pod 再次准备就绪，则重新添加 pod。</p>
-<p>与存活探针不同，如果容器未通过准备检查，则不会被终止或重新启动。这是存活探针与就绪探针之间的重要区别。存活探针通过杀死异常的容器并用新的正常容器替代它们来保持 pod 正常工作，而就绪探针确保只有准备好处理请求的 pod 才可以接收请求。这在容器启动时最为必要，当然在容器运行一段时间后也是有用的。</p>
-<p>如下图所示，如果一个容器的就绪探测失败， 则将该容器从端点对象中移除。连接到该服务的客户端不会被重定向到 pod。这和 pod 与服务的标签选择器完全不匹配的效果相同。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1455014-0a4e696f494b4a1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="就绪失败的 pod 将从服务的 endpoint 中移除"></p>
-<h2 id="pod-添加就绪探针"><a href="#pod-添加就绪探针" class="headerlink" title="pod 添加就绪探针"></a>pod 添加就绪探针</h2><p>我们可以在定义 pod 模板的时候添加好探针，也可以通过 kubectl edit 命令来修改已存在的 pod 模板。下面我们就来修改之前创建的 ReplicationController中的 pod 模板。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit rc rc-test</span><br></pre></td></tr></table></figure></p>
-<p>当在文本编辑器中打开 ReplicationController 的 YAML 时，就将以下就绪探针定义添加到 spec.template.spec.containers 下的容器模板中。修改后的 YAML 大致如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="string">.....</span> <span class="comment">##省略其它</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">    <span class="string">.....</span> <span class="comment">##省略其它</span></span><br><span class="line"><span class="attr">    template:</span></span><br><span class="line"><span class="attr">        spec:</span></span><br><span class="line"><span class="attr">            containers:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">test-rc-nginx</span></span><br><span class="line"><span class="attr">              image:</span> <span class="string">nginx</span></span><br><span class="line">              <span class="comment">## 添加就绪探针</span></span><br><span class="line"><span class="attr">              readinessProbe:</span></span><br><span class="line"><span class="attr">                exec:</span></span><br><span class="line"><span class="attr">                    command:</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="string">ls</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="string">/var/test</span> </span><br><span class="line">    <span class="string">.....</span> <span class="comment">##省略其它</span></span><br></pre></td></tr></table></figure>
-<p>就绪探针将定期在容器内执行 ls /var/test 命令。 如果文件存在，则 ls 命令返回退出码 0，否则返回非零的退出码。如果文件存在，则就绪探针为成功，反之失败。</p>
-<p>修改 rc 之后，现有的所有 pod 仍没有定义准备就绪探针。我们需要删除现有 pod 并让它们通过修改之后的 ReplicationController 重新创建。新的 pod 将进行就绪检查会一直失败，并且不会将其作为服务的端点，直到在每个 pod 中创建 /var/test 文件。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span># 列出 pod  会发现所有的 pod 都处于 NO READY 状态</span><br><span class="line">[root@h249 test]# kc get pods</span><br><span class="line">NAME            READY   STATUS    RESTARTS   AGE</span><br><span class="line">rc-test-nxg74   0/1     Running   0          9m55s</span><br><span class="line">rc-test-pztvx   0/1     Running   0          6m58s</span><br><span class="line">rc-test-svkzp   0/1     Running   0          6m58s</span><br></pre></td></tr></table></figure>
-<p>使用 kubecl exec 命令为 pod 创建 /var/test 文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@h249 home]# kc exec rc-test-nxg74 -- touch /var/test</span><br></pre></td></tr></table></figure>
-<p>准备就绪探针会定期检查，默认情况下每 10 秒检查一次。可能不是马上就会调用就绪探针，因此容器可能还是未准备好。但是最晚 10 秒钟内，该 pod 就会准备就绪。</p>
+<h2 id="happens-before规则"><a href="#happens-before规则" class="headerlink" title="happens-before规则"></a>happens-before规则</h2><p>Java内存模型下自带了写先行发生原则，这些先行发现原则无须任何同步器协助就已经存在，可以在编码中直接使用。如果两个操作之间的关系不在其中，并且无法从下面的规则推导出来的话，它们就没有顺序性保障，因为虚拟机可以对它们随意的进行重排序。</p>
+<ul>
+<li><p>程序次序规则：一个线程内，按照代码编写顺序，写在前面的操作happens-before写在后面的操作。但还是有可能指令重排，但随便怎么排，最后的结果应该和重排前代码顺序的结果是一致的。</p>
+</li>
+<li><p>管程锁定规则：对于同一个锁来说，一个线程对这个锁解锁之后，另一个线程获取了这个锁都能看到前一个线程的操作结果。(管程是一种通用的同步术语，synchronized就是管程的实现)</p>
+</li>
+<li><p>volatile变量规则：就是如果一个线程先去写一个volatile变量，然后一个线程去读这个变量，那么这个写操作的结果对读的这个线程是可见的。对一个volatile变量的写操作happens-before后面对这个变量的读操作(这里针对的是指令重排)；</p>
+</li>
+<li><p>线程启动规则：Thread对象的start()方法happens-before此线程的每一个动作；在主线程A执行过程中，启动子线程B，那么线程A在启动子线程B之前对共享变量的修改结果对线程B可见。</p>
+</li>
+<li><p>线程终止规则：线程中所有的操作都happens-before线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行；在主线程A执行过程中，子线程B终止，那么线程B在终止之前对共享变量的修改结果在线程A中可见。</p>
+</li>
+<li><p>线程中断规则：对线程interrupt()方法的调用happens-before被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()检测到是否发生中断。</p>
+</li>
+<li><p>传递规则：就是happens-before原则具有传递性，即A happens-before B ， B happens-before C，那么A happens-before C。</p>
+</li>
+<li><p>对象终结规则：就是一个对象的初始化的完成，也就是构造函数执行的结束一定happens-before它的finalize()方法。</p>
+</li>
+</ul>
 
       
     </div>
@@ -418,7 +430,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/kubernetes/k8s8/" title="（八）Kubernetes 之 就绪探针">http://fyuxuan.github.io/kubernetes/k8s8/</a>
+    <a href="http://fyuxuan.github.io/javaThread/thread5/" title="五、【Java并发】JMM之happens-before">http://fyuxuan.github.io/javaThread/thread5/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -433,7 +445,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
           
         </div>
       
@@ -446,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/docker/docker1/" rel="next" title="（一）初识 Docker 与容器">
-                <i class="fa fa-chevron-left"></i> （一）初识 Docker 与容器
+              <a href="/designPattern/pattern_factory_method/" rel="next" title="设计模式 —— 工厂方法模式">
+                <i class="fa fa-chevron-left"></i> 设计模式 —— 工厂方法模式
               </a>
             
           </div>
@@ -456,8 +470,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/kubernetes/k8s6/" rel="prev" title="（六）Kubernetes 之 控制器">
-                （六）Kubernetes 之 控制器 <i class="fa fa-chevron-right"></i>
+              <a href="/javaThread/thread3/" rel="prev" title="三、【Java并发】线程安全之synchronized的原理和应用">
+                三、【Java并发】线程安全之synchronized的原理和应用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -608,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#就绪探针"><span class="nav-number">1.</span> <span class="nav-text">就绪探针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解就绪探针的流程"><span class="nav-number">2.</span> <span class="nav-text">了解就绪探针的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod-添加就绪探针"><span class="nav-number">3.</span> <span class="nav-text">pod 添加就绪探针</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#happens-before"><span class="nav-number">1.</span> <span class="nav-text">happens-before</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#happens-before规则"><span class="nav-number">2.</span> <span class="nav-text">happens-before规则</span></a></li></ol></div>
             
 
           </div>
