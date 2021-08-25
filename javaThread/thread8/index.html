@@ -79,20 +79,22 @@
 
 
 
-<meta name="description" content="线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&amp;#123;     Thread.sleep(5000);&amp;#125;doSomeThing(); 上面这段伪代码看似能够实现所需的功能">
+<meta name="description" content="什么是伪共享为了解决计算机系统中主内存与 CPU 之间运行速度差问题，会在 CPU 与主内存之间添加一级或者多级高速缓冲存储器（ Cache ）。这个 Cache 一般是被集成到 CPU 内部的， 所以也叫 CPU Cache ，如下图所示是两级 Cache 结构。  在 Cache 内部是按行存储的，其中每一行称为一个 Cache 行。Cache 行是 Cache 与主内存进行数据交换的单位">
 <meta name="keywords" content="Java,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="四、【Java并发】线程间通信之wait,notify,notifyAll">
-<meta property="og:url" content="http://fyuxuan.github.io/javaThread/thread4/index.html">
+<meta property="og:title" content="八、【Java 并发】伪共享">
+<meta property="og:url" content="http://fyuxuan.github.io/javaThread/thread8/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
-<meta property="og:description" content="线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&amp;#123;     Thread.sleep(5000);&amp;#125;doSomeThing(); 上面这段伪代码看似能够实现所需的功能">
+<meta property="og:description" content="什么是伪共享为了解决计算机系统中主内存与 CPU 之间运行速度差问题，会在 CPU 与主内存之间添加一级或者多级高速缓冲存储器（ Cache ）。这个 Cache 一般是被集成到 CPU 内部的， 所以也叫 CPU Cache ，如下图所示是两级 Cache 结构。  在 Cache 内部是按行存储的，其中每一行称为一个 Cache 行。Cache 行是 Cache 与主内存进行数据交换的单位">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-d2bb1f5e464ca80f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2021-08-22T09:13:53.951Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-795db8f09d33a5ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-c1ea87f536e18149.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-db0cbd9a2e6f7ef4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2021-08-25T09:20:32.947Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="四、【Java并发】线程间通信之wait,notify,notifyAll">
-<meta name="twitter:description" content="线程间通信在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：1234while(条件判断)&amp;#123;     Thread.sleep(5000);&amp;#125;doSomeThing(); 上面这段伪代码看似能够实现所需的功能">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-d2bb1f5e464ca80f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="八、【Java 并发】伪共享">
+<meta name="twitter:description" content="什么是伪共享为了解决计算机系统中主内存与 CPU 之间运行速度差问题，会在 CPU 与主内存之间添加一级或者多级高速缓冲存储器（ Cache ）。这个 Cache 一般是被集成到 CPU 内部的， 所以也叫 CPU Cache ，如下图所示是两级 Cache 结构。  在 Cache 内部是按行存储的，其中每一行称为一个 Cache 行。Cache 行是 Cache 与主内存进行数据交换的单位">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-795db8f09d33a5ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -122,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/javaThread/thread4/">
+  <link rel="canonical" href="http://fyuxuan.github.io/javaThread/thread8/">
 
 
 
 
 
-  <title>四、【Java并发】线程间通信之wait,notify,notifyAll | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>八、【Java 并发】伪共享 | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -277,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/javaThread/thread4/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/javaThread/thread8/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -294,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">四、【Java并发】线程间通信之wait,notify,notifyAll</h1>
+          <h1 class="post-title" itemprop="name headline">八、【Java 并发】伪共享</h1>
         
 
         <div class="post-meta">
@@ -359,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1k
+                  1.3k
                 </span>
               
 
@@ -386,60 +388,22 @@
       
         <meta name="referrer" content="no-referrer">
 
-<h2 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h2><p>在多线程编程当中，很多时候我们需要一个线程修改了某个值之后，而另外一个线程能够感知到变化从而进行响应的操作。比较笨的方法呢就是不断轮询判断，如果条件满足进行响应的操作，反之则等待若干时间后再次轮询判断。就如下代码所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(条件判断)&#123; </span><br><span class="line">    Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">&#125;</span><br><span class="line">doSomeThing();</span><br></pre></td></tr></table></figure></p>
-<p>上面这段伪代码看似能够实现所需的功能，但是却有着很严重的问题：</p>
-<ul>
-<li>难以确保及时性。在休眠的时候，确实不会消耗处理器资源，但是通过睡眠机制，就不能及时的发现条件已经变化。</li>
-<li>难以降低开销。如果降低睡眠的时间，比如1毫秒，这样确实能迅速的发现条件变化，但是却可能消耗更多的处理器资源，造成不必要的浪费。</li>
-</ul>
-<p>以上两个问题，看似矛盾难以取舍。但是Java通过等待/通知机制就能很好的解决问题并实现所需的功能。</p>
-<h2 id="初识-wait-amp-notify"><a href="#初识-wait-amp-notify" class="headerlink" title="初识 wait &amp; notify"></a>初识 wait &amp; notify</h2><p>等待/通知相关方法是任意Java对象都具备的，因为这些方法是被定义在java.lang.Object对象上的，方法描述如下</p>
-<table>
-<thead>
-<tr>
-<th>方法名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>notify()</td>
-<td>通知一个在对象上等待的线程，使其从wait()方法返回，返回的前提是该线程重新获取到了对象的锁</td>
-</tr>
-<tr>
-<td>notifyAll()</td>
-<td>通知所有等待在改对象上的线程</td>
-</tr>
-<tr>
-<td>wait()</td>
-<td>调用该方法的线程进入阻塞状态并且会释放对象的锁，只有等待其他线程通知或被终端才会返回，</td>
-</tr>
-<tr>
-<td>wait(long)</td>
-<td>等待指定一段时间，时间一到就返回</td>
-</tr>
-<tr>
-<td>wait(long,int)</td>
-<td>等待指定一段时间，对于超时时间更加细粒度的控制，可以达到纳秒</td>
-</tr>
-</tbody>
-</table>
-<p>示例代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WaitNotifyTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">static</span> Object  lock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Thread waitThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">             <span class="comment">// 加锁</span></span><br><span class="line">                <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                    <span class="comment">// 当条件不满足时，继续wait，同时释放了lock的锁</span></span><br><span class="line">                    <span class="keyword">while</span> (flag) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            System.out.println(Thread.currentThread().getName() + <span class="string">" wait 开始"</span>);</span><br><span class="line">                            lock.wait();</span><br><span class="line">                            System.out.println(Thread.currentThread().getName() + <span class="string">" wait 结束"</span>);</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 条件满足时，完成工作</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">" 开始工作"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">"WaitThread"</span>);</span><br><span class="line">        waitThread.start();</span><br><span class="line">        </span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        Thread notifyThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">             <span class="comment">// 加锁，拥有lock的Monitor</span></span><br><span class="line">                <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                    <span class="comment">// 获取lock的锁，然后进行通知，通知时不会释放lock的锁，</span></span><br><span class="line">                    <span class="comment">// 直到当前线程释放了lock后，WaitThread才能从wait方法中返回</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">" notify 开始"</span>);</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    flag = <span class="keyword">false</span>;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">" notify 完成 开始睡眠"</span>);</span><br><span class="line">                    SleepUtils.second(<span class="number">5</span>);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">"睡眠结束即将释放锁"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">"NotifyThread"</span>);</span><br><span class="line">        notifyThread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>输出内容：<br><img src="https://upload-images.jianshu.io/upload_images/1455014-d2bb1f5e464ca80f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>通过上面的示例代码，会发现使用wait/notfiy相关方法时需要注意一下细节：</p>
-<ul>
-<li>使用wait(),notify(),notifyAll()时需要先获取到该对象的锁。</li>
-<li>使用wait()方法会使线程进入阻塞状态，并且会释放锁。</li>
-<li>调用notify(),notifyAll()方法后，被通知的线程依旧不会从wait返回，需要调用notify()方法的线程释放锁之后，并且等待的线程重新获取到锁之后才会返回。</li>
-<li>notify()方法是将等待队列中的一个等待线程从等待队列移到同步队列中，而notifyAll()方法是讲等待队列中的所有线程全部移到同步队列中</li>
-</ul>
-<h2 id="wait-amp-sleep-的区别"><a href="#wait-amp-sleep-的区别" class="headerlink" title="wait &amp; sleep 的区别"></a>wait &amp; sleep 的区别</h2><p>从表面上来看，wait和sleep都能使当前线程进入阻塞状态，但两者还是有着本质上的区别：</p>
-<ul>
-<li>wait和sleep方法都可以使线程进入阻塞状态，并且均是可中断方法，被中断后都会收到中断异常。</li>
-<li>wait是Object方法，sleep是Thread独有的方法。</li>
-<li>wait需要在同步方法中调用，而sleep不需要。</li>
-<li>wait方法会释放锁，而sleep方法并不会释放锁。</li>
-</ul>
+<h2 id="什么是伪共享"><a href="#什么是伪共享" class="headerlink" title="什么是伪共享"></a>什么是伪共享</h2><p>为了解决计算机系统中主内存与 CPU 之间运行速度差问题，会在 CPU 与主内存之间添加一级或者多级高速缓冲存储器（ Cache ）。这个 Cache 一般是被集成到 CPU 内部的， 所以也叫 CPU Cache ，如下图所示是两级 Cache 结构。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-795db8f09d33a5ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>在 Cache 内部是按行存储的，其中每一行称为一个 Cache 行。Cache 行是 Cache 与主内存进行数据交换的单位，Cache 行的大小一般为 2 的幂次数字节。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-c1ea87f536e18149.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>当 CPU 访问某个变量时，首先会去看 CPU Cache 内是否有该变量，如果有则直接从中获取，否则就去主内存里面获取该变量，然后把该变量所在内存区域的一个 Cache 行大小的内存复制到 Cache 中。由于存放到 Cache 行的是内存块而不是单个变量，所以可能会把多个变量存放到 一个 Cache 行中。当多个线程同时修改一个缓存行里面的多个变量时，由于同时只能有一个线程操作缓存行，所以相比将每个变量放到一个缓存行，性能会有所下降，这就是伪共享，如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-db0cbd9a2e6f7ef4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>在上图中，变量 x 和 y 同时被放到了 CPU 的一级和二级缓存，当线程 1 使用 CPU1 对变量 x 进行更新时，首先会修改 CPU1 的一级缓存变量 x 所在的缓存行，这时候在缓存一致性协议下，CPU2 中变量 x 对应的缓存行失效。那么线程 2 在写入变量 x 时就只能去二级缓存里查找，这就破坏了一级缓存。而一级缓存比二级缓存更快，这也说明了多个线程不可能同时去修改自己所使用的 CPU 中相同缓存行里面的变量。更坏的情况是，如果 CPU 只有一级缓存，则会导致频繁地访问主内存。</p>
+<h2 id="为何会出现伪共享"><a href="#为何会出现伪共享" class="headerlink" title="为何会出现伪共享"></a>为何会出现伪共享</h2><p>伪共享的产生是因为多个变量被放入了一个缓存行中，并且多个线程同时去写入缓存行中不同的变量。那么为何多个变量会被放入一个缓存行呢？其实是因为缓存与内存交换数据的单位就是缓存行，当 CPU 要访问的变量没有在缓存中找到时，根据程序运行的局部性原理，会把该变量所在内存中大小为缓存行的内存放入缓存行。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> a;</span><br><span class="line"><span class="keyword">long</span> b;</span><br><span class="line"><span class="keyword">long</span> c;</span><br><span class="line"><span class="keyword">long</span> d;</span><br></pre></td></tr></table></figure></p>
+<p>如上代码声明了四个 long 变量，假设缓存行的大小为 32 字节，那么当 CPU 访问变量 a 时，发现该变量没有在缓存中，就会去主内存把变量 a 以及内存地址附近的 b、c、d 放入缓存行。也就是地址连续的多个变量才有可能会被放到一个缓存行中。当创建数组时，数组里面的多个元素就会被放入同一个缓存行。那么在单线程下多个变量被放入同一个缓存行对性能有影响吗？其实在正常情况下单线程访问时将数组元素放入一个或者多个缓存行对代码执行是有利的，因为数据都在缓存中，代码执行会更快。</p>
+<h2 id="如何避免伪共享"><a href="#如何避免伪共享" class="headerlink" title="如何避免伪共享"></a>如何避免伪共享</h2><p>在 JDK 8 之前一般都是通过字节填充的方式来避免该问题，也就是创建一个变量时使用填充字段填充该变量所在的缓存行，这样就避免了将多个变量存放在同 一个缓存行中，例如如下代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">FilledLong</span> </span>&#123; </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> value = OL;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">long</span> pl,p2,p3,p4,p5,p6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>假如缓存行为 64 字节，那么我们在 FilledLong 类里面填充了 6 个 long 类型的变量，每个 long 类型变量占用 8 字节，加 上 value 变量的 8 字节总共 56 字节。另外，这里 FilledLong 是一个类对象，而类对象的字节码的对象头占用 8 字节，所以一个 FilledLong 对象实际会占用 64 字节的内存，这正好可以放入一个缓存行。</p>
+<p>JDK 8 提供了 一个 sun.misc.Contended 注解，用来解决伪共享问题。将上面代码修改为如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@sun</span>.misc.Contended</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">FilledLong</span> </span>&#123; </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> value = OL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>次注解除了可以修饰类，也可以修饰变量，比如在 Thread 类中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The current seed for a ThreadLocalRandom */</span></span><br><span class="line">    <span class="meta">@sun</span>.misc.Contended(<span class="string">"tlr"</span>)</span><br><span class="line">    <span class="keyword">long</span> threadLocalRandomSeed;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Probe hash value; nonzero if threadLocalRandomSeed initialized */</span></span><br><span class="line">    <span class="meta">@sun</span>.misc.Contended(<span class="string">"tlr"</span>)</span><br><span class="line">    <span class="keyword">int</span> threadLocalRandomProbe;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Secondary seed isolated from public ThreadLocalRandom sequence */</span></span><br><span class="line">    <span class="meta">@sun</span>.misc.Contended(<span class="string">"tlr"</span>)</span><br><span class="line">    <span class="keyword">int</span> threadLocalRandomSecondarySeed;</span><br></pre></td></tr></table></figure></p>
+<p>Thread 类里面这三个变量默认被初始化为 0 ，这三个变量会在ThreadLocalRandom 类中使用。</p>
+<p>需要注意的是，在默认情况下，＠Contended 注解只用于 Java 核心类，比如此包下的类。如果用户类路径下的类需要使用这个注解，则需要添加 JVM 参数：－XX:-RestrictContended。填充的宽度默认为 128 ，要自定义宽度则可以设置 －XX:ContendedPaddingWidth 参数。</p>
 
       
     </div>
@@ -460,7 +424,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/javaThread/thread4/" title="四、【Java并发】线程间通信之wait,notify,notifyAll">http://fyuxuan.github.io/javaThread/thread4/</a>
+    <a href="http://fyuxuan.github.io/javaThread/thread8/" title="八、【Java 并发】伪共享">http://fyuxuan.github.io/javaThread/thread8/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -490,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/javaThread/thread1/" rel="next" title="一、【Java并发】初识线程">
-                <i class="fa fa-chevron-left"></i> 一、【Java并发】初识线程
+              <a href="/designPattern/pattern_simple_factory/" rel="next" title="设计模式 —— 简单工厂模式">
+                <i class="fa fa-chevron-left"></i> 设计模式 —— 简单工厂模式
               </a>
             
           </div>
@@ -500,8 +464,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/springcloud/eureka/springcloud2/" rel="prev" title="（二）服务注册与发现之 Spring Cloud Eureka">
-                （二）服务注册与发现之 Spring Cloud Eureka <i class="fa fa-chevron-right"></i>
+              <a href="/javaThread/thread3/" rel="prev" title="三、【Java并发】线程安全之synchronized的原理和应用">
+                三、【Java并发】线程安全之synchronized的原理和应用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -652,7 +616,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程间通信"><span class="nav-number">1.</span> <span class="nav-text">线程间通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初识-wait-amp-notify"><span class="nav-number">2.</span> <span class="nav-text">初识 wait &amp; notify</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait-amp-sleep-的区别"><span class="nav-number">3.</span> <span class="nav-text">wait &amp; sleep 的区别</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是伪共享"><span class="nav-number">1.</span> <span class="nav-text">什么是伪共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为何会出现伪共享"><span class="nav-number">2.</span> <span class="nav-text">为何会出现伪共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免伪共享"><span class="nav-number">3.</span> <span class="nav-text">如何避免伪共享</span></a></li></ol></div>
             
 
           </div>
