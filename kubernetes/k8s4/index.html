@@ -382,15 +382,15 @@
 <li>包含具有特定键的标签，但其值与我们指定的不同</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">## 列出指定标签的 pod </span><br><span class="line">kubectl get pods --show-labels -l env</span><br><span class="line">## 列出指定标签,指定标签值的 pod </span><br><span class="line">kubectl get pods --show-labels -l env=prod</span><br><span class="line">## 列出没有指定标签的 pod</span><br><span class="line">kubectl get pods --show-labels -l &apos;!env&apos;</span><br><span class="line">## 列出标签值不等于某个值的 pod</span><br><span class="line">get pods --show-labels -l &apos;env!=prod&apos;</span><br><span class="line">## in</span><br><span class="line">get pods --show-labels -l &apos;env in (prod,debug)&apos;</span><br><span class="line">## notin</span><br><span class="line">get pods --show-labels -l &apos;env notin (prod,debug)&apos;</span><br><span class="line">## 多个条件用逗号分隔</span><br><span class="line">get pods --show-labels -l &apos;env in (prod,debug),auth=yuxuan&apos;</span><br></pre></td></tr></table></figure>
-<h2 id="使用标签和选择器来约束-pod-调度"><a href="#使用标签和选择器来约束-pod-调度" class="headerlink" title="使用标签和选择器来约束 pod 调度"></a>使用标签和选择器来约束 pod 调度</h2><p>pod 并不是唯一可以附加标签的 Kubernetes 资源。标签可以附加到任何 Kubernetes 对象上，包括节点。我们可以通过标签来控制 pod 调度到特定的节点。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span># 列出集群node</span><br><span class="line">kc get nodes --show-labels</span><br><span class="line"><span class="meta">#</span># 给指点节点打上标签</span><br><span class="line">kc label node 192.168.1.230 env=test</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用标签和选择器来约束-pod-调度"><a href="#使用标签和选择器来约束-pod-调度" class="headerlink" title="使用标签和选择器来约束 pod 调度"></a>使用标签和选择器来约束 pod 调度</h2><p>pod 并不是唯一可以附加标签的 Kubernetes 资源。标签可以附加到任何 Kubernetes 对象上，包括节点。我们可以通过标签来控制 pod 调度到特定的节点。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 列出集群node</span></span></span><br><span class="line">kc get nodes --show-labels</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 给指点节点打上标签</span></span></span><br><span class="line">kc label node 192.168.1.230 env=test</span><br></pre></td></tr></table></figure></p>
 <p>在yaml里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: pod</span><br><span class="line">metadata:</span><br><span class="line">    name: test-nginx-label</span><br><span class="line">    ## 添加标签</span><br><span class="line">    labels:</span><br><span class="line">        auth: yuxuan</span><br><span class="line">        env: prod</span><br><span class="line">spec:</span><br><span class="line">    ## 控制该pod 只调度在标签 env=test的节点上</span><br><span class="line">    nodeSelector:</span><br><span class="line">        env: &quot;test&quot;</span><br><span class="line">    containers:</span><br><span class="line">    - image: nginx</span><br><span class="line">      name: test</span><br><span class="line">      ports:</span><br><span class="line">      - containerPort: 80</span><br><span class="line">        protocol: TCP</span><br></pre></td></tr></table></figure></p>
 <h1 id="Annotations-注解"><a href="#Annotations-注解" class="headerlink" title="Annotations 注解"></a>Annotations 注解</h1><p>除标签外，pod 和其他对象还可以包含注解。注解也是键值对，所以它们本质上与标签非常相似。但与标签不同，注解并不是为了保存标识信息而存在的，它们不能像标签一样用于对对象进行分组。当我们可以通过标签选择器选择对象时，就不存在注解选择器这样的东西。</p>
 <p>另一方面，注解可以容纳更多的信息，并且主要用于工具使用。Kubernetes 也会将一些注解自动添加到对象，但其他的注解则需要由用户手动添加。</p>
 <p>向 kubernetes 引入新特性时，通常也会使用注解。一般来说，新功能的 alpha 和 beta 版本不会向 API 对象引入任何新字段，因此使用的是注解而不是字段，一旦所需的 API 更改变得清晰并得到所有相关人员的认可，就会引入新的字段并废弃相关注解。</p>
-<h2 id="添加和修改注解"><a href="#添加和修改注解" class="headerlink" title="添加和修改注解"></a>添加和修改注解</h2><p>和标签一样，注解可以在创建时就添加到 pod 中，也可以在之后再对现有的 pod 进行添加或修改。其中将注解添加到现有对象的最简单的方法是通过 kubectl annotate 命令。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span># 添加注解</span><br><span class="line">kc annotate pod test-nginx test.annotations="test"</span><br><span class="line"><span class="meta">#</span># 修改注解</span><br><span class="line">kc annotate pod test-nginx test.annotations="pro" --overwrite</span><br></pre></td></tr></table></figure></p>
+<h2 id="添加和修改注解"><a href="#添加和修改注解" class="headerlink" title="添加和修改注解"></a>添加和修改注解</h2><p>和标签一样，注解可以在创建时就添加到 pod 中，也可以在之后再对现有的 pod 进行添加或修改。其中将注解添加到现有对象的最简单的方法是通过 kubectl annotate 命令。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 添加注解</span></span></span><br><span class="line">kc annotate pod test-nginx test.annotations="test"</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 修改注解</span></span></span><br><span class="line">kc annotate pod test-nginx test.annotations="pro" --overwrite</span><br></pre></td></tr></table></figure></p>
 <h1 id="namespace-命名空间"><a href="#namespace-命名空间" class="headerlink" title="namespace 命名空间"></a>namespace 命名空间</h1><p>我们已经看到标签是如何将 pod 和其他对象组织成组的。由于每个对象都可以有多个标签，因 此这些对象组可以重叠。另外，当在集群中工作（例如通过 kubectl ）时，如果没有明确指定标签选择器，我们总能看到所有对象 。</p>
 <p>但是，当你想将对象分割成完全独立且不重叠的组时，又该如何呢？可能你每次只想在一个小组内进行操作，因此 kubernetes 也能将对象分组到命名空间中。Kubernetes 命名空间简单地为对象名称提供了一个作用域。此时我们并不会将所有资源都放在同一个命名空间中，而是将它们组织到多个命名空间中，这样可以允许我们多次使用相同的资源名称（跨不同的命名空间〉。</p>
-<h2 id="列出命名空间及其-pod"><a href="#列出命名空间及其-pod" class="headerlink" title="列出命名空间及其 pod"></a>列出命名空间及其 pod</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>#列出集群中的所有命名空间</span><br><span class="line">kc get ns</span><br></pre></td></tr></table></figure>
+<h2 id="列出命名空间及其-pod"><a href="#列出命名空间及其-pod" class="headerlink" title="列出命名空间及其 pod"></a>列出命名空间及其 pod</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#列出集群中的所有命名空间</span></span></span><br><span class="line">kc get ns</span><br></pre></td></tr></table></figure>
 <p>当使用 kubectl get 命令列出资源时，我们从未明确指定命名空间，因此 kubectl 总是默认为 default 命名空间，只显示该命名空间下的对象。但从列表中我们可以看到还存在 kube -public 和 kube-system 命名空间。接下来可以使用 kubectl 命令指定命名空间来列出只属于该命名空间的 pod<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kc get pods --namespace kube-system</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>可以使用 -n 代替 –namespace</p>
@@ -457,8 +457,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/kubernetes/k8s5/" rel="next" title="（五）Kubernetes 之 存活探针">
-                <i class="fa fa-chevron-left"></i> （五）Kubernetes 之 存活探针
+              <a href="/kubernetes/k8s6/" rel="next" title="（六）Kubernetes 之 控制器">
+                <i class="fa fa-chevron-left"></i> （六）Kubernetes 之 控制器
               </a>
             
           </div>
@@ -467,8 +467,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/kubernetes/k8s3/" rel="prev" title="（三）Kubernetes 之 pod">
-                （三）Kubernetes 之 pod <i class="fa fa-chevron-right"></i>
+              <a href="/kubernetes/k8s5/" rel="prev" title="（五）Kubernetes 之 存活探针">
+                （五）Kubernetes 之 存活探针 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -548,7 +548,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -660,7 +660,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">37.8k</span>
+    <span title="Site words total count">42.6k</span>
   
 </div>
 

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Docker,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Centos安装过程 Docker从1.13版本之后采用时间线的方式作为版本号，分为社区版CE和企业版EE。社区版是免费提供给个人开发者和小型团体使用的，企业版会提供额外的收费服务，比如经过官方测试认证过的基础设施、容器、插件等。社区版按照stable和edge两种方式发布，每个季度更新stable版本，如17.06，17.09；每个月份更新edge版本，如17.09，17.10。  1. 安">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（二）Centos 安装 Docker">
+<meta property="og:url" content="http://fyuxuan.github.io/docker/docker2/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="Centos安装过程 Docker从1.13版本之后采用时间线的方式作为版本号，分为社区版CE和企业版EE。社区版是免费提供给个人开发者和小型团体使用的，企业版会提供额外的收费服务，比如经过官方测试认证过的基础设施、容器、插件等。社区版按照stable和edge两种方式发布，每个季度更新stable版本，如17.06，17.09；每个月份更新edge版本，如17.09，17.10。  1. 安">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-08-26T06:21:06.684Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（二）Centos 安装 Docker">
+<meta name="twitter:description" content="Centos安装过程 Docker从1.13版本之后采用时间线的方式作为版本号，分为社区版CE和企业版EE。社区版是免费提供给个人开发者和小型团体使用的，企业版会提供额外的收费服务，比如经过官方测试认证过的基础设施、容器、插件等。社区版按照stable和edge两种方式发布，每个季度更新stable版本，如17.06，17.09；每个月份更新edge版本，如17.09，17.10。  1. 安">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/docker/docker2/">
+
+
+
+
+
+  <title>（二）Centos 安装 Docker | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/docker/docker2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">（二）Centos 安装 Docker</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<h1 id="Centos安装过程"><a href="#Centos安装过程" class="headerlink" title="Centos安装过程"></a>Centos安装过程</h1><blockquote>
+<p>Docker从1.13版本之后采用时间线的方式作为版本号，分为社区版CE和企业版EE。<br>社区版是免费提供给个人开发者和小型团体使用的，企业版会提供额外的收费服务，比如经过官方测试认证过的基础设施、容器、插件等。<br>社区版按照stable和edge两种方式发布，每个季度更新stable版本，如17.06，17.09；每个月份更新edge版本，如17.09，17.10。</p>
+</blockquote>
+<h2 id="1-安装依赖"><a href="#1-安装依赖" class="headerlink" title="1. 安装依赖"></a>1. 安装依赖</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于国内网络问题，我们可以设置阿里云yum源来加快速度<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">    ``` </span><br><span class="line"></span><br><span class="line">## 2. 可以查看所有仓库中所有docker版本，并选择特定版本安装</span><br><span class="line">```shell</span><br><span class="line">yum list docker-ce --showduplicates | sort -r</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="3-安装Docker"><a href="#3-安装Docker" class="headerlink" title="3. 安装Docker"></a>3. 安装Docker</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 直接安装默认版本</span><br><span class="line">yum install docker-ce docker-ce-cli containerd.io</span><br><span class="line"><span class="meta">#</span> 安装指定版本</span><br><span class="line">sudo yum install docker-ce-version号 docker-ce-cli-version号 containerd.io</span><br></pre></td></tr></table></figure>
+<h2 id="4-设置Docker开机自启并启动"><a href="#4-设置Docker开机自启并启动" class="headerlink" title="4. 设置Docker开机自启并启动"></a>4. 设置Docker开机自启并启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable docker &amp;&amp; sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>docker安装时默认创建了docker用户组，将普通用户加入docker用户组就可以不使用sudo来操作docker<br>sudo usermod -aG docker 用户名 //注:添加用户组之后要退出重新登录才会生效</p>
+</blockquote>
+<p>#镜像加速<br>只要是外国的东西在国内基本都很难有好的速度，所有就有了加速器的概念，目前国内常用的如下：</p>
+<ul>
+<li>阿里云：<a href="https://dev.aliyun.com/search.html" target="_blank" rel="noopener">https://dev.aliyun.com/search.html</a></li>
+<li>USTC：<a href="https://lug.ustc.edu.cn/wiki/mirrors/help/docker" target="_blank" rel="noopener">https://lug.ustc.edu.cn/wiki/mirrors/help/docker</a></li>
+<li>daocloud：<a href="http://get.daocloud.io/" target="_blank" rel="noopener">http://get.daocloud.io/</a></li>
+<li>网易：<a href="https://c.163.com" target="_blank" rel="noopener">https://c.163.com</a></li>
+<li>时速云：<a href="https://hub.tenxcloud.com/" target="_blank" rel="noopener">https://hub.tenxcloud.com/</a></li>
+<li>灵雀云：<a href="https://hub.alauda.cn/" target="_blank" rel="noopener">https://hub.alauda.cn/</a></li>
+<li>推荐优先阿里云，然后是 USTC</li>
+<li>我下面的讲解也是基于阿里云加速</li>
+<li>阿里云的服务需要注册账号，<strong>首次使用需要设置 docker 登录密码（阿里云叫做：</strong>修改Registry登录密码<strong>），这个以后用私人仓库会用到。</strong></li>
+<li>如果忘记了，后面可以在这里修改：<a href="https://cr.console.aliyun.com/#/imageList" target="_blank" rel="noopener">https://cr.console.aliyun.com/#/imageList</a></li>
+<li>注册后请访问：<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="noopener">https://cr.console.aliyun.com/#/accelerator</a>，你会看到专属的加速地址，比如我是：<code>https://a4jvbfkt.mirror.aliyuncs.com</code>，所以下面文章你看到该地址都表示是这个专属地址，请记得自己更换自己的。</li>
+<li>以及教你如何使用 Docker 加速器。如果你已经安装了最新版的 Docker 你就不需要用它的脚本进行安装了。</li>
+<li>最新版本的 Docker 是新增配置文件：<code>vim /etc/docker/daemon.json</code>，增加如下内容：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"registry-mirrors"</span>: [<span class="string">"https://a4jvbfkt.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">```<span class="comment"># Centos安装过程</span></span><br><span class="line">&gt;Docker从1.13版本之后采用时间线的方式作为版本号，分为社区版CE和企业版EE。</span><br><span class="line">社区版是免费提供给个人开发者和小型团体使用的，企业版会提供额外的收费服务，比如经过官方测试认证过的基础设施、容器、插件等。</span><br><span class="line">社区版按照stable和edge两种方式发布，每个季度更新stable版本，如17.06，17.09；每个月份更新edge版本，如17.09，17.10。</span><br><span class="line"></span><br><span class="line"><span class="comment">## 1. 安装依赖</span></span><br><span class="line">```shell</span><br><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于国内网络问题，我们可以设置阿里云yum源来加快速度<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">    ``` </span><br><span class="line"></span><br><span class="line">## 2. 可以查看所有仓库中所有docker版本，并选择特定版本安装</span><br><span class="line">```shell</span><br><span class="line">yum list docker-ce --showduplicates | sort -r</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="3-安装Docker-1"><a href="#3-安装Docker-1" class="headerlink" title="3. 安装Docker"></a>3. 安装Docker</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 直接安装默认版本</span></span><br><span class="line">yum install docker-ce docker-ce-cli containerd.io</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装指定版本</span></span><br><span class="line">sudo yum install docker-ce-version号 docker-ce-cli-version号 containerd.io</span><br></pre></td></tr></table></figure>
+<h2 id="4-设置Docker开机自启并启动-1"><a href="#4-设置Docker开机自启并启动-1" class="headerlink" title="4. 设置Docker开机自启并启动"></a>4. 设置Docker开机自启并启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable docker &amp;&amp; sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>docker安装时默认创建了docker用户组，将普通用户加入docker用户组就可以不使用sudo来操作docker<br>sudo usermod -aG docker 用户名 //注:添加用户组之后要退出重新登录才会生效</p>
+</blockquote>
+<p>#镜像加速<br>只要是外国的东西在国内基本都很难有好的速度，所有就有了加速器的概念，目前国内常用的如下：</p>
+<ul>
+<li>阿里云：<a href="https://dev.aliyun.com/search.html" target="_blank" rel="noopener">https://dev.aliyun.com/search.html</a></li>
+<li>USTC：<a href="https://lug.ustc.edu.cn/wiki/mirrors/help/docker" target="_blank" rel="noopener">https://lug.ustc.edu.cn/wiki/mirrors/help/docker</a></li>
+<li>daocloud：<a href="http://get.daocloud.io/" target="_blank" rel="noopener">http://get.daocloud.io/</a></li>
+<li>网易：<a href="https://c.163.com" target="_blank" rel="noopener">https://c.163.com</a></li>
+<li>时速云：<a href="https://hub.tenxcloud.com/" target="_blank" rel="noopener">https://hub.tenxcloud.com/</a></li>
+<li>灵雀云：<a href="https://hub.alauda.cn/" target="_blank" rel="noopener">https://hub.alauda.cn/</a></li>
+<li>推荐优先阿里云，然后是 USTC</li>
+<li>我下面的讲解也是基于阿里云加速</li>
+<li>阿里云的服务需要注册账号，<strong>首次使用需要设置 docker 登录密码（阿里云叫做：</strong>修改Registry登录密码<strong>），这个以后用私人仓库会用到。</strong></li>
+<li>如果忘记了，后面可以在这里修改：<a href="https://cr.console.aliyun.com/#/imageList" target="_blank" rel="noopener">https://cr.console.aliyun.com/#/imageList</a></li>
+<li>注册后请访问：<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="noopener">https://cr.console.aliyun.com/#/accelerator</a>，你会看到专属的加速地址，比如我是：<code>https://a4jvbfkt.mirror.aliyuncs.com</code>，所以下面文章你看到该地址都表示是这个专属地址，请记得自己更换自己的。</li>
+<li>以及教你如何使用 Docker 加速器。如果你已经安装了最新版的 Docker 你就不需要用它的脚本进行安装了。</li>
+<li>最新版本的 Docker 是新增配置文件：<code>vim /etc/docker/daemon.json</code>，增加如下内容：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"registry-mirrors"</span>: [<span class="string">"https://a4jvbfkt.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/docker/docker2/" title="（二）Centos 安装 Docker">http://fyuxuan.github.io/docker/docker2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/docker/docker1/" rel="next" title="（一）初识 Docker 与容器">
+                <i class="fa fa-chevron-left"></i> （一）初识 Docker 与容器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/docker/docker3/" rel="prev" title="（三）Docker 镜像">
+                （三）Docker 镜像 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Centos安装过程"><span class="nav-number">1.</span> <span class="nav-text">Centos安装过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安装依赖"><span class="nav-number">1.1.</span> <span class="nav-text">1. 安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-安装Docker"><span class="nav-number">1.2.</span> <span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-设置Docker开机自启并启动"><span class="nav-number">1.3.</span> <span class="nav-text">4. 设置Docker开机自启并启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-安装Docker-1"><span class="nav-number">1.4.</span> <span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-设置Docker开机自启并启动-1"><span class="nav-number">1.5.</span> <span class="nav-text">4. 设置Docker开机自启并启动</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">42.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

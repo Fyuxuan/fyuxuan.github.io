@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Docker,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="容器是 Docker 的另一个核心概念。简单来说，容器是镜像的一个运行实例。镜像是静态的只读文件，而容器带有运行时需要的可写文件层，同时，容器中的应用进程处于运行状态。 创建容器新建容器 docker create12345[root@h244 ~]# docker create -it ubuntu:latest5d05ba725c395dbc351da29253c077bf82b4f711">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（四）Docker 容器">
+<meta property="og:url" content="http://fyuxuan.github.io/docker/docker4/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="容器是 Docker 的另一个核心概念。简单来说，容器是镜像的一个运行实例。镜像是静态的只读文件，而容器带有运行时需要的可写文件层，同时，容器中的应用进程处于运行状态。 创建容器新建容器 docker create12345[root@h244 ~]# docker create -it ubuntu:latest5d05ba725c395dbc351da29253c077bf82b4f711">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-2022faefe8e8ad28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-536f47f3240e35d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-6d1e7d993dc84138.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-382a34351de517a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1455014-b6b547fe85a2558e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2021-08-26T06:21:04.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（四）Docker 容器">
+<meta name="twitter:description" content="容器是 Docker 的另一个核心概念。简单来说，容器是镜像的一个运行实例。镜像是静态的只读文件，而容器带有运行时需要的可写文件层，同时，容器中的应用进程处于运行状态。 创建容器新建容器 docker create12345[root@h244 ~]# docker create -it ubuntu:latest5d05ba725c395dbc351da29253c077bf82b4f711">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1455014-2022faefe8e8ad28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/docker/docker4/">
+
+
+
+
+
+  <title>（四）Docker 容器 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/docker/docker4/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">（四）Docker 容器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<p>容器是 Docker 的另一个核心概念。简单来说，容器是镜像的一个运行实例。镜像是静态的只读文件，而容器带有运行时需要的可写文件层，同时，容器中的应用进程处于运行状态。</p>
+<h2 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h2><h3 id="新建容器-docker-create"><a href="#新建容器-docker-create" class="headerlink" title="新建容器 docker create"></a>新建容器 docker create</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker create -it ubuntu:latest</span><br><span class="line">5d05ba725c395dbc351da29253c077bf82b4f711ea332687b09d03e3c1aa046b</span><br><span class="line">[root@h244 ~]# docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS                      PORTS               NAMES</span><br><span class="line">5d05ba725c39        ubuntu:latest          "bash"                   5 seconds ago       Created                                         nifty_chandrasekhar</span><br></pre></td></tr></table></figure>
+<p>使用 docker create 命令新建的容器处于停止状态，可以使用 docker start 命令来启动。</p>
+<p>容器是整个 Docker 技术的核心，创建容器的选项十分复杂，主要包裹几个大类：</p>
+<ul>
+<li>与容器运行模式相关</li>
+<li>与容器环境配置相关</li>
+<li>与容器资源限制</li>
+<li>与安全保护相关</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-2022faefe8e8ad28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="运行模式相关"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-536f47f3240e35d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="环境配置相关"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-6d1e7d993dc84138.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-382a34351de517a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="启动容器-docker-start"><a href="#启动容器-docker-start" class="headerlink" title="启动容器 docker start"></a>启动容器 docker start</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker start 5d05ba725c39</span><br><span class="line">5d05ba725c39</span><br><span class="line">[root@h244 ~]# docker ps</span><br><span class="line">CONTAINER ID        IMAGE                  COMMAND                  CREATED              STATUS              PORTS               NAMES</span><br><span class="line">5d05ba725c39        ubuntu:latest          "bash"                   About a minute ago   Up 1 second                             nifty_chandrasekhar</span><br></pre></td></tr></table></figure>
+<p>此时，通过 ps 命令查看就会发现容器是运行状态了。</p>
+<h3 id="新建并启动容器-docker-run"><a href="#新建并启动容器-docker-run" class="headerlink" title="新建并启动容器 docker run"></a>新建并启动容器 docker run</h3><p>docker run，其等价于先执行 docker create，在执行 docker start 命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker run ubuntu:latest /bin/echo 'hello world'</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<p>执行上面命令其实和本地执行 /bin/echo ‘hello world’ 几乎感觉不出任何区别。<br>当执行 docker run 来创建并启动容器时，docker 在后台操作如下：</p>
+<ul>
+<li>检查本地是否存在指定的镜像，不存在就从公有仓库下载。</li>
+<li>利用镜像创建一个容器，并启动该容器。</li>
+<li>分配一个文件系统给容器，并在只读的镜像层外面挂载一层可读写层。</li>
+<li>从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去。</li>
+<li>从网桥的地址池配置一个 IP 地址给容器。</li>
+<li>执行用户指定的应用程序。</li>
+<li>执行完毕后容器被自动退出运行。</li>
+</ul>
+<p>下面我们在 run 一个容器，运行 bash 终端进行交互<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker run -it  ubuntu:latest /bin/bash</span><br><span class="line">root@e99229bb9570:/# ls</span><br><span class="line">bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@e99229bb9570:/# ps</span><br><span class="line">   PID TTY          TIME CMD</span><br><span class="line">     1 pts/0    00:00:00 bash</span><br><span class="line">     9 pts/0    00:00:00 ps</span><br><span class="line">root@e99229bb9570:/# exit</span><br><span class="line">exit</span><br><span class="line">[root@h244 ~]#</span><br></pre></td></tr></table></figure></p>
+<p>－t 选项让 Docker 分配一个伪终端并绑定到容器的标准输入上，－i 则让容器的标准输入保持打开。</p>
+<p>在容器内用 ps 命令查看进程，可以看到，只运行了 bash 应用，并没有运行其他无关的进程。当我们 exit 退出 bash 进程之后，容器也会自动退出。</p>
+<h3 id="守护态运行"><a href="#守护态运行" class="headerlink" title="守护态运行"></a>守护态运行</h3><p>很多时候，需要让 docker 容器在后台以守护态形式运行。我们可以通过添加 -d 参数来实现。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker run -d  ubuntu:latest /bin/sh -c "while true; do echo hello world; sleep 1; done"</span><br><span class="line">8538511dbb52c78b7b7b4b1cfa38f981ef484713ad0595fda2647724e12acf90</span><br></pre></td></tr></table></figure>
+<p>容器启动后会返回一个唯一的 id, 可以通过 docker ps 来查看容器信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker ps</span><br><span class="line">CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS               NAMES</span><br><span class="line">8538511dbb52        ubuntu:latest          "/bin/sh -c 'while t…"   2 seconds ago       Up 1 second                             wizardly_hugle</span><br></pre></td></tr></table></figure>
+<h2 id="查看容器输出"><a href="#查看容器输出" class="headerlink" title="查看容器输出"></a>查看容器输出</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker logs -f 8538511dbb52</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+<p>通过 docker logs 可以查看容器的输出。</p>
+<blockquote>
+<p>－details 打印详细信息<br>-f,-follow 持续保持输出<br>-since string 输出从某个时间开始得日志<br>-tail string 输出最近的若干日志<br>-t,-timestamps 显示时间戳信息<br>-until string 输出某个时间之前的日志</p>
+</blockquote>
+<h2 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h2><h3 id="暂停容器"><a href="#暂停容器" class="headerlink" title="暂停容器"></a>暂停容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker pause 8538511dbb52</span><br><span class="line">8538511dbb52</span><br><span class="line">[root@h244 ~]# docker ps</span><br><span class="line">CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS                  PORTS               NAMES</span><br><span class="line">8538511dbb52        ubuntu:latest          "/bin/sh -c 'while t…"   7 minutes ago       Up 7 minutes (Paused)                       wizardly_hugle</span><br><span class="line"></span><br><span class="line">[root@h244 ~]# docker unpause 8538511dbb52</span><br><span class="line">8538511dbb52</span><br><span class="line">[root@h244 ~]# docker ps</span><br><span class="line">CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS               NAMES</span><br><span class="line">8538511dbb52        ubuntu:latest          "/bin/sh -c 'while t…"   8 minutes ago       Up 8 minutes                            wizardly_hugle</span><br></pre></td></tr></table></figure>
+<p>当执行 pause 之后容器状态就会变成 Paused，然后可以通过 unpause来恢复到运行状态</p>
+<h3 id="终止容器"><a href="#终止容器" class="headerlink" title="终止容器"></a>终止容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker stop 8538511dbb52</span><br><span class="line">8538511dbb52</span><br><span class="line">[root@h244 ~]#</span><br></pre></td></tr></table></figure>
+<p>使用 docker stop 来终止一个运行中的容器，该命令会首先向容器发送 SIGTERM 信号，等待一段超时时间后（默认为 10 秒），再发送 SIGKILL 信号来终止容器。</p>
+<h2 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h2><p>在使用 －d 参数时，容器启动后会进入后台，用户无法看到容器中的信息，也无法进行 操作。这个时候如果需要进入容器进行操作，我们可以使用 exec 命令。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker exec -it dc138363f794 /bin/bash</span><br><span class="line">root@dc138363f794:/# ls</span><br><span class="line">bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@dc138363f794:/# cd /home/</span><br><span class="line">root@dc138363f794:/home# ls</span><br><span class="line">root@dc138363f794:/home# pwd</span><br><span class="line">/home</span><br><span class="line">root@dc138363f794:/home#</span><br></pre></td></tr></table></figure></p>
+<p>可以看到会打开一个新的 bash 终端，在不影响容器内其他应用的前提下，用户可以与 容器进行交互。</p>
+<p>exec 比较重要的参数如下：</p>
+<blockquote>
+<p>-d, –detach  在容器中后台执行命令<br>–detach-keys=”” 指定将容器切回后台的按键<br>-e, –env=[]  指定环境变量列表<br>-i,–interactive=true|false 打开标准输入接受用户输入命令，默认值为 false<br>– privileged=true|false 是否给执行命令以最高权限，默认值为 false<br>-t, -tty=true|false 分配伪终端， 默认值为 false<br>-u, –user=”” 执行命令的用户名或 ID</p>
+</blockquote>
+<h2 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h2><p>我们可以通过 docker rm 命令来删除处于终止或退出状态的容器。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker rm -f dc138363f794</span><br><span class="line">dc138363f794</span><br><span class="line">[root@h244 ~]#</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>－f, –force=false 是否强行终止并删除一个运行中的容器<br>-l, –link=false  删除容器的连接，但保留容器<br>-v, –volumes=false 删除容器挂载的数据卷</p>
+</blockquote>
+<blockquote>
+<p>执行 docker container prune 命令清除掉所有处于停止状态的容器</p>
+</blockquote>
+<h2 id="导入和导出容器"><a href="#导入和导出容器" class="headerlink" title="导入和导出容器"></a>导入和导出容器</h2><p>有时候，需要将容器从一个系统迁移到另外一个系统，此时可以使用 Docker 的导入和导出功能，这也是 Docker 自身提供的一个重要特性。</p>
+<h3 id="导出容器"><a href="#导出容器" class="headerlink" title="导出容器"></a>导出容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 home]# docker export -o run_ubuntu_export.tar 8538511dbb52</span><br><span class="line">[root@h244 home]# ls</span><br><span class="line">run_ubuntu_export.tar</span><br><span class="line">[root@h244 home]# docker export 8538511dbb52 &gt; stop_ubuntu_export.tar</span><br><span class="line">[root@h244 home]# ls</span><br><span class="line">run_ubuntu_export.tar  stop_ubuntu_export.tar</span><br></pre></td></tr></table></figure>
+<p>上面两个命令都可以将容器导出</p>
+<h3 id="导入容器"><a href="#导入容器" class="headerlink" title="导入容器"></a>导入容器</h3><p>执行下面命令就可以将导出的 tar 文件导入系统中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 home]# docker import run_ubuntu_export.tar  test/ubuntu:v1</span><br><span class="line">sha256:6dda819276c34cd2a8c6cc7a2f79caa188e5e5d1e432ecad9e8fffa738149d2d</span><br><span class="line">[root@h244 home]# docker images</span><br><span class="line">REPOSITORY                           TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">test/ubuntu                          v1                  6dda819276c3        2 seconds ago       72.8MB</span><br></pre></td></tr></table></figure>
+<p>实际上，既可以使用 docker load 命令来导入镜像存储文件到本地镜像库，也可以使 用 docker [container] import 命令来导入一个容器快照到本地镜像库。这两者的区别在于：容器快照文件将丢弃所有的历史记录和元数据信息（即仅保存容器当时的快照状态），而镜像存储文件将保存完整记录，体积更大。此外，从容器快照文件导人时可以重新指定标签等元数据信息。</p>
+<h2 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h2><h3 id="查看容器详情"><a href="#查看容器详情" class="headerlink" title="查看容器详情"></a>查看容器详情</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker container inspect 8538511dbb52</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        "Id": "8538511dbb52c78b7b7b4b1cfa38f981ef484713ad0595fda2647724e12acf90",</span><br><span class="line">        "Created": "2021-08-25T06:30:59.638701387Z",</span><br><span class="line">        "Path": "/bin/sh",</span><br><span class="line">        "Args": [</span><br><span class="line">            "-c",</span><br><span class="line">            "while true; do echo hello world; sleep 1; done"</span><br><span class="line">        ],</span><br><span class="line">        "State": &#123;</span><br><span class="line">            "Status": "running",</span><br><span class="line">            "Running": true,</span><br><span class="line">            "Paused": false,</span><br><span class="line">            "Restarting": false,</span><br><span class="line">            "OOMKilled": false,</span><br><span class="line">            "Dead": false,</span><br><span class="line">            "Pid": 104436,</span><br><span class="line">            "ExitCode": 0,</span><br><span class="line">            "Error": "",</span><br><span class="line">            "StartedAt": "2021-08-25T07:57:45.41899904Z",</span><br><span class="line">            "FinishedAt": "2021-08-25T06:40:51.275889779Z"</span><br><span class="line">        &#125;,</span><br><span class="line">        "Image": "sha256:1318b700e415001198d1bf66d260b07f67ca8a552b61b0da02b3832c778f221b"</span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+<p>执行 inspect 命令会以 json 格式返回容器 Id、创建时间、路径、状态、镜像、配置等在内的各项信息。</p>
+<h3 id="查看容器内进程"><a href="#查看容器内进程" class="headerlink" title="查看容器内进程"></a>查看容器内进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker container top 8538511dbb52</span><br><span class="line">UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD</span><br><span class="line">root                97740               104436              0                   09:49               ?                   00:00:00            sleep 1</span><br><span class="line">root                104436              104419              0                   8月25                ?                   00:00:28            /bin/sh -c while true; do echo hello world; sleep 1; done</span><br></pre></td></tr></table></figure>
+<p>docker top 类似于 linux 系统中的 top 命令，会打印出容器内的进程信息，包括 PID、用户、时间、命令等。</p>
+<h3 id="查看统计信息"><a href="#查看统计信息" class="headerlink" title="查看统计信息"></a>查看统计信息</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker stats --no-stream  8538511dbb52</span><br><span class="line">CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT   MEM %               NET I/O             BLOCK I/O           PIDS</span><br><span class="line">8538511dbb52        wizardly_hugle      0.18%               304KiB / 7.62GiB    0.00%               656B / 0B           0B / 0B             2</span><br><span class="line">[root@h244 ~]#</span><br></pre></td></tr></table></figure>
+<p>docker container stats 命令会显示 CPU、内存、存储、网络等使用情况的统计信息。</p>
+<blockquote>
+<p>-a,-all 输出所有容器统计信息，默认仅在运行中的容器<br>－-format string 格式化输出信息<br>－-no-stream 不持续输出，默认会自动实时刷新数据<br>－-no-trunc 不截断输出信息</p>
+</blockquote>
+<h2 id="主机与容器之间文件复制"><a href="#主机与容器之间文件复制" class="headerlink" title="主机与容器之间文件复制"></a>主机与容器之间文件复制</h2><p>复制文件到容器里<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp ./text.txt 8538511dbb52:/tmp/</span><br></pre></td></tr></table></figure></p>
+<p>上面这个命令把 text.txt 文件复制到容器里的 tmp 目录下</p>
+<p>从容器里面复制文件到主机上<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp 8538511dbb52:/tmp/text.txt ./</span><br></pre></td></tr></table></figure></p>
+<p>上面那个命令把容器里的 text.txt 文件复制到主机的当前目录下。</p>
+<blockquote>
+<p>-a, -archive 打包模式，复制文件会带有原始的 uid/gid 信息<br>-L, -follow-link 跟随软连接。当原路径为软连接时，默认只复制链接信息，使用该选项会复制链接的目标内容。</p>
+</blockquote>
+<h2 id="查看容器文件系统变更"><a href="#查看容器文件系统变更" class="headerlink" title="查看容器文件系统变更"></a>查看容器文件系统变更</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker container diff 8538511dbb52</span><br><span class="line">C /tmp</span><br><span class="line">A /tmp/text.txt</span><br><span class="line">[root@h244 ~]#</span><br></pre></td></tr></table></figure>
+<p>使用 diff 命令可以查看容器内文件系统的变更。</p>
+<h2 id="查看容器端口映射"><a href="#查看容器端口映射" class="headerlink" title="查看容器端口映射"></a>查看容器端口映射</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@POLY-SERVER:~# docker container port af38a226694e</span><br><span class="line">9555/tcp -&gt; 0.0.0.0:9555</span><br><span class="line">8848/tcp -&gt; 0.0.0.0:8848</span><br></pre></td></tr></table></figure>
+<p>port 命令可以查看容器的端口映射情况</p>
+<h2 id="更新配置"><a href="#更新配置" class="headerlink" title="更新配置"></a>更新配置</h2><p>docker update 命令可以更新容器的一些运行时配置主要是一些资源限制份额。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@h244 ~]# docker update --restart always 8538511dbb52</span><br><span class="line">8538511dbb52</span><br><span class="line">[root@h244 ~]#</span><br></pre></td></tr></table></figure>
+<p>执行上面命令就可以调整容器退出后的重启策略为 always。</p>
+<blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/1455014-b6b547fe85a2558e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="支持修改的配置"></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/docker/docker4/" title="（四）Docker 容器">http://fyuxuan.github.io/docker/docker4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/docker/docker3/" rel="next" title="（三）Docker 镜像">
+                <i class="fa fa-chevron-left"></i> （三）Docker 镜像
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/kubernetes/k8s8/" rel="prev" title="（八）Kubernetes 之 就绪探针">
+                （八）Kubernetes 之 就绪探针 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建容器"><span class="nav-number">1.</span> <span class="nav-text">创建容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建容器-docker-create"><span class="nav-number">1.1.</span> <span class="nav-text">新建容器 docker create</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动容器-docker-start"><span class="nav-number">1.2.</span> <span class="nav-text">启动容器 docker start</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建并启动容器-docker-run"><span class="nav-number">1.3.</span> <span class="nav-text">新建并启动容器 docker run</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#守护态运行"><span class="nav-number">1.4.</span> <span class="nav-text">守护态运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看容器输出"><span class="nav-number">2.</span> <span class="nav-text">查看容器输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#停止容器"><span class="nav-number">3.</span> <span class="nav-text">停止容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#暂停容器"><span class="nav-number">3.1.</span> <span class="nav-text">暂停容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终止容器"><span class="nav-number">3.2.</span> <span class="nav-text">终止容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进入容器"><span class="nav-number">4.</span> <span class="nav-text">进入容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除容器"><span class="nav-number">5.</span> <span class="nav-text">删除容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入和导出容器"><span class="nav-number">6.</span> <span class="nav-text">导入和导出容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导出容器"><span class="nav-number">6.1.</span> <span class="nav-text">导出容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入容器"><span class="nav-number">6.2.</span> <span class="nav-text">导入容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看容器"><span class="nav-number">7.</span> <span class="nav-text">查看容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看容器详情"><span class="nav-number">7.1.</span> <span class="nav-text">查看容器详情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看容器内进程"><span class="nav-number">7.2.</span> <span class="nav-text">查看容器内进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看统计信息"><span class="nav-number">7.3.</span> <span class="nav-text">查看统计信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主机与容器之间文件复制"><span class="nav-number">8.</span> <span class="nav-text">主机与容器之间文件复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看容器文件系统变更"><span class="nav-number">9.</span> <span class="nav-text">查看容器文件系统变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看容器端口映射"><span class="nav-number">10.</span> <span class="nav-text">查看容器端口映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新配置"><span class="nav-number">11.</span> <span class="nav-text">更新配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">42.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

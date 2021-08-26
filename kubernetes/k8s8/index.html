@@ -394,7 +394,7 @@
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="string">.....</span> <span class="comment">##省略其它</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">    <span class="string">.....</span> <span class="comment">##省略其它</span></span><br><span class="line"><span class="attr">    template:</span></span><br><span class="line"><span class="attr">        spec:</span></span><br><span class="line"><span class="attr">            containers:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">test-rc-nginx</span></span><br><span class="line"><span class="attr">              image:</span> <span class="string">nginx</span></span><br><span class="line">              <span class="comment">## 添加就绪探针</span></span><br><span class="line"><span class="attr">              readinessProbe:</span></span><br><span class="line"><span class="attr">                exec:</span></span><br><span class="line"><span class="attr">                    command:</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="string">ls</span></span><br><span class="line"><span class="bullet">                    -</span> <span class="string">/var/test</span> </span><br><span class="line">    <span class="string">.....</span> <span class="comment">##省略其它</span></span><br></pre></td></tr></table></figure>
 <p>就绪探针将定期在容器内执行 ls /var/test 命令。 如果文件存在，则 ls 命令返回退出码 0，否则返回非零的退出码。如果文件存在，则就绪探针为成功，反之失败。</p>
 <p>修改 rc 之后，现有的所有 pod 仍没有定义准备就绪探针。我们需要删除现有 pod 并让它们通过修改之后的 ReplicationController 重新创建。新的 pod 将进行就绪检查会一直失败，并且不会将其作为服务的端点，直到在每个 pod 中创建 /var/test 文件。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span># 列出 pod  会发现所有的 pod 都处于 NO READY 状态</span><br><span class="line">[root@h249 test]# kc get pods</span><br><span class="line">NAME            READY   STATUS    RESTARTS   AGE</span><br><span class="line">rc-test-nxg74   0/1     Running   0          9m55s</span><br><span class="line">rc-test-pztvx   0/1     Running   0          6m58s</span><br><span class="line">rc-test-svkzp   0/1     Running   0          6m58s</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 列出 pod  会发现所有的 pod 都处于 NO READY 状态</span></span></span><br><span class="line">[root@h249 test]# kc get pods</span><br><span class="line">NAME            READY   STATUS    RESTARTS   AGE</span><br><span class="line">rc-test-nxg74   0/1     Running   0          9m55s</span><br><span class="line">rc-test-pztvx   0/1     Running   0          6m58s</span><br><span class="line">rc-test-svkzp   0/1     Running   0          6m58s</span><br></pre></td></tr></table></figure>
 <p>使用 kubecl exec 命令为 pod 创建 /var/test 文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@h249 home]# kc exec rc-test-nxg74 -- touch /var/test</span><br></pre></td></tr></table></figure>
 <p>准备就绪探针会定期检查，默认情况下每 10 秒检查一次。可能不是马上就会调用就绪探针，因此容器可能还是未准备好。但是最晚 10 秒钟内，该 pod 就会准备就绪。</p>
@@ -446,8 +446,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/docker/docker1/" rel="next" title="（一）初识 Docker 与容器">
-                <i class="fa fa-chevron-left"></i> （一）初识 Docker 与容器
+              <a href="/docker/docker4/" rel="next" title="（四）Docker 容器">
+                <i class="fa fa-chevron-left"></i> （四）Docker 容器
               </a>
             
           </div>
@@ -537,7 +537,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -649,7 +649,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">37.8k</span>
+    <span title="Site words total count">42.6k</span>
   
 </div>
 
