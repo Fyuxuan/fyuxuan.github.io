@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,设计模式,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="软件设计模式的概念软件设计模式（ Software Design Pattern ），又称设计模式， 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。它描述了在软件设计过程中的一些不断重复发生的问题，以及该问题的解决方案。也就是说，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是为了提高代码的可重用性、代码的可读性和代码的可靠">
+<meta name="keywords" content="Java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式（一）设计模式基本概念">
+<meta property="og:url" content="http://fyuxuan.github.io/designPattern/designPattern1/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="软件设计模式的概念软件设计模式（ Software Design Pattern ），又称设计模式， 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。它描述了在软件设计过程中的一些不断重复发生的问题，以及该问题的解决方案。也就是说，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是为了提高代码的可重用性、代码的可读性和代码的可靠">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-08-27T06:10:54.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式（一）设计模式基本概念">
+<meta name="twitter:description" content="软件设计模式的概念软件设计模式（ Software Design Pattern ），又称设计模式， 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。它描述了在软件设计过程中的一些不断重复发生的问题，以及该问题的解决方案。也就是说，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是为了提高代码的可重用性、代码的可读性和代码的可靠">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/designPattern/designPattern1/">
+
+
+
+
+
+  <title>设计模式（一）设计模式基本概念 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/designPattern/designPattern1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式（一）设计模式基本概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  6.8k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="软件设计模式的概念"><a href="#软件设计模式的概念" class="headerlink" title="软件设计模式的概念"></a>软件设计模式的概念</h2><p>软件设计模式（ Software Design Pattern ），又称设计模式， 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。它描述了在软件设计过程中的一些不断重复发生的问题，以及该问题的解决方案。也就是说，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是为了提高代码的可重用性、代码的可读性和代码的可靠性。</p>
+<h2 id="软件设计模式的基本要素"><a href="#软件设计模式的基本要素" class="headerlink" title="软件设计模式的基本要素"></a>软件设计模式的基本要素</h2><p>软件设计模式使人们可以更加简单方便地复用成功的设计和体系结构，它通常包含以下几个基 本要素：模式名称、别名、动机、问题、解决方案、效果、结构、模式角色、合作关系、实现方法、适用性、已知应用、例程、模式扩展和相关模式等，其中最关键的元素包括以下4个主要部分。</p>
+<h3 id="1-模式名称"><a href="#1-模式名称" class="headerlink" title="1. 模式名称"></a>1. 模式名称</h3><p>每一个模式都有自己的名字，通常用一两个词来描述，可以根据模式的问题、特点、解决方案、功能和效果来命名。模式名称（ Pattern Name ）有助于我们理解和记忆该模式，也方便我们来讨论自己的设计。</p>
+<h3 id="2-问题"><a href="#2-问题" class="headerlink" title="2. 问题"></a>2. 问题</h3><p>问题（ Problem ）描述了该模式的应用环境，即何时使用该模式。它解释了设计问题和问题存在的前因后果，以及必须满足的一系列先决条件。</p>
+<h3 id="3-解决方案"><a href="#3-解决方案" class="headerlink" title="3. 解决方案"></a>3. 解决方案</h3><p>模式问题的解决方案（ Solution ）包括设计的组成成分、它们之间的相互关系及各自的职责和协作方式。因为模式就像一个模板，可应用于多种不同场合，所以解决方案并不描述一个特定而具体的设计或实现 ，而是提供设计问题的抽象描述和怎样用一个具有一般意义的元素组合（类或对象的组合）来解决这个问题。</p>
+<h3 id="4-效果"><a href="#4-效果" class="headerlink" title="4. 效果"></a>4. 效果</h3><p>描述了模式的应用效果以及使用该模式应该权衡的问题，即模式的优缺点。主要是对时间和空 间的衡量，以及该模式对系统的灵活性、扩充性、可移植性的影响，也考虑其实现问题。显式地列出这些效果（ Consequence ）对理解和评价这些模式有很大的帮助。</p>
+<h2 id="GoF-的-23-种设计模式简介"><a href="#GoF-的-23-种设计模式简介" class="headerlink" title="GoF 的 23 种设计模式简介"></a>GoF 的 23 种设计模式简介</h2><p>设计模式有两种分类方法，即根据模式的目的来分和根据模式的作用的范围来分。</p>
+<h3 id="根据目的来分"><a href="#根据目的来分" class="headerlink" title="根据目的来分"></a>根据目的来分</h3><p>根据模式是用来完成什么工作来划分， 这种方式可分为创建型模式、结构型模式和行为型模 式 3 种。</p>
+<h4 id="1-创建型模式"><a href="#1-创建型模式" class="headerlink" title="1.创建型模式"></a>1.创建型模式</h4><p>用于描述“怎样创建对象”，它的主要特点是“将对象的创建与使用分离“。GoF 中提供了单例、原型、工厂方法、抽象工厂、建造者等 5 种创建型模式。</p>
+<h4 id="2-结构型模式"><a href="#2-结构型模式" class="headerlink" title="2.结构型模式"></a>2.结构型模式</h4><p>用于描述如何将类或对象按某种布局组成更大的结构，GoF 中提供了代理、适配器、桥接、装饰、外观、享元、组合等 7 种结构型模式。</p>
+<h4 id="3-行为型模式"><a href="#3-行为型模式" class="headerlink" title="3.行为型模式"></a>3.行为型模式</h4><p>用于描述类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，以及怎样分配职责。 GoF 中提供了模板方法、策略、命令、职责链、状态、观察者、中介者、迭代器、访问者、备忘录、解释器等 11 种行为型模式。</p>
+<h3 id="根据作用范围来分"><a href="#根据作用范围来分" class="headerlink" title="根据作用范围来分"></a>根据作用范围来分</h3><p>根据模式是主要用于类上还是主要用于对象上来分 ， 这种方式可分为类模式和对象模式两种。</p>
+<h4 id="1-类模式"><a href="#1-类模式" class="headerlink" title="1. 类模式"></a>1. 类模式</h4><p>用于处理类与子类之间的关系，这些关系通过继承来建立，是静态的，在编译时刻便确定下来了。GoF 中的工厂方法、（类）适配器、模板方法、解释器属于该模式。</p>
+<h4 id="2-对象模式"><a href="#2-对象模式" class="headerlink" title="2. 对象模式"></a>2. 对象模式</h4><p>用于处理对象之间的关系，这些关系可以通过组合或聚合来实现，在运行时刻是可以变化的，更具动态性。 GoF 中除了以上 4 种，其他的都是对象模式。</p>
+<table>
+<thead>
+<tr>
+<th>范围\目的</th>
+<th>创建型模式</th>
+<th>结构型模式</th>
+<th>行为型模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类模式</td>
+<td>工厂方法</td>
+<td>（类）适配器</td>
+<td>模板方法、解释器</td>
+</tr>
+<tr>
+<td>对象模式</td>
+<td>单例 原型 抽象工厂 建造者</td>
+<td>代理 （对象）适配器 桥接 装饰 外观 享元 组合</td>
+<td>策略 命令 职责链 状态 观察者 中介者 迭代器 访问者 备忘录</td>
+</tr>
+</tbody>
+</table>
+<h2 id="GoF-的-23-种设计模式的功能"><a href="#GoF-的-23-种设计模式的功能" class="headerlink" title="GoF 的 23 种设计模式的功能"></a>GoF 的 23 种设计模式的功能</h2><p>前面说明了 GoF 的 23 种设计模式的分类，现在对各个模式的功能进行介绍。</p>
+<ul>
+<li><p>单例（ Singleton ）模式：某个类只能生成一个实例，该类提供了一个全局访问点供外部获取该实例，其拓展是有限多例模式。</p>
+</li>
+<li><p>原型（ Prototype ）模式：将一个对象作为原型，通过对其进行复制而克隆出多个和原型类似的新实例。</p>
+</li>
+<li><p>工厂方法（ Facto可 Method ）模式：定义一个用于创建产品的接口，由子类决定生产什么产品。</p>
+</li>
+<li><p>抽象工厂（ Abstract Factory ）模式：提供一个创建产品族的接口，其每个子类可以生产一系列相关的产品。</p>
+</li>
+<li><p>建造者（ Builder ）模式：将一个复杂对象分解成多个相对简单的部分，然后根据不同需要分别创建它们，最后构建成该复杂对象。</p>
+</li>
+<li><p>代理（ Proxy ）模式：为某对象提供一种代理以控制对该对象的访问。 即客户端通过代理间 接地访问该对象 ， 从而限制、增强或修改该对象的一些特性。 </p>
+</li>
+<li><p>适配器（ Adapter ）模式： 将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。 </p>
+</li>
+<li><p>桥接（ Bridge ）模式：将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的相合度。 </p>
+</li>
+<li><p>装饰（ Decorator ）模式：动态的给对象增加一些职责，即增加其额外的功能。 </p>
+</li>
+<li><p>外观（ Facade ）模式：为多个复杂的子系统提供一个一致的接口，使这些子系统更加容易被访问。 </p>
+</li>
+<li><p>享元（ Flyweight ）模式：运用共享技术来有效地支持大量细粒度对象的复用。 </p>
+</li>
+<li><p>组合（ Composite ）模式：将对象组合成树状层次结构，使用户对单个对象和组合对象具有一致的访问性。 </p>
+</li>
+<li><p>模板方法（ Template Method ）模式：定义一个操作中的算法骨架，而将算法的一些步骤延迟到子类中，使得子类可以不改变该算法结构的情况下重定义该算法的某些特定步骤。</p>
+</li>
+<li><p>策略（ Strategy ）模式：定义了一系列算法，并将每个算法封装起来，使它们可以相互替换，且算法的改变不会影响使用算法的客户 。 </p>
+</li>
+<li><p>命令（ Command ）模式：将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。 </p>
+</li>
+<li><p>职责链（ Chain of Responsibility ）模式：把请求从链中的一个对象传到下一个对象，直到请求被响应为止。通过这种方式去除对象之间的耦合。 </p>
+</li>
+<li><p>状态（ State ）模式：允许一个对象在其内部状态发生改变时改变其行为能力 。 </p>
+</li>
+<li><p>观察者（ Observer ）模式：多个对象间存在一对多关系，当一个对象发生改变时，把这种改变通知给其他多个对象，从而影响其他对象的行为 。 </p>
+</li>
+<li><p>中介者（ Mediator ）模式：定义一个中介对象来简化原有对象之间的交互关系，降低系统中对象间的相合度，使原有对象之间不必相互了解。 </p>
+</li>
+<li><p>迭代器（ Iterator ）模式：提供一种方法来顺序访问聚合对象中的一系列数据 ，而不暴露聚合对象的内部表示。</p>
+</li>
+<li><p>访问者（ Visitor ）模式：在不改变集合元素的前提下，为一个集合中的每个元素提供多种访问方式，即每个元素有多个访问者对象访问。 </p>
+</li>
+<li><p>备忘录（ Memento ）模式：在不破坏封装性的前提下，获取并保存一个对象的内部状态，以便以后恢复它。 </p>
+</li>
+<li><p>解释器（ Interpreter ）模式：提供如何定义语言的文法，以及对语言句子的解释方法，即解释器。</p>
+</li>
+</ul>
+<blockquote>
+<p>这里必须强调一点，这 23 种设计模式不是孤立存在的，很多模式之间存在一定的关联关系，在大的系统开发中常常同时使用多种设计模式</p>
+</blockquote>
+<h2 id="面向对象的设计原则"><a href="#面向对象的设计原则" class="headerlink" title="面向对象的设计原则"></a>面向对象的设计原则</h2><p>在软件开发中，为了提高软件系统的可维护性和可复用性，增加软件的可扩展性和灵活性，程序员要尽量根据以下 7 条原则来开发程序，从而提高软件开发效率、节约软件开发成本和维护成本。</p>
+<h3 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h3><h4 id="开闭原则的定义"><a href="#开闭原则的定义" class="headerlink" title="开闭原则的定义"></a>开闭原则的定义</h4><p>开闭原则（ Open Closed Principle，OCP ）是由勃兰特·梅耶（ Bertrand Meyer ）提出，他在 1988 年的著作《面向对象软件构造》中提出：软件实体应当对扩展开放，对修改关闭，这就是开闭原则的经典定义</p>
+<p>这里的软件实体包括以下几个部分： </p>
+<ul>
+<li>项目中划分出的模块</li>
+<li>类与接口</li>
+<li>方法 </li>
+</ul>
+<p>开闭原则的含义是：当应用的需求改变时，在不修改软件实体的源代码或者二进制代码的前提下，可以扩展模块的功能，使其满足新的需求。</p>
+<h4 id="开闭原则的作用"><a href="#开闭原则的作用" class="headerlink" title="开闭原则的作用"></a>开闭原则的作用</h4><p>开闭原则是面向对象程序设计的终极目标，它使软件实体拥有一定的适应性和灵活性的同时具 备稳定性和延续性。具体来说，其作用如下。</p>
+<ul>
+<li><p>对软件测试的影响<br>软件遵守开闭原则的话，软件测试时只需要对扩展的代码进行测试就可以了，因为原有的测试 代码仍然能够正常运行。</p>
+</li>
+<li><p>可以提高代码的可复用性<br>粒度越小，被复用的可能性就越大；在面向对象的程序设计中，根据原子和抽象编程可以提高 代码的可复用性。</p>
+</li>
+<li><p>可以提高软件的可维护性<br>遵守开闭原则的软件，其稳定性高和延续性强，从而易于扩展和维护。</p>
+</li>
+</ul>
+<h4 id="开闭原则的实现方法"><a href="#开闭原则的实现方法" class="headerlink" title="开闭原则的实现方法"></a>开闭原则的实现方法</h4><p>可以通过“抽象约束、封装变化”来实现开闭原则，即通过接口或者抽象类为软件实体定义一 个相对稳定的抽象层，而将相同的可变因素封装在相同的具体实现类中。因为抽象灵活性好， 适应性广，只要抽象的合理，可以基本保持软件架构的稳定。而软件中易变的细节可以从抽象派生来的实现类来进行扩展，当软件需要发生变化时，只需要根据需求重新派生一个实现类来扩展就可以了。</p>
+<h3 id="里式替换原则"><a href="#里式替换原则" class="headerlink" title="里式替换原则"></a>里式替换原则</h3><h4 id="里氏替换原则的定义"><a href="#里氏替换原则的定义" class="headerlink" title="里氏替换原则的定义"></a>里氏替换原则的定义</h4><p>里氏替换原则（ Liskov Substitution Principle, LSP ）由麻省理工学院计算机科学实验室的里斯科夫（ Liskov ）女士在 1987 年的“面向对象技术的高峰会议”（ OOPSLA ）上发表的一篇文章《数据抽象和层次》（ Data Abstraction and Hierarchy ）里提出来的，她提出：继承必须确保超类所拥有的性质在子类中仍然成立。</p>
+<p>里氏替换原则主要阐述了有关继承的一些原则，也就是什么时候应该使用继承，什么时候不应 该使用继承，以及其中蕴含的原理。里氏替换原是继承复用的基础，它反映了基类与子类之间的关系，是对开闭原则的补充，是对实现抽象化的具体步骤的规范。</p>
+<h4 id="里式替换原则的作用"><a href="#里式替换原则的作用" class="headerlink" title="里式替换原则的作用"></a>里式替换原则的作用</h4><p>里氏替换原则的主要作用有以下几点：</p>
+<ul>
+<li>里氏替换原则是实现开闭原则的重要方式之一。</li>
+<li>它克服了继承中重写父类造成的可复用性变差的缺点。</li>
+<li>它是动作正确性的保证。即类的扩展不会给已有的系统引入新的错误，降低了代码出错的可能性。</li>
+</ul>
+<h4 id="里式替换原则的实现方法"><a href="#里式替换原则的实现方法" class="headerlink" title="里式替换原则的实现方法"></a>里式替换原则的实现方法</h4><p>里氏替换原则通俗来讲就是：子类可以扩展父类的功能，但不能改变父类原有的功能。也就是说：子类继承父类时，除添加新的方法完成新增功能外，尽量不要重写父类的方法。如果通过重写父类的方法来完成新的功能，这样写起来虽然简单，但是整个继承体系的可复用性会比较差，特别是运用多态比较频繁时，程序运行出错的概率会非常大。</p>
+<p>如果程序违背了里氏替换原则，则继承类的对象在基类出现的地方会出现运行错误。这时其修正方法是：取消原来的继承关系，重新设计它们之间的关系。</p>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><h4 id="依赖倒置原则的定义"><a href="#依赖倒置原则的定义" class="headerlink" title="依赖倒置原则的定义"></a>依赖倒置原则的定义</h4><p>依赖倒置原则（ Dependence Inversion Principle , DIP ）是 Object Mentor 公司总裁罗伯特·马丁 ( Robert C. Martin ）于 1996 年在 C++ Report 上发表的文章。其原始定义是：高层模块不应该依赖低层模块，两者都应该依赖其抽象；抽象不应该依赖细节，细节应该依赖抽象。其核心思想是：要面向接口编程，不要面向实现编程。</p>
+<p>依赖倒置原则是实现开闭原则的重要途径之一，它降低了客户与实现模块之间的耦合。由于在 软件设计中，细节具有多变性，而抽象层则相对稳定，因此以抽象为基础搭建起来的架构要比以细节为基础搭建起来的架构要稳定得多。这里的抽象指的是接口或者抽象类，而细节是指具体的实现类。使用接口或者抽象类的目的是制定好规范和契约，而不去涉及任何具体的操作，把展现细节的任务交给它们的实现类去完成。</p>
+<h4 id="依赖倒置原则的作用"><a href="#依赖倒置原则的作用" class="headerlink" title="依赖倒置原则的作用"></a>依赖倒置原则的作用</h4><p>依赖倒置原则的主要作用有以下几点：</p>
+<ul>
+<li>依赖倒置原则可以降低类间的耦合性。</li>
+<li>依赖倒置原则可以提高系统的稳定性。</li>
+<li>依赖倒置原则可以减少并行开发引起的风险。</li>
+<li>依赖倒置原则可以提高代码的可读性和可维护性。</li>
+</ul>
+<h4 id="依赖倒置原则的实现方法"><a href="#依赖倒置原则的实现方法" class="headerlink" title="依赖倒置原则的实现方法"></a>依赖倒置原则的实现方法</h4><p>依赖倒置原则的目的是通过要面向接口的编程来降低类间的耦合性，所以我们在实际编程中只 要遵循以下 4 点，就能在项目中满足这个规则 。</p>
+<ul>
+<li>每个类尽量提供接口或抽象类，或者两者都具备。</li>
+<li>变量的声明类型尽量是接口或者是抽象类。</li>
+<li>任何类都不应该从具体类派生。 </li>
+<li>使用继承时尽量遵循里氏替换原则 。</li>
+</ul>
+<h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><h4 id="单一职责原则的定义"><a href="#单一职责原则的定义" class="headerlink" title="单一职责原则的定义"></a>单一职责原则的定义</h4><p>单一职责原则（ Single Responsibility Principle, SRP ）又称单一功能原则，由罗伯特·C.马丁（ Robert C. Martin ）于《敏捷软件开发：原则、模式和实践》一书中提出的。这里的职责是指类变化的原因，单一职责原则规定一个类应该有且仅有一个引起它变化的原因，否则类应该被拆分。</p>
+<p>该原则提出对象不应该承担太多职责，如果一个对象承担了太多的职责，至少存在以下两个缺点： </p>
+<ul>
+<li>一个职责的变化可能会削弱或者抑制这个类实现其他职责的能力； </li>
+<li>当客户端需要该对象的某一个职责时，不得不将其他不需要的职责全都包含进来，从而造成冗余代码或代码的浪费。</li>
+</ul>
+<h4 id="单一职责原则的优点"><a href="#单一职责原则的优点" class="headerlink" title="单一职责原则的优点"></a>单一职责原则的优点</h4><p>单一职责原则的核心就是控制类的粒度大小、将对象解耦、提高其内聚性。如果遵循单一职责 原则将有以下优点。</p>
+<ul>
+<li>降低类的复杂度。一个类只负责一项职责，其逻辑肯定要比负责多项职责简单得多。 </li>
+<li>提高类的可读性。复杂性降低，自然其可读性会提高。 </li>
+<li>提高系统的可维护性。可读性提高，那自然更容易维护了 。 </li>
+<li>变更引起的风险降低。变更是必然的，如果单一职责原则遵守得好，当修改一个功能时， 可以显著降低对其他功能的影响。</li>
+</ul>
+<h4 id="单一职责原则的实现方法"><a href="#单一职责原则的实现方法" class="headerlink" title="单一职责原则的实现方法"></a>单一职责原则的实现方法</h4><p>单一职责原则是最简单但又最难运用的原则， 需要设计人员发现类的不同职责并将其分离 ， 再 封装到不同的类或模块中 。而发现类的多重职责需要设计人员具有较强的分析设计能力和相关重构 经验。</p>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><h4 id="接口隔离原则的定义"><a href="#接口隔离原则的定义" class="headerlink" title="接口隔离原则的定义"></a>接口隔离原则的定义</h4><p>接口隔离原则（ Interface Segregation Principle , ISP ）要求程序员尽量将臃肿庞大的接口拆分成更小的和更具体的接口，让接口中只包含客户感兴趣的方法。2002 年罗伯特·c.马丁给“接口隔离原则”的定义是：客户端不应该被迫依赖于它不使用的方法。该原则还有另外一个定义：一个类对另一个类的依赖应该建立在最小的接口上。两个定义的含义是：要为各个类建立它们需要的专用接口，而不要试图去建立一个很庞大的接口供所有依赖它的类去调用。</p>
+<p>接口隔离原则和单一职责都是为了提高类的内聚性、降低它们之间的耦合性，体现了封装的思想，但两者是不同的： </p>
+<ul>
+<li>单一职责原则注重的是职责，而接口隔离原则注重的是对接口依赖的隔离；</li>
+<li>单一职责原则主要是约束类，它针对的是程序中的实现和细节；接口隔离原则主要约束接口，主要针对抽象和程序整体框架的构建。</li>
+</ul>
+<h4 id="接口隔离原则的优点"><a href="#接口隔离原则的优点" class="headerlink" title="接口隔离原则的优点"></a>接口隔离原则的优点</h4><p>接口隔离原则是为了约束接口、降低类对接口的依赖性，遵循接口隔离原则有以下 5 个优点：</p>
+<ul>
+<li>将臃肿庞大的接口分解为多个粒度小的接口，可以预防外来变更的扩散，提高系统的灵活 性和可维护性。</li>
+<li>接口隔离提高了系统的内聚性，减少了对外交互，降低了系统的耦合性。</li>
+<li>如果接口的粒度大小定义合理，能够保证系统的稳定性；但是，如果定义过小，则会造成 接口数量过多，使设计复杂化；如果定义太大，灵活性降低，无法提供定制服务，给整体项目带来无法预料的风险。</li>
+<li>使用多个专门的接口还能够体现对象的层次，因为可以通过接口的继承，实现对总接口的 定义。</li>
+<li>能减少项目工程中的代码冗余。过大的大接口里面通常放置许多不用的方法，当实现这个 接口的时候，被迫设计冗余的代码。</li>
+</ul>
+<h4 id="接口隔离原则的实现方法"><a href="#接口隔离原则的实现方法" class="headerlink" title="接口隔离原则的实现方法"></a>接口隔离原则的实现方法</h4><p>在具体应用接口隔离原则时，应该根据以下几个规则来衡量:</p>
+<ul>
+<li>接口尽量小，但是要有限度。一个接口只服务于一个子模块或业务逻辑。</li>
+<li>为依赖接口的类定制服务。只提供调用者需要的方法，屏蔽不需要的方法。</li>
+<li>了解环境，拒绝盲从。每个项目或产品都有选定的环境因素，环境不同，接口拆分的标准 就不同，深入了解业务逻辑。</li>
+<li>提高内聚，减少对外交互。使接口用最少的方法去完成最多的事情。</li>
+</ul>
+<h3 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h3><h4 id="迪米特法则的定义"><a href="#迪米特法则的定义" class="headerlink" title="迪米特法则的定义"></a>迪米特法则的定义</h4><p>迪米特法则（ Law of Demeter，LoD ）又叫作最少知识原则（ Least Knowledge Principle, LKP ), 产生于 1987 年美国东北大学（ Northeastern University ）的一个名为迪米特（ Demeter ）的研究项目，由伊恩·荷兰（ Ian Holland ）提出 ， 被 UML 创始者之一的布奇（ Booch ）普及，后来又因为在经典著作《程序员修炼之道》提及而广为人知。</p>
+<p>迪米特法则的定义是：只与你的直接朋友交谈，不跟“陌生人”说话。其含义是：如果两个软件实体无须直接通信，那么就不应当发生直接的相互调用，可以通过第三方转发该调用。其目的是降低类之间的相合度，提高模块的相对独立性。</p>
+<p>迪米特法则中的 “朋友” 是指：当前对象本身、当前对象的成员对象、当前对象所创建的对象、当前对象的方法参数等，这些对象同当前对象存在关联、聚合或组合关系，可以直接访问这些对象的方法。</p>
+<h4 id="迪米特法则的优点"><a href="#迪米特法则的优点" class="headerlink" title="迪米特法则的优点"></a>迪米特法则的优点</h4><p>迪米特法则要求限制软件实体之间通信的宽度和深度，正确使用迪米特法则将有以下两个优点：</p>
+<ul>
+<li>降低了类之间的相合度，提高了模块的相对独立性。</li>
+<li>由于相合度降低，从而提高了类的可复用率和系统的扩展性。</li>
+</ul>
+<p>但是，过度使用迪米特法则会使系统产生大量的中介类，从而增加系统的复杂性，使模块之间 的通信效率降低。所以，在采用迪米特法则时需要反复权衡，确保高内聚和低相合的同时，保证系统的结构清晰。</p>
+<h4 id="迪米特法则的实现方法"><a href="#迪米特法则的实现方法" class="headerlink" title="迪米特法则的实现方法"></a>迪米特法则的实现方法</h4><p>从迪米特法则的定义和特点可知，它强调以下两点：从依赖者的角度来说，只依赖应该依赖的对象。从被依赖者的角度说，只暴露应该暴露的方法。所以，在运用迪米特法则时要注意以下 6 点:</p>
+<ul>
+<li>在类的划分上，应该创建弱耦合的类。类与类之间的耦合越弱，就越有利于实现可复用的目标。</li>
+<li>在类的结构设计上，尽量降低类成员的访问权限。</li>
+<li>在类的设计上，优先考虑将一个类设置成不变类。 </li>
+<li>在对其他类的引用上，将引用其他对象的次数降到最低。 </li>
+<li>不暴露类的属性成员，而应该提供相应的访问器（ set 和 get 方法）。</li>
+<li>谨慎使用序列化（ Serializable ）功能。</li>
+</ul>
+<h3 id="合成复用原则"><a href="#合成复用原则" class="headerlink" title="合成复用原则"></a>合成复用原则</h3><h4 id="合成复用原则的定义"><a href="#合成复用原则的定义" class="headerlink" title="合成复用原则的定义"></a>合成复用原则的定义</h4><p>合成复用原则（ Composite Reuse Principle, CRP ）又叫组合／聚合复用原则（ Composition/Aggregate Reuse Principle, CARP。 它要求在软件复用时，要尽量先使用组合或者聚合等关联关系来实现，其次才考虑使用继承关系来实现。如果要使用继承关系，则必须严格遵循里氏代换原则。合成复用原则同里氏代换原则相辅相成的，两者都是开闭原则的具体实现规范。</p>
+<h4 id="合成复用原则的重要性"><a href="#合成复用原则的重要性" class="headerlink" title="合成复用原则的重要性"></a>合成复用原则的重要性</h4><p>通常类的复用分为继承复用和合成复用两种，继承复用虽然有简单和易实现的优点，但它 也存在以下缺点:</p>
+<ul>
+<li>继承复用破坏了类的封装性。因为继承会将父类的实现细节暴露给子类，父类对子类是透明的，所以这种复用又称为“白箱”复用。</li>
+<li>子类与父类的耦合度高。父类的实现的任何改变都会导致子类的实现发生变化，这不利于类的扩展与维护。</li>
+<li>它限制了复用的灵活性。从父类继承而来的实现是静态的，在编译时已经定义，所以在运行 时不可能发生变化。</li>
+</ul>
+<p>采用组合或聚合复用时，可以将已有对象纳入新对象中，使之成为新对象的一部分，新对象可以调用已有对象的功能，它有以下优点:</p>
+<ul>
+<li>它维持了类的封装性。因为成分对象的内部细节是新对象看不见的，所以这种复用又称为“黑箱”复用。</li>
+<li>新旧类之间的耦合度低。这种复用所需的依赖较少，新对象存取成分对象的唯一方法是通过成分对象的接口 。</li>
+<li>复用的灵活性高。这种复用可以在运行时动态进行，新对象可以动态地引用与成分对象类型相同的对象。</li>
+</ul>
+<h4 id="合成复用原则的实现方法"><a href="#合成复用原则的实现方法" class="headerlink" title="合成复用原则的实现方法"></a>合成复用原则的实现方法</h4><p>合成复用原则是通过将已有的对象纳入新对象中，作为新对象的成员对象来实现的，新对象可 以调用己有对象的功能，从而达到复用。</p>
+<h3 id="七种设计原则的要点"><a href="#七种设计原则的要点" class="headerlink" title="七种设计原则的要点"></a>七种设计原则的要点</h3><p>上面介绍了 7 种设计原则，它们是软件设计模式必须尽量遵循的原则，各种原则要求的侧重点不同。其中，开闭原则是总纲，它告诉我们要对扩展开放，对修改关闭；里氏替换原则告诉我们不要破坏继承体系；依赖倒置原则告诉我们要面向接口编程；单一职责原则告诉我们实现类要职责单一；接口隔离原则告诉我们在设计接口的时候要精简单一；迪米特法则告诉我们要降低耦合度；合成复用原则告诉我们要优先使用组合或者聚合关系复用，少用继承关系复用。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/designPattern/designPattern1/" title="设计模式（一）设计模式基本概念">http://fyuxuan.github.io/designPattern/designPattern1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/designPattern/designPattern2/" rel="prev" title="设计模式（二）单例模式">
+                设计模式（二）单例模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#软件设计模式的概念"><span class="nav-number">1.</span> <span class="nav-text">软件设计模式的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件设计模式的基本要素"><span class="nav-number">2.</span> <span class="nav-text">软件设计模式的基本要素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-模式名称"><span class="nav-number">2.1.</span> <span class="nav-text">1. 模式名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-问题"><span class="nav-number">2.2.</span> <span class="nav-text">2. 问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-解决方案"><span class="nav-number">2.3.</span> <span class="nav-text">3. 解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-效果"><span class="nav-number">2.4.</span> <span class="nav-text">4. 效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GoF-的-23-种设计模式简介"><span class="nav-number">3.</span> <span class="nav-text">GoF 的 23 种设计模式简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#根据目的来分"><span class="nav-number">3.1.</span> <span class="nav-text">根据目的来分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-创建型模式"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.创建型模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-结构型模式"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.结构型模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-行为型模式"><span class="nav-number">3.1.3.</span> <span class="nav-text">3.行为型模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据作用范围来分"><span class="nav-number">3.2.</span> <span class="nav-text">根据作用范围来分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-类模式"><span class="nav-number">3.2.1.</span> <span class="nav-text">1. 类模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-对象模式"><span class="nav-number">3.2.2.</span> <span class="nav-text">2. 对象模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GoF-的-23-种设计模式的功能"><span class="nav-number">4.</span> <span class="nav-text">GoF 的 23 种设计模式的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象的设计原则"><span class="nav-number">5.</span> <span class="nav-text">面向对象的设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开闭原则"><span class="nav-number">5.1.</span> <span class="nav-text">开闭原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开闭原则的定义"><span class="nav-number">5.1.1.</span> <span class="nav-text">开闭原则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开闭原则的作用"><span class="nav-number">5.1.2.</span> <span class="nav-text">开闭原则的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开闭原则的实现方法"><span class="nav-number">5.1.3.</span> <span class="nav-text">开闭原则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#里式替换原则"><span class="nav-number">5.2.</span> <span class="nav-text">里式替换原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#里氏替换原则的定义"><span class="nav-number">5.2.1.</span> <span class="nav-text">里氏替换原则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#里式替换原则的作用"><span class="nav-number">5.2.2.</span> <span class="nav-text">里式替换原则的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#里式替换原则的实现方法"><span class="nav-number">5.2.3.</span> <span class="nav-text">里式替换原则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖倒置原则"><span class="nav-number">5.3.</span> <span class="nav-text">依赖倒置原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖倒置原则的定义"><span class="nav-number">5.3.1.</span> <span class="nav-text">依赖倒置原则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖倒置原则的作用"><span class="nav-number">5.3.2.</span> <span class="nav-text">依赖倒置原则的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖倒置原则的实现方法"><span class="nav-number">5.3.3.</span> <span class="nav-text">依赖倒置原则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单一职责原则"><span class="nav-number">5.4.</span> <span class="nav-text">单一职责原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一职责原则的定义"><span class="nav-number">5.4.1.</span> <span class="nav-text">单一职责原则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单一职责原则的优点"><span class="nav-number">5.4.2.</span> <span class="nav-text">单一职责原则的优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单一职责原则的实现方法"><span class="nav-number">5.4.3.</span> <span class="nav-text">单一职责原则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口隔离原则"><span class="nav-number">5.5.</span> <span class="nav-text">接口隔离原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口隔离原则的定义"><span class="nav-number">5.5.1.</span> <span class="nav-text">接口隔离原则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口隔离原则的优点"><span class="nav-number">5.5.2.</span> <span class="nav-text">接口隔离原则的优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口隔离原则的实现方法"><span class="nav-number">5.5.3.</span> <span class="nav-text">接口隔离原则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迪米特法则"><span class="nav-number">5.6.</span> <span class="nav-text">迪米特法则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#迪米特法则的定义"><span class="nav-number">5.6.1.</span> <span class="nav-text">迪米特法则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迪米特法则的优点"><span class="nav-number">5.6.2.</span> <span class="nav-text">迪米特法则的优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迪米特法则的实现方法"><span class="nav-number">5.6.3.</span> <span class="nav-text">迪米特法则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合成复用原则"><span class="nav-number">5.7.</span> <span class="nav-text">合成复用原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#合成复用原则的定义"><span class="nav-number">5.7.1.</span> <span class="nav-text">合成复用原则的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合成复用原则的重要性"><span class="nav-number">5.7.2.</span> <span class="nav-text">合成复用原则的重要性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合成复用原则的实现方法"><span class="nav-number">5.7.3.</span> <span class="nav-text">合成复用原则的实现方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七种设计原则的要点"><span class="nav-number">5.8.</span> <span class="nav-text">七种设计原则的要点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">49.3k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

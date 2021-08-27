@@ -82,14 +82,14 @@
 <meta name="description" content="概念程序在运行时，通常都会生成很多实例。例如，表示字符串的 String 类的实例与字符串是一一对应的关系，所以当有 1000 个字符串的时候，会生成 1000 个实例。 但是，当我们想在程序中表示某个东西只会存在一个时，就会有“只能创建-一个实例”的需求。典型的例子有表示程序所运行于的那台计算机的类、表示软件系统相关设置的类，以及表示视窗系统（window system）的类。当然，只要我们在编">
 <meta name="keywords" content="Java,设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设计模式 —— 单例模式">
-<meta property="og:url" content="http://fyuxuan.github.io/designPattern/pattern_singleton/index.html">
+<meta property="og:title" content="设计模式（二）单例模式">
+<meta property="og:url" content="http://fyuxuan.github.io/designPattern/designPattern2/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
 <meta property="og:description" content="概念程序在运行时，通常都会生成很多实例。例如，表示字符串的 String 类的实例与字符串是一一对应的关系，所以当有 1000 个字符串的时候，会生成 1000 个实例。 但是，当我们想在程序中表示某个东西只会存在一个时，就会有“只能创建-一个实例”的需求。典型的例子有表示程序所运行于的那台计算机的类、表示软件系统相关设置的类，以及表示视窗系统（window system）的类。当然，只要我们在编">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-08-18T01:58:03.746Z">
+<meta property="og:updated_time" content="2021-08-27T06:10:35.467Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="设计模式 —— 单例模式">
+<meta name="twitter:title" content="设计模式（二）单例模式">
 <meta name="twitter:description" content="概念程序在运行时，通常都会生成很多实例。例如，表示字符串的 String 类的实例与字符串是一一对应的关系，所以当有 1000 个字符串的时候，会生成 1000 个实例。 但是，当我们想在程序中表示某个东西只会存在一个时，就会有“只能创建-一个实例”的需求。典型的例子有表示程序所运行于的那台计算机的类、表示软件系统相关设置的类，以及表示视窗系统（window system）的类。当然，只要我们在编">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://fyuxuan.github.io/designPattern/pattern_singleton/">
+  <link rel="canonical" href="http://fyuxuan.github.io/designPattern/designPattern2/">
 
 
 
 
 
-  <title>设计模式 —— 单例模式 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>设计模式（二）单例模式 | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/designPattern/pattern_singleton/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/designPattern/designPattern2/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -292,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">设计模式 —— 单例模式</h1>
+          <h1 class="post-title" itemprop="name headline">设计模式（二）单例模式</h1>
         
 
         <div class="post-meta">
@@ -416,7 +416,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/designPattern/pattern_singleton/" title="设计模式 —— 单例模式">http://fyuxuan.github.io/designPattern/pattern_singleton/</a>
+    <a href="http://fyuxuan.github.io/designPattern/designPattern2/" title="设计模式（二）单例模式">http://fyuxuan.github.io/designPattern/designPattern2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -446,8 +446,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/designPattern/pattern_factory_method/" rel="next" title="设计模式 —— 工厂方法模式">
-                <i class="fa fa-chevron-left"></i> 设计模式 —— 工厂方法模式
+              <a href="/designPattern/designPattern1/" rel="next" title="设计模式（一）设计模式基本概念">
+                <i class="fa fa-chevron-left"></i> 设计模式（一）设计模式基本概念
               </a>
             
           </div>
@@ -456,8 +456,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/designPattern/pattern_simple_factory/" rel="prev" title="设计模式 —— 简单工厂模式">
-                设计模式 —— 简单工厂模式 <i class="fa fa-chevron-right"></i>
+              <a href="/designPattern/designPattern3/" rel="prev" title="设计模式（三）简单工厂模式">
+                设计模式（三）简单工厂模式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -537,7 +537,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -649,7 +649,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">42.6k</span>
+    <span title="Site words total count">49.3k</span>
   
 </div>
 
