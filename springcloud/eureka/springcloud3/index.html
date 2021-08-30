@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring Cloud,Eureka,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关闭自我保护保护模式主要在一组客户端和 Eureka Server 之间存在网络分区场景时使用。一旦进入保护模式，Eureka Server 将会尝试保护其服务的注册表中的信息，不再删除服务注册表中的数据。当网络故障恢复后，该 Eureka Server 节点会自动退出保护模式。 123eureka:    server:        enable-self-preservation: f">
+<meta name="keywords" content="Spring Cloud,Eureka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（三）Spring Cloud Eureka 常用配置">
+<meta property="og:url" content="http://fyuxuan.github.io/springcloud/eureka/springcloud3/index.html">
+<meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
+<meta property="og:description" content="关闭自我保护保护模式主要在一组客户端和 Eureka Server 之间存在网络分区场景时使用。一旦进入保护模式，Eureka Server 将会尝试保护其服务的注册表中的信息，不再删除服务注册表中的数据。当网络故障恢复后，该 Eureka Server 节点会自动退出保护模式。 123eureka:    server:        enable-self-preservation: f">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-08-30T06:42:32.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（三）Spring Cloud Eureka 常用配置">
+<meta name="twitter:description" content="关闭自我保护保护模式主要在一组客户端和 Eureka Server 之间存在网络分区场景时使用。一旦进入保护模式，Eureka Server 将会尝试保护其服务的注册表中的信息，不再删除服务注册表中的数据。当网络故障恢复后，该 Eureka Server 节点会自动退出保护模式。 123eureka:    server:        enable-self-preservation: f">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fyuxuan.github.io/springcloud/eureka/springcloud3/">
+
+
+
+
+
+  <title>（三）Spring Cloud Eureka 常用配置 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?594cf65e85cdb71cfa067d402cd84f2a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/fyuxuan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">你必须全力以赴，才能成为发光的哪一个。</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">擅长写BUG，更擅长解决BUG。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/springcloud/eureka/springcloud3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">（三）Spring Cloud Eureka 常用配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Cloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+
+<h2 id="关闭自我保护"><a href="#关闭自我保护" class="headerlink" title="关闭自我保护"></a>关闭自我保护</h2><p>保护模式主要在一组客户端和 Eureka Server 之间存在网络分区场景时使用。一旦进入保护模式，Eureka Server 将会尝试保护其服务的注册表中的信息，不再删除服务注册表中的数据。当网络故障恢复后，该 Eureka Server 节点会自动退出保护模式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">    server:</span></span><br><span class="line"><span class="attr">        enable-self-preservation:</span> <span class="literal">false</span> <span class="string">//关闭自我保护</span></span><br></pre></td></tr></table></figure>
+<h2 id="自定义-Eureka-的-InstanceID"><a href="#自定义-Eureka-的-InstanceID" class="headerlink" title="自定义 Eureka 的 InstanceID"></a>自定义 Eureka 的 InstanceID</h2><p>客户端在注册时，服务的 Instance ID 的默认值的格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;spring.cloud.client.hostname&#125;:$&#123;spring.application.name&#125;:$&#123;spring.application. instance id:$&#123;server.port&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是“主机名：服务名称：服务端口”</p>
+<p>如果想把主机名替换成 IP</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">    instance:</span></span><br><span class="line"><span class="attr">        instance-id:</span> <span class="string">$&#123;spring.application.name&#125;:$&#123;spring.cloud.client.ipaddress&#125;:$&#123;server.port&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-IP-进行注册"><a href="#使用-IP-进行注册" class="headerlink" title="使用 IP 进行注册"></a>使用 IP 进行注册</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">    instance:</span></span><br><span class="line"><span class="attr">        preferipAddress:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h2 id="自定义实例调整链接"><a href="#自定义实例调整链接" class="headerlink" title="自定义实例调整链接"></a>自定义实例调整链接</h2><p>通过配置实现了用 IP 进行注册，当点击 Instance ID 进行跳转的时候， 就可以用 IP 跳转了，跳转的地址默认是 IP+Port/info 。我们可以自定义这个跳转的地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eureka:</span><br><span class="line">    instance:</span><br><span class="line">        status-page-url: http://$&#123;spring.cloud.client.ip-address&#125;:$&#123;server.port&#125;/swagger-ui.html</span><br></pre></td></tr></table></figure>
+<h2 id="快速移除已经失效的服务信息"><a href="#快速移除已经失效的服务信息" class="headerlink" title="快速移除已经失效的服务信息"></a>快速移除已经失效的服务信息</h2><p>在实际开发过程中，我们可能会不停地重启服务，由于 Eureka 有自己的保护机制，故节点下线后，服务信息还会一直存在于 Eureka 中。我们可以通过增加一些配置让移除的速度更快一点，当然只在开发环境下使用，生产环境下不推荐使用。<br>首先在 eureka-server 中增加两个配置，分别是关闭自我保护和清理间隔：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">    server:</span></span><br><span class="line"><span class="attr">        enable-self-preservation:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">        eviction-interval-timer-in-ms:</span> <span class="number">5000</span> <span class="comment">## 默认 60000 毫秒</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在客户端服务配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">eureka:</span><br><span class="line">    client:</span><br><span class="line">        healthcheck:</span><br><span class="line">            enabled: true ## 开启健康检查</span><br><span class="line">    instance:</span><br><span class="line">        lease-renewal-interval-in-seconds: 5 ##默认 30 秒</span><br><span class="line">        lease-expiration-duration-in-seconds: 5 ##默认 30 秒</span><br></pre></td></tr></table></figure>
+<p>开启健康检查，需要在 pom.xml 中引入 actuator的依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>lease-renewal-interval-in-seconds: 表示 Eureka Client 发送心跳给 server 端的频率。</li>
+<li>lease-expiration-duration-in-seconds: 表示 Eureka Server 至上一次收到 client 的心跳之后，等待下一次心跳的超时时间，在这个时间内若没收到下一次心跳，则移除该 Instance</li>
+</ul>
+<blockquote>
+<p>更多的 Instance 配置信息可参考源码中的配置类：org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean<br>更多的 Server 配置信息可参考源码中的配置类：org.springframework.cloud.netflix.eureka.server.EurekaServerConfigBean</p>
+</blockquote>
+<h2 id="元数据使用"><a href="#元数据使用" class="headerlink" title="元数据使用"></a>元数据使用</h2><p>Eureka 的元数据有两种类型，分别是框架定好了的标准元数据和用户自定义元数据。标准元数据指的是主机名、IP 地址、端口号、状态页和健康检查等信息，这些信息都会被发布在服务注册表中，用于服务之间的调用。自定义元数据可以使用 eureka.instance.metadataMap 进行配置。</p>
+<p>自定义元数据说得通俗点就是自定义配置，我们可以为每个 Eureka Client 定义一些属于自己的配置，这个配置不会影响 Eureka 的功能。自定义元数据可以用来做一些扩展信息，比如灰度发布之类的功能，可以用元数据来存储灰度发布的状态数据，Ribbon 转发的时候就可以根据服务的元数据来做一些处理。当不需要灰度发布的时候可以调用 Eureka 提供的 REST API 将元数据清除掉。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">    instance:</span></span><br><span class="line"><span class="attr">        metadataMap:</span></span><br><span class="line"><span class="attr">            version:</span> <span class="number">1.0</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="EuekaClient-使用"><a href="#EuekaClient-使用" class="headerlink" title="EuekaClient 使用"></a>EuekaClient 使用</h3><p>当我们的项目中集成了 Eureka 之后，可以通过 EurekaClient 来获取一些我们想要的数据，比如上面提的元数据。我们就可以直接通过 EurekaClient 来获取。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> EurekaClient eurekaClient;</span><br></pre></td></tr></table></figure></p>
+<p>除了使用 EurekaClient，还可以使用 DiscoveryClient, 不是Eureka 自带的, 是 Spring Cloud 重新封装的，类的路径为 org.springframework.cloud.client.discovery.DiscoveryClient</p>
+<h2 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h2><p>默认情况下，Eureka 客户端是使用心跳和服务端通信来判断客户端是否存活，在某些场景下，比如服务对应的数据库出现了异常，但应用进程还是存在的，这意味着服务可以继续上报心跳，但其实此时的服务已经不能够正常提供服务了。</p>
+<p>Spring Boot Actuator 提供了／actuator/health 端点，该端点可展示应用程序的健康信息， 当应用服务异常时，通过扩展健康检查的端点调整健康检查逻辑</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">    client:</span></span><br><span class="line"><span class="attr">        healthcheck:</span></span><br><span class="line"><span class="attr">            enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>开启健康检查，在 pom.xml 中引入 actuator的依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomHealthIndicator</span> <span class="keyword">extends</span> <span class="title">AbstractHealthindicator</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doHealthCheck</span><span class="params">(Builder builder)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="服务上下线监控"><a href="#服务上下线监控" class="headerlink" title="服务上下线监控"></a>服务上下线监控</h2><p>在某些特定的需求下，我们需要对服务的上下线进行监控，上线或下线都进行邮件通知，Eureka 中提供了事件监昕的方式来扩展 。</p>
+<ul>
+<li>EurekaInstanceCanceledEvent 服务下线事件 。</li>
+<li>EurekaInstanceRegisteredEvent 服务注册事件。 </li>
+<li>EurekaInstanceRenewedEvent 服务续约事件。 </li>
+<li>EurekaRegistryAvailableEvent Eureka 注册中心启动事件。</li>
+<li>EurekaServerStartedEvent Eureka Server 启动事件。</li>
+</ul>
+<p>基于 Eureka 提供的事件机制，可以监控服务的上下线过程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaStateChangeListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">(EurekaInstanceCanceledEvent event)</span></span>&#123;</span><br><span class="line">        <span class="comment">//服务下线监听</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">(EurekaInstanceRegisteredEvent event)</span></span>&#123;</span><br><span class="line">        <span class="comment">//服务注册事件监听</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">(EurekaInstanceRenewedEvent event)</span></span>&#123;</span><br><span class="line">        <span class="comment">//服务续约事件监听</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">(EurekaRegistryAvailableEvent event)</span></span>&#123;</span><br><span class="line">        <span class="comment">//注册中心启动监听</span></span><br><span class="line">        <span class="comment">// 通过查看 EurekaServerInitializerConfiguration 源码 EurekaRegistryAvailableEvent 在 EurekaServerStartedEvent 之前发送</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">(EurekaServerStartedEvent event)</span></span>&#123;</span><br><span class="line">        <span class="comment">//Eureka Server 启动事件监听</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    雨轩
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fyuxuan.github.io/springcloud/eureka/springcloud3/" title="（三）Spring Cloud Eureka 常用配置">http://fyuxuan.github.io/springcloud/eureka/springcloud3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring-Cloud/" rel="tag"># Spring Cloud</a>
+          
+            <a href="/tags/Eureka/" rel="tag"># Eureka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/springcloud/eureka/springcloud2/" rel="next" title="（二）服务注册与发现之 Spring Cloud Eureka">
+                <i class="fa fa-chevron-left"></i> （二）服务注册与发现之 Spring Cloud Eureka
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/docker/docker1/" rel="prev" title="（一）初识 Docker 与容器">
+                （一）初识 Docker 与容器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4" alt="雨轩">
+            
+              <p class="site-author-name" itemprop="name">雨轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fyuxuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yuxuan.sunny@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭自我保护"><span class="nav-number">1.</span> <span class="nav-text">关闭自我保护</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义-Eureka-的-InstanceID"><span class="nav-number">2.</span> <span class="nav-text">自定义 Eureka 的 InstanceID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-IP-进行注册"><span class="nav-number">2.1.</span> <span class="nav-text">使用 IP 进行注册</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义实例调整链接"><span class="nav-number">3.</span> <span class="nav-text">自定义实例调整链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速移除已经失效的服务信息"><span class="nav-number">4.</span> <span class="nav-text">快速移除已经失效的服务信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#元数据使用"><span class="nav-number">5.</span> <span class="nav-text">元数据使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EuekaClient-使用"><span class="nav-number">5.1.</span> <span class="nav-text">EuekaClient 使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#健康检查"><span class="nav-number">6.</span> <span class="nav-text">健康检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务上下线监控"><span class="nav-number">7.</span> <span class="nav-text">服务上下线监控</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雨轩</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">53.2k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
