@@ -82,14 +82,14 @@
 <meta name="description" content="乐观锁 &amp;amp; 悲观锁乐观锁和悲观锁是在数据库中引入的名词，但是在 Java 并发包锁里面也引入了类似的思想。 悲观锁悲观锁 指对数据被外界修改持保守态度，认为数据很容易就会被其他线程修改，所以在数据被处理前先对数据进行加锁，并在整个数据处理过程中，使数据处于锁定状态。 悲观锁 的实现往往依靠数据库提供的锁机制，即在数据库中，在对数据记录操作前给记录加排它锁。如果获取锁失败，则说明数据正在">
 <meta name="keywords" content="Java,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="八、【Java 并发】伪共享">
+<meta property="og:title" content="九、【Java 并发】锁的概述">
 <meta property="og:url" content="http://fyuxuan.github.io/javaThread/thread9/index.html">
 <meta property="og:site_name" content="你必须全力以赴，才能成为发光的哪一个。">
 <meta property="og:description" content="乐观锁 &amp;amp; 悲观锁乐观锁和悲观锁是在数据库中引入的名词，但是在 Java 并发包锁里面也引入了类似的思想。 悲观锁悲观锁 指对数据被外界修改持保守态度，认为数据很容易就会被其他线程修改，所以在数据被处理前先对数据进行加锁，并在整个数据处理过程中，使数据处于锁定状态。 悲观锁 的实现往往依靠数据库提供的锁机制，即在数据库中，在对数据记录操作前给记录加排它锁。如果获取锁失败，则说明数据正在">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-09-01T08:22:04.915Z">
+<meta property="og:updated_time" content="2021-09-03T06:35:12.188Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="八、【Java 并发】伪共享">
+<meta name="twitter:title" content="九、【Java 并发】锁的概述">
 <meta name="twitter:description" content="乐观锁 &amp;amp; 悲观锁乐观锁和悲观锁是在数据库中引入的名词，但是在 Java 并发包锁里面也引入了类似的思想。 悲观锁悲观锁 指对数据被外界修改持保守态度，认为数据很容易就会被其他线程修改，所以在数据被处理前先对数据进行加锁，并在整个数据处理过程中，使数据处于锁定状态。 悲观锁 的实现往往依靠数据库提供的锁机制，即在数据库中，在对数据记录操作前给记录加排它锁。如果获取锁失败，则说明数据正在">
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>八、【Java 并发】伪共享 | 你必须全力以赴，才能成为发光的哪一个。</title>
+  <title>九、【Java 并发】锁的概述 | 你必须全力以赴，才能成为发光的哪一个。</title>
   
 
 
@@ -292,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">八、【Java 并发】伪共享</h1>
+          <h1 class="post-title" itemprop="name headline">九、【Java 并发】锁的概述</h1>
         
 
         <div class="post-meta">
@@ -443,7 +443,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fyuxuan.github.io/javaThread/thread9/" title="八、【Java 并发】伪共享">http://fyuxuan.github.io/javaThread/thread9/</a>
+    <a href="http://fyuxuan.github.io/javaThread/thread9/" title="九、【Java 并发】锁的概述">http://fyuxuan.github.io/javaThread/thread9/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -483,8 +483,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/springcloud/springcloud1/" rel="prev" title="（一）微服务架构与 Spring Cloud 简介">
-                （一）微服务架构与 Spring Cloud 简介 <i class="fa fa-chevron-right"></i>
+              <a href="/javaThread/thread10/" rel="prev" title="十、【Java 并发】抽象同步队列 AQS">
+                十、【Java 并发】抽象同步队列 AQS <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -564,7 +564,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -676,7 +676,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">59.1k</span>
+    <span title="Site words total count">64.8k</span>
   
 </div>
 
