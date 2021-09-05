@@ -271,7 +271,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s2/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s8/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -290,7 +290,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/kubernetes/k8s2/" itemprop="url">（二）Kubernetes简介：核心资源对象&核心组件</a></h1>
+                <a class="post-title-link" href="/kubernetes/k8s8/" itemprop="url">（八）Kubernetes 之 就绪探针</a></h1>
         
 
         <div class="post-meta">
@@ -344,7 +344,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.2k
+                  1.4k
                 </span>
               
 
@@ -371,11 +371,13 @@
       
         
           
-          Kubernetes 使用共享网络将多个物理机或虚拟机汇集到一个集群中，在各服务器之间进行通信，该集群是配置 Kubernetes 的所有组件、功能和工作负载的物理平台。 集群中一台服务器（或高可用部署中的一组服务器）用作 Master ，负责管理整个集群，余下的其他机器用作 Worker Node
+          
+
+现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s2/#more" rel="contents">
+            <a class="btn" href="/kubernetes/k8s8/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -426,7 +428,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s3/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s7/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -445,7 +447,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/kubernetes/k8s3/" itemprop="url">（三）Kubernetes 之 pod</a></h1>
+                <a class="post-title-link" href="/kubernetes/k8s7/" itemprop="url">（七）Kubernetes 之 服务 Service</a></h1>
         
 
         <div class="post-meta">
@@ -499,7 +501,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.2k
+                  2.7k
                 </span>
               
 
@@ -526,321 +528,11 @@
       
         
           
-          pod 是一组并置的容器，代表了 Kubernetes 中的基本构建模块。在实际应用中我们并不会单独部署容器，更多的是针对一组 pod 的容器进行部署和操作。然而这并不意味着一个 pod 总是要包含多个容器，实际上只包含一个单独容器的 pod 也是非常常见的。值得注意的是，当一个 pod 包含多个容
+          kubernetes 服务是一种为一组功能相同的 pod 提供单一不变的接入点的资源。当服务存在时，它的 IP 地址和端口不会改变。客户端通过 IP 地址和端口号建立连接，这些连接会被路由到提供该服务的任意一个 pod 上。通过这种方式，客户端不需要知道每个单独的提供服务的 pod 的地址，这样这些
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s3/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s1/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雨轩">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/kubernetes/k8s1/" itemprop="url">（一）Kubernetes简介：Kubernetes架构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.9k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s1/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s4/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雨轩">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/kubernetes/k8s4/" itemprop="url">（四）Kubernetes之标签-注解-命名空间</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.6k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Label 标签标签是一种简单却功能强大的 kubernetes 特性，不仅可以组织 pod，也可以组织所有其他的 kubernetes 资源。详细来讲 ，标签是可以附加到资源的任意键值对，用以选择具有该确切标签的资源（这是通过标签选择器完成的）。只要标签的 key 在资源内是唯一的，一个资源便可以
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s4/#more" rel="contents">
+            <a class="btn" href="/kubernetes/k8s7/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1046,163 +738,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s8/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雨轩">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/kubernetes/k8s8/" itemprop="url">（八）Kubernetes 之 就绪探针</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1.4k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-
-现在我们知道了，服务（service）可以通过服务的 pod 选择器来匹配具有相应标签的 pod。匹配成功后， pod 将作为服务的后端，它将成为服务的一部分，并且请求开始被重定向到 pod。但是，如果 pod 没有完全启动好，比如改 pod 可能需要时间来加载配置或数据，或者可能需要执行预热过
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s8/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s5/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1358,7 +893,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s7/">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s4/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雨轩">
@@ -1377,7 +912,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/kubernetes/k8s7/" itemprop="url">（七）Kubernetes 之 服务 Service</a></h1>
+                <a class="post-title-link" href="/kubernetes/k8s4/" itemprop="url">（四）Kubernetes之标签-注解-命名空间</a></h1>
         
 
         <div class="post-meta">
@@ -1431,7 +966,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.7k
+                  1.6k
                 </span>
               
 
@@ -1458,11 +993,476 @@
       
         
           
-          kubernetes 服务是一种为一组功能相同的 pod 提供单一不变的接入点的资源。当服务存在时，它的 IP 地址和端口不会改变。客户端通过 IP 地址和端口号建立连接，这些连接会被路由到提供该服务的任意一个 pod 上。通过这种方式，客户端不需要知道每个单独的提供服务的 pod 的地址，这样这些
+          Label 标签标签是一种简单却功能强大的 kubernetes 特性，不仅可以组织 pod，也可以组织所有其他的 kubernetes 资源。详细来讲 ，标签是可以附加到资源的任意键值对，用以选择具有该确切标签的资源（这是通过标签选择器完成的）。只要标签的 key 在资源内是唯一的，一个资源便可以
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/kubernetes/k8s7/#more" rel="contents">
+            <a class="btn" href="/kubernetes/k8s4/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/kubernetes/k8s3/" itemprop="url">（三）Kubernetes 之 pod</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.2k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          pod 是一组并置的容器，代表了 Kubernetes 中的基本构建模块。在实际应用中我们并不会单独部署容器，更多的是针对一组 pod 的容器进行部署和操作。然而这并不意味着一个 pod 总是要包含多个容器，实际上只包含一个单独容器的 pod 也是非常常见的。值得注意的是，当一个 pod 包含多个容
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/kubernetes/k8s3/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/kubernetes/k8s2/" itemprop="url">（二）Kubernetes简介：核心资源对象&核心组件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.2k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Kubernetes 使用共享网络将多个物理机或虚拟机汇集到一个集群中，在各服务器之间进行通信，该集群是配置 Kubernetes 的所有组件、功能和工作负载的物理平台。 集群中一台服务器（或高可用部署中的一组服务器）用作 Master ，负责管理整个集群，余下的其他机器用作 Worker Node
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/kubernetes/k8s2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fyuxuan.github.io/kubernetes/k8s1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雨轩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12712060?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你必须全力以赴，才能成为发光的哪一个。">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/kubernetes/k8s1/" itemprop="url">（一）Kubernetes简介：Kubernetes架构</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Kubernetes最初源于谷歌内部的Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes的目标旨在消除编排物理/虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/kubernetes/k8s1/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
